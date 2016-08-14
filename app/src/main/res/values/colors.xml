@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">@color/primary</color>
+    <color name="colorPrimaryDark">@color/primary_dark</color>
+    <color name="colorPrimaryLight">@color/primary_light</color>
+    <color name="colorAccent">@color/accent</color>
+    <color name="colorAccentDark">@color/accent_dark</color>
+    <color name="colorAccentLight">@color/accent_light</color>
+    <color name="colorPrimaryText">@color/primary_text</color>
+    <color name="colorSecondaryText">@color/secondary_text</color>
+    <color name="colorInverseText">@color/inverse_text</color>
+    <color name="colorPrimaryBackground">@color/primary_background</color>
+    <color name="colorSecondaryBackground">@color/secondary_background</color>
+    <color name="colorSelectedBackground">@color/selected_background</color>
+    <color name="colorPrimaryIcons">@color/primary_icons</color>
+    <color name="colorSecondaryIcons">@color/secondary_icons</color>
+
+</resources>
