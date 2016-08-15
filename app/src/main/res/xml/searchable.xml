@@ -2,7 +2,7 @@
 <searchable xmlns:android="http://schemas.android.com/apk/res/android"
             android:label="@string/app_name"
             android:hint="@string/search_hint"
-            android:searchSuggestAuthority="com.example.spotifystreamer.model.QuerySuggestionProvider"
+            android:searchSuggestAuthority="com.example.androidpodcastplayer.custom.QuerySuggestionProvider"
             android:searchSuggestSelection=" ?">
 
 </searchable>

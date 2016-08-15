@@ -26,6 +26,11 @@
                 android:resource="@xml/searchable"/>
         </activity>
 
+        <provider
+            android:authorities="com.example.androidpodcastplayer.custom.QuerySuggestionProvider"
+            android:name=".custom.QuerySuggestionProvider"
+            android:exported="false"/>
+
     </application>
 
 </manifest>
