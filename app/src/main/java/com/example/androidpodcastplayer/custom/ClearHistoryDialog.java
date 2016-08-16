@@ -19,7 +19,7 @@ import com.example.androidpodcastplayer.common.Constants;
 
 import timber.log.Timber;
 
-@SuppressLint("ValidFragment")
+
 public class ClearHistoryDialog extends DialogFragment implements View.OnClickListener{
 
     // callback implemented by the activity
