@@ -27,16 +27,10 @@ public class ClearHistoryDialog extends DialogFragment implements View.OnClickLi
         void confirmHistoryCleared(boolean historyCleared);
     }
 
-    private static final String SEARCHABLE_BUNDLE = "searchable_bundle";
     private CallbackListener mListener;
-    private SearchRecentSuggestions mRecentSuggestions;
     private boolean mHistoryCleared = false;
 
     public ClearHistoryDialog() {}
-
-    public ClearHistoryDialog(SearchRecentSuggestions suggestions) {
-        mRecentSuggestions = suggestions;
-    }
 
 
     @Nullable
@@ -65,10 +59,7 @@ public class ClearHistoryDialog extends DialogFragment implements View.OnClickLi
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.dialog_positive_btn:
-                if (mRecentSuggestions != null) {
-                    mRecentSuggestions.clearHistory();
-                    mHistoryCleared = true;
-                }
+                mHistoryCleared = true;
                 break;
         }
         // inform the activity the history has been cleared

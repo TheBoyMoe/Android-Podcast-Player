@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.facebook.stetho.Stetho;
 import com.facebook.stetho.timber.StethoTree;
+import com.squareup.leakcanary.LeakCanary;
 
 import timber.log.Timber;
 
@@ -33,7 +34,7 @@ public class PodcastPlayerApplication extends Application{
         }
 
         // enable Leak Canary
-        // LeakCanary.install(this);
+        LeakCanary.install(this);
 
     }
 
