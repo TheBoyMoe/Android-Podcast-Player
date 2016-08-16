@@ -1,11 +1,14 @@
 package com.example.androidpodcastplayer.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
+import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -13,13 +16,18 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 
 
 import com.example.androidpodcastplayer.R;
 import com.example.androidpodcastplayer.common.Utils;
-import com.example.androidpodcastplayer.custom.ClearHistoryDialog;
+
+
 import com.example.androidpodcastplayer.custom.QuerySuggestionProvider;
 import com.example.androidpodcastplayer.ui.fragment.GridItemFragment;
 import com.example.androidpodcastplayer.ui.fragment.ListItemFragment;
@@ -31,8 +39,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements
         GridItemFragment.Contract,
-        ListItemFragment.Contract,
-        ClearHistoryDialog.CallbackListener{
+        ListItemFragment.Contract{
 
     // implementation of interface methods
     @Override
@@ -43,15 +50,6 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void gridItemClick(int position) {
         Utils.showSnackbar(mLayout, "Clicked grid item " + position);
-    }
-
-    @Override
-    public void confirmHistoryCleared(boolean historyCleared) {
-        if (historyCleared) {
-            mRecentSuggestions.clearHistory();
-            mRecentSuggestions = null;
-            Utils.showSnackbar(mLayout, "History successfully cleared");
-        }
     }
     // END
 
@@ -84,6 +82,14 @@ public class MainActivity extends AppCompatActivity implements
         setupViewPager(viewPager);
         mTabLayout.setupWithViewPager(viewPager);
         setupTabIcons();
+
+        // ensures there is a ref to suggestions on startup/device rotation
+        mRecentSuggestions = new SearchRecentSuggestions(
+                MainActivity.this,
+                QuerySuggestionProvider.AUTHORITY,
+                QuerySuggestionProvider.MODE
+        );
+
     }
 
 
@@ -94,7 +100,6 @@ public class MainActivity extends AppCompatActivity implements
         // Associate searchable config with SearchView widget
         SearchManager search = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         mSearchItem = menu.findItem(R.id.action_search);
-        //  mSearchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
         mSearchView = (SearchView) mSearchItem.getActionView();
         mSearchView.setSearchableInfo(search.getSearchableInfo(getComponentName()));
         mSearchView.setSubmitButtonEnabled(true);
@@ -108,7 +113,6 @@ public class MainActivity extends AppCompatActivity implements
         switch (item.getItemId()) {
             case R.id.action_delete:
                 if (mRecentSuggestions != null) {
-                    // FIXME suggestions ref lost on device rotation
                     ClearHistoryDialog dialog = new ClearHistoryDialog();
                     dialog.show(getSupportFragmentManager(), "clear history");
                 } else {
@@ -126,11 +130,12 @@ public class MainActivity extends AppCompatActivity implements
     SearchView.OnQueryTextListener listener = new SearchView.OnQueryTextListener() {
         @Override
         public boolean onQueryTextSubmit(String query) {
-            // save queries to suggestions provider
+            // re-create ref in case the suggestions has been cleared since startup
             mRecentSuggestions = new SearchRecentSuggestions(
                     MainActivity.this,
                     QuerySuggestionProvider.AUTHORITY,
                     QuerySuggestionProvider.MODE);
+            // save queries to suggestions provider
             mRecentSuggestions.saveRecentQuery(query, null);
             executeSearchQuery(query);
 
@@ -150,6 +155,14 @@ public class MainActivity extends AppCompatActivity implements
     private void executeSearchQuery(String query) {
         // TODO search iTunes
         Utils.showSnackbar(mLayout, "Execute search: " + query);
+    }
+
+    public void confirmHistoryCleared(boolean historyCleared) {
+        if (historyCleared) {
+            mRecentSuggestions.clearHistory();
+            mRecentSuggestions = null;
+            Utils.showSnackbar(mLayout, "History successfully cleared");
+        }
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -202,36 +215,34 @@ public class MainActivity extends AppCompatActivity implements
     }
 
 
-//    public static class ClearHistoryDialog extends DialogFragment implements View.OnClickListener{
-//
-//        public ClearHistoryDialog() {}
-//
-//        @Nullable
-//        @Override
-//        public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-//            View view = inflater.inflate(R.layout.dialog_clear_history, container, false);
-//            getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-//            (view.findViewById(R.id.dialog_positive_btn)).setOnClickListener(this);
-//            (view.findViewById(R.id.dialog_negative_btn)).setOnClickListener(this); // needs to be enabled to be dismissed
-//            return view;
-//        }
-//
-//        @Override
-//        public void onClick(View view) {
-//            switch (view.getId()) {
-//                case R.id.dialog_positive_btn:
-//                    if (mRecentSuggestions != null) {
-//                        mRecentSuggestions.clearHistory();
-//                        mRecentSuggestions = null;
-//                        Utils.showSnackbar(mLayout, "History successfully cleared");
-//                    }
-//                    break;
-//            }
-//            dismiss();
-//        }
-//
-//
-//    }
+    public static class ClearHistoryDialog extends DialogFragment implements View.OnClickListener{
+
+        private boolean mHistoryCleared = false;
+
+        public ClearHistoryDialog() {}
+
+        @Nullable
+        @Override
+        public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            View view = inflater.inflate(R.layout.dialog_clear_history, container, false);
+            getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            (view.findViewById(R.id.dialog_positive_btn)).setOnClickListener(this);
+            (view.findViewById(R.id.dialog_negative_btn)).setOnClickListener(this); // needs to be enabled to be dismissed
+            return view;
+        }
+
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()) {
+                case R.id.dialog_positive_btn:
+                    mHistoryCleared = true;
+                    break;
+            }
+            ((MainActivity)getActivity()).confirmHistoryCleared(mHistoryCleared);
+            dismiss();
+        }
+
+    }
 
 
 }
