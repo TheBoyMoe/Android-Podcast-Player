@@ -48,8 +48,8 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void gridItemClick(int position) {
-        Utils.showSnackbar(mLayout, "Clicked grid item " + position);
+    public void gridItemClick(int genreId) {
+        Utils.showSnackbar(mLayout, "Clicked grid item " + genreId);
     }
     // END
 
