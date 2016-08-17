@@ -13,7 +13,10 @@
     <dimen name="tab_layout_height">72dp</dimen>
     <dimen name="list_item_vertical_margin">8px</dimen>
     <dimen name="list_item_horizontal_margin">16px</dimen>
-    <dimen name="grid_item_size">120dp</dimen>
+    <dimen name="grid_item_height">160dp</dimen>
+    <dimen name="grid_item_width">120dp</dimen>
+    <dimen name="grid_item_image_size">120dp</dimen>
+    <dimen name="grid_item_title_height">40dp</dimen>
     <dimen name="grid_item_margin">6px</dimen>
 
 </resources>

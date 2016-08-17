@@ -2,26 +2,29 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:gravity="center"
     android:background="@drawable/touch_selector"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/grid_item_size">
+    android:layout_height="@dimen/grid_item_height">
 
     <ImageView
         android:id="@+id/item_icon"
-        android:layout_centerInParent="true"
-        android:layout_gravity="center_horizontal"
+        android:layout_alignParentTop="true"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="@dimen/grid_item_image_size"
         tools:ignore="ContentDescription"/>
 
-    <!--<TextView-->
-        <!--android:id="@+id/item_title"-->
-        <!--style="@style/ItemTextStyle.ItemTitle.Centered"-->
-        <!--tools:text="Jazz"-->
-        <!--android:paddingTop="@dimen/dimen_small"-->
-        <!--android:layout_below="@id/item_icon"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"/>-->
+    <LinearLayout
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/grid_item_title_height">
+
+        <TextView
+            android:id="@+id/item_title"
+            style="@style/TextStyle.GridItem"
+            android:text="Jazz"/>
+
+    </LinearLayout>
+
 
 </RelativeLayout>
