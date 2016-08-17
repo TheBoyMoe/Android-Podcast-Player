@@ -31,7 +31,7 @@ public class ItunesGenreDataCache {
             new ItunesGenre(PODCAST_LITERATURE, "Literature", R.drawable.literature_100x100),
             new ItunesGenre(PODCAST_PHILOSOPHY, "Philosophy", R.drawable.philosophy_100x100),
             new ItunesGenre(PODCAST_CAREERS, "Careers", R.drawable.careers_100x100),
-            new ItunesGenre(PODCAST_HISTORY, "history", R.drawable.history_100x100),
+            new ItunesGenre(PODCAST_HISTORY, "History", R.drawable.history_100x100),
             new ItunesGenre(PODCAST_SOCIAL_SCIENCES, "Social Sciences", R.drawable.social_sciences_100x100),
             new ItunesGenre(PODCAST_SELF_HELP, "Self Help", R.drawable.self_help_100x100),
             new ItunesGenre(PODCAST_VISUAL_ARTS, "Visual Arts", R.drawable.visual_arts_100x100),
