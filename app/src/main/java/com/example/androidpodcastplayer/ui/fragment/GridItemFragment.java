@@ -24,7 +24,7 @@ import java.util.List;
 public class GridItemFragment extends ContractFragment<GridItemFragment.Contract>{
 
     public interface Contract {
-        void gridItemClick(int genreId);
+        void gridItemClick(int genreId, String title);
     }
 
     public GridItemFragment() {}
@@ -83,6 +83,7 @@ public class GridItemFragment extends ContractFragment<GridItemFragment.Contract
             ImageView mIcon;
             TextView mTitle;
             int mId;
+            String mTitleText;
 
             public ViewHolder(View itemView) {
                 super(itemView);
@@ -93,14 +94,15 @@ public class GridItemFragment extends ContractFragment<GridItemFragment.Contract
 
             public void bindModelItem(ItunesGenre item) {
                 mId = item.getGenreId();
-                mTitle.setText(item.getTitle());
+                mTitleText = item.getTitle();
+                mTitle.setText(mTitleText);
                 Utils.loadPreviewWithGlide(mContext, item.getDrawable(), mIcon);
             }
 
             @Override
             public void onClick(View view) {
                 // forward click event to hosting fragment
-                getContract().gridItemClick(mId);
+                getContract().gridItemClick(mId, mTitleText);
             }
         }
 

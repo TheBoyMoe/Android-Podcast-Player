@@ -4,6 +4,7 @@
           package="com.example.androidpodcastplayer">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         android:allowBackup="true"
@@ -26,6 +27,15 @@
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable"/>
+        </activity>
+
+        <activity
+            android:name=".ui.activity.GenreActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".ui.activity.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.activity.MainActivity"/>
         </activity>
 
         <provider

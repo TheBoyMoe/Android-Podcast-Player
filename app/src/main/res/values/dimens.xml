@@ -18,5 +18,7 @@
     <dimen name="grid_item_image_size">120dp</dimen>
     <dimen name="grid_item_title_height">40dp</dimen>
     <dimen name="grid_item_margin">6px</dimen>
+    <dimen name="podcast_list_item_width">320dp</dimen>
+    <dimen name="podcast_list_item_height">160dp</dimen>
 
 </resources>
