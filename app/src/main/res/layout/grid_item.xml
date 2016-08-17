@@ -13,18 +13,17 @@
         android:layout_height="@dimen/grid_item_image_size"
         tools:ignore="ContentDescription"/>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_alignParentBottom="true"
-        android:orientation="vertical"
+        android:gravity="center_vertical"
         android:layout_width="match_parent"
         android:layout_height="@dimen/grid_item_title_height">
 
         <TextView
             android:id="@+id/item_title"
-            style="@style/TextStyle.GridItem"
-            android:text="Jazz"/>
+            style="@style/TextStyle.GridItem"/>
 
-    </LinearLayout>
+    </RelativeLayout>
 
 
 </RelativeLayout>

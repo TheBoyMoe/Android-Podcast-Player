@@ -47,9 +47,9 @@ public class Utils {
         return  activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 
-    public static void loadPreviewWithGlide(Context context, String previewPath, ImageView view) {
+    public static void loadPreviewWithGlide(Context context, int drawable, ImageView view) {
         Glide.with(context)
-                .load(previewPath)
+                .load(drawable)
                 .crossFade()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(view);
