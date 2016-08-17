@@ -61,29 +61,29 @@ package com.example.androidpodcastplayer.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchResult {
+public class Results {
 
-    private int ResultCount;
-    private List<Podcast> Results;
+    private int resultCount;
+    private List<Podcast> results;
 
-    public SearchResult() {
-        Results = new ArrayList<>();
+    public Results() {
+        results = new ArrayList<>();
     }
 
     public int getResultCount() {
-        return ResultCount;
+        return resultCount;
     }
 
     public void setResultCount(int resultCount) {
-        ResultCount = resultCount;
+        this.resultCount = resultCount;
     }
 
     public List<Podcast> getResults() {
-        return Results;
+        return results;
     }
 
     public void setResults(List<Podcast> results) {
-        Results = results;
+        this.results = results;
     }
 
 

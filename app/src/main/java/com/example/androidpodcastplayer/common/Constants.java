@@ -6,5 +6,7 @@ public class Constants {
     public static final String CONFIRM_HISTORY_CLEARED = "confirm_history_cleared";
     public static final int REQUEST_CODE_HISTORY_CLEARED = 101;
 
+    public static final String REST_TERM = "podcasts";
+    public static final int REST_LIMIT = 10;
 
 }

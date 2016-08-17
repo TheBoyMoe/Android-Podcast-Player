@@ -25,10 +25,15 @@ import android.view.Window;
 
 
 import com.example.androidpodcastplayer.R;
+import com.example.androidpodcastplayer.common.Constants;
 import com.example.androidpodcastplayer.common.Utils;
 
 
 import com.example.androidpodcastplayer.custom.QuerySuggestionProvider;
+import com.example.androidpodcastplayer.model.Podcast;
+import com.example.androidpodcastplayer.model.Results;
+import com.example.androidpodcastplayer.rest.ApiClient;
+import com.example.androidpodcastplayer.rest.ApiInterface;
 import com.example.androidpodcastplayer.ui.fragment.GridItemFragment;
 import com.example.androidpodcastplayer.ui.fragment.ListItemFragment;
 import com.example.androidpodcastplayer.ui.fragment.PlaylistFragment;
@@ -36,6 +41,11 @@ import com.example.androidpodcastplayer.ui.fragment.SubscriptionFragment;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity implements
         GridItemFragment.Contract,
@@ -49,7 +59,8 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void gridItemClick(int genreId) {
-        Utils.showSnackbar(mLayout, "Clicked grid item " + genreId);
+        // TODO execute download of podcasts for the relevant genre
+        executeCatalogueQuery(genreId);
     }
     // END
 
@@ -155,6 +166,27 @@ public class MainActivity extends AppCompatActivity implements
     private void executeSearchQuery(String query) {
         // TODO search iTunes
         Utils.showSnackbar(mLayout, "Execute search: " + query);
+    }
+
+    private void executeCatalogueQuery(int genreId) {
+        ApiInterface restService = ApiClient.getClient().create(ApiInterface.class);
+        Call<Results> call = restService.getCategoryPodcasts(
+                Constants.REST_TERM, genreId, Constants.REST_LIMIT
+        );
+        call.enqueue(new Callback<Results>() {
+            @Override
+            public void onResponse(Call<Results> call, Response<Results> response) {
+                List<Podcast> results = response.body().getResults();
+                for (Podcast result : results) {
+                    Timber.i("%s: artist name: %s", Constants.LOG_TAG, result.getArtistName());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Results> call, Throwable t) {
+                Timber.e("%s error %s", Constants.LOG_TAG, t.getMessage());
+            }
+        });
     }
 
     public void confirmHistoryCleared(boolean historyCleared) {
