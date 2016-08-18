@@ -32,7 +32,7 @@ public class ApiClient {
             logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
             sOkHttpClient = new OkHttpClient.Builder()
                     .addInterceptor(logging)
-                    .addNetworkInterceptor(new StethoInterceptor()) // enable network inspection
+                    .addNetworkInterceptor(new StethoInterceptor()) // enable network inspection via chrome
                     .build();
         }
         return sOkHttpClient;

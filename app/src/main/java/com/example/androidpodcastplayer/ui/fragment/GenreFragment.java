@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.example.androidpodcastplayer.R;
 import com.example.androidpodcastplayer.common.Constants;
-import com.example.androidpodcastplayer.common.Utils;
 import com.example.androidpodcastplayer.model.Podcast;
 import com.example.androidpodcastplayer.model.Results;
 import com.example.androidpodcastplayer.rest.ApiClient;
@@ -70,11 +69,12 @@ public class GenreFragment extends ContractFragment<GenreFragment.Contract>{
     }
 
     private void executeGenreQuery(int genreId) {
+        // instantiate retrofit client and execute rest call asynchronously
         ApiInterface restService = ApiClient.getClient().create(ApiInterface.class);
-        Call<Results> call = restService.getCategoryPodcasts(
+        Call<Results> call = restService.getGenrePodcasts(
                 Constants.REST_TERM, genreId, Constants.REST_LIMIT
         );
-        call.enqueue(new Callback<Results>() { // execute call asynchronously
+        call.enqueue(new Callback<Results>() {
             @Override
             public void onResponse(Call<Results> call, Response<Results> response) {
                 List<Podcast> results = response.body().getResults();

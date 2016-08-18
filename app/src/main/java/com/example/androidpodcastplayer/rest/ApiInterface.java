@@ -14,9 +14,9 @@ public interface ApiInterface {
     // download the podcasts for the genreId
     // example url: https://itunes.apple.com/search?term=podcasts&genreId=1406&limit=10
     @GET("search?")
-    Call<Results> getCategoryPodcasts(@Query("term") String term,
-                                      @Query("genreId") int genreId,
-                                      @Query("limit") int limit);
+    Call<Results> getGenrePodcasts(@Query("term") String term,
+                                   @Query("genreId") int genreId,
+                                   @Query("limit") int limit);
 
 
 }

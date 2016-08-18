@@ -61,10 +61,9 @@ public class GenreActivity extends AppCompatActivity implements
         if (genreTitle != null) {
             setTitle(genreTitle + " Genre");
         }
+        // retrieve the genreId and load the genre fragment
         int genreId = getIntent().getIntExtra(Constants.GENRE_ID, 0);
-        // load genre fragment
         if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) == null) {
-            Timber.i("%s instantiating genre fragment", Constants.LOG_TAG);
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.fragment_container, GenreFragment.newInstance(genreId))
                     .commit();
