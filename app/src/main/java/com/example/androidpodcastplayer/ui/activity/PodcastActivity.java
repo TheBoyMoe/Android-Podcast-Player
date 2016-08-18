@@ -13,13 +13,11 @@ import android.view.MenuItem;
 import com.example.androidpodcastplayer.R;
 import com.example.androidpodcastplayer.common.Constants;
 import com.example.androidpodcastplayer.common.Utils;
-import com.example.androidpodcastplayer.ui.fragment.GenreFragment;
-
-import timber.log.Timber;
+import com.example.androidpodcastplayer.ui.fragment.PodcastFragment;
 
 
-public class GenreActivity extends AppCompatActivity implements
-        GenreFragment.Contract{
+public class PodcastActivity extends AppCompatActivity implements
+        PodcastFragment.Contract{
 
     // impl of contract methods
     @Override
@@ -34,7 +32,7 @@ public class GenreActivity extends AppCompatActivity implements
     // END
 
     public static void launch(Activity activity, int genreId, String genreTitle) {
-        Intent intent = new Intent(activity, GenreActivity.class);
+        Intent intent = new Intent(activity, PodcastActivity.class);
         intent.putExtra(Constants.GENRE_ID, genreId);
         intent.putExtra(Constants.GENRE_TITLE, genreTitle);
         activity.startActivity(intent);
@@ -65,7 +63,7 @@ public class GenreActivity extends AppCompatActivity implements
         int genreId = getIntent().getIntExtra(Constants.GENRE_ID, 0);
         if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_container, GenreFragment.newInstance(genreId))
+                    .add(R.id.fragment_container, PodcastFragment.newInstance(genreId))
                     .commit();
         }
 

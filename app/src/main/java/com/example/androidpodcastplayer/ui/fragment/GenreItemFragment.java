@@ -21,16 +21,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class GridItemFragment extends ContractFragment<GridItemFragment.Contract>{
+public class GenreItemFragment extends ContractFragment<GenreItemFragment.Contract>{
 
     public interface Contract {
         void gridItemClick(int genreId, String title);
     }
 
-    public GridItemFragment() {}
+    public GenreItemFragment() {}
 
-    public static GridItemFragment newInstance() {
-        return new GridItemFragment();
+    public static GenreItemFragment newInstance() {
+        return new GenreItemFragment();
     }
 
     @Nullable

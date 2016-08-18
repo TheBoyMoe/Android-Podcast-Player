@@ -2,6 +2,7 @@ package com.example.androidpodcastplayer.ui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +23,7 @@ import retrofit2.Response;
 import timber.log.Timber;
 
 
-public class GenreFragment extends ContractFragment<GenreFragment.Contract>{
+public class PodcastFragment extends ContractFragment<PodcastFragment.Contract>{
 
     public interface Contract {
         void onItemClick();
@@ -31,10 +32,10 @@ public class GenreFragment extends ContractFragment<GenreFragment.Contract>{
 
     private TextView mEmptyView;
 
-    public GenreFragment() {}
+    public PodcastFragment() {}
 
-    public static GenreFragment newInstance(int genreId) {
-        GenreFragment fragment = new GenreFragment();
+    public static PodcastFragment newInstance(int genreId) {
+        PodcastFragment fragment = new PodcastFragment();
         Bundle args = new Bundle();
         args.putInt(Constants.GENRE_ID, genreId);
         fragment.setArguments(args);
@@ -91,5 +92,38 @@ public class GenreFragment extends ContractFragment<GenreFragment.Contract>{
         });
     }
 
+
+    class PodcastListAdapter extends RecyclerView.Adapter<PodcastListAdapter.ViewHolder>{
+
+
+        @Override
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            return null;
+        }
+
+        @Override
+        public void onBindViewHolder(ViewHolder holder, int position) {
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return 0;
+        }
+
+
+        class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+            public ViewHolder(View itemView) {
+                super(itemView);
+            }
+
+            @Override
+            public void onClick(View view) {
+
+            }
+        }
+
+    }
 
 }

@@ -1,6 +1,5 @@
 package com.example.androidpodcastplayer.ui.activity;
 
-import android.annotation.SuppressLint;
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
@@ -28,7 +27,7 @@ import com.example.androidpodcastplayer.R;
 import com.example.androidpodcastplayer.common.Utils;
 
 import com.example.androidpodcastplayer.custom.QuerySuggestionProvider;
-import com.example.androidpodcastplayer.ui.fragment.GridItemFragment;
+import com.example.androidpodcastplayer.ui.fragment.GenreItemFragment;
 import com.example.androidpodcastplayer.ui.fragment.ListItemFragment;
 import com.example.androidpodcastplayer.ui.fragment.PlaylistFragment;
 import com.example.androidpodcastplayer.ui.fragment.SubscriptionFragment;
@@ -38,7 +37,7 @@ import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity implements
-        GridItemFragment.Contract,
+        GenreItemFragment.Contract,
         ListItemFragment.Contract{
 
     // implementation of interface methods
@@ -49,10 +48,10 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void gridItemClick(int genreId, String genreTitle) {
-        // launch GenreActivity which will execute download of podcasts
+        // launch PodcastActivity which will execute download of podcasts
         // for the relevant genre and display the results
         if (Utils.isClientConnected(this)) {
-            GenreActivity.launch(this, genreId, genreTitle);
+            PodcastActivity.launch(this, genreId, genreTitle);
         } else {
             Utils.showSnackbar(mLayout, "No network connection");
         }
@@ -181,7 +180,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private void setupViewPager(ViewPager viewPager) {
         CustomViewPagerAdapter adapter = new CustomViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(GridItemFragment.newInstance(), "Explore");
+        adapter.addFragment(GenreItemFragment.newInstance(), "Explore");
         adapter.addFragment(ListItemFragment.newInstance(), "Categories");
         adapter.addFragment(SubscriptionFragment.newInstance(), "Subscription");
         adapter.addFragment(PlaylistFragment.newInstance(), "Playlist");
