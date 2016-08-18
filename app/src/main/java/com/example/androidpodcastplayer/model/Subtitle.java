@@ -8,6 +8,8 @@ public class Subtitle {
     @SerializedName("__cdata")
     private String description;
 
+    public Subtitle() { }
+
     public String getDescription() {
         return description;
     }

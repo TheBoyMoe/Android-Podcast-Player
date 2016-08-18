@@ -8,6 +8,8 @@ public class Duration {
     @SerializedName("__text")
     private String duration;
 
+    public Duration() { }
+
     public String getDuration() {
         return duration;
     }

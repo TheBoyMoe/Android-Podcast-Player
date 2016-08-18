@@ -90,6 +90,8 @@ package com.example.androidpodcastplayer.model;
 public class Rss {
     private Channel channel;
 
+    public Rss() {  }
+
     public Channel getChannel() {
         return channel;
     }

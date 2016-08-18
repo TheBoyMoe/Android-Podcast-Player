@@ -8,6 +8,8 @@ public class Description {
     @SerializedName("__cdata")
     private String description;
 
+    public Description() {  }
+
     public String getDescription() {
         return description;
     }

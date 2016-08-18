@@ -13,6 +13,8 @@ public class Channel {
     private Description description;
     private List<Episode> item;
 
+    public Channel() { }
+
     public String getTitle() {
         return title;
     }

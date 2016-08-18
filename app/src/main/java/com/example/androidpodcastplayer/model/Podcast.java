@@ -67,7 +67,7 @@ public class Podcast {
     private String collectionName;
     private String trackName;
     private String collectionViewUrl;
-    private String feedUrl;
+    private String feedUrl; // episode list
     private String trackViewUrl;
     private String artworkUrl100;
     private String artworkUrl600;
@@ -75,8 +75,7 @@ public class Podcast {
     private int trackCount;
     private String country;
     private String primaryGenreName;
-    private String[] genreIds;
-    private String[] genres;
+
 
     public Podcast() {}
 
@@ -206,22 +205,6 @@ public class Podcast {
 
     public void setPrimaryGenreName(String primaryGenreName) {
         this.primaryGenreName = primaryGenreName;
-    }
-
-    public String[] getGenreIds() {
-        return genreIds;
-    }
-
-    public void setGenreIds(String[] genreIds) {
-        this.genreIds = genreIds;
-    }
-
-    public String[] getGenres() {
-        return genres;
-    }
-
-    public void setGenres(String[] genres) {
-        this.genres = genres;
     }
 
 

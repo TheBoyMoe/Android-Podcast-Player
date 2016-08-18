@@ -80,7 +80,7 @@ public class PodcastFragment extends ContractFragment<PodcastFragment.Contract>{
             public void onResponse(Call<Results> call, Response<Results> response) {
                 List<Podcast> results = response.body().getResults();
                 for (Podcast result : results) {
-                    Timber.i("%s: artist name: %s", Constants.LOG_TAG, result.getArtistName());
+                    Timber.i("%s: artist name: %s, rss feed: %s", Constants.LOG_TAG, result.getArtistName(), result.getFeedUrl());
                 }
             }
 

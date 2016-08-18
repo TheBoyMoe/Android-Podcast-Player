@@ -8,6 +8,8 @@ public class Image {
     @SerializedName(value = "url", alternate = "_href")
     private String url;
 
+    public Image() {  }
+
     public String getUrl() {
         return url;
     }

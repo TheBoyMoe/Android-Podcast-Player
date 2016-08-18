@@ -51,6 +51,8 @@ public class Episode {
     private Duration duration;
     private Subtitle subtitle;
 
+    public Episode() { }
+
     public String getTitle() {
         return title;
     }
