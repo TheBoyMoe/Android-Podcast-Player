@@ -21,8 +21,9 @@ public class PodcastActivity extends AppCompatActivity implements
 
     // impl of contract methods
     @Override
-    public void onItemClick() {
+    public void onItemClick(String feedUrl) {
         // TODO download episodes for that particular podcast
+        Utils.showSnackbar(mLayout, "rss feed: " + feedUrl);
     }
 
     @Override

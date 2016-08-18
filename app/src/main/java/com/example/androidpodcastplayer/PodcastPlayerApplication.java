@@ -34,7 +34,7 @@ public class PodcastPlayerApplication extends Application{
         }
 
         // enable Leak Canary
-        LeakCanary.install(this);
+        // LeakCanary.install(this);
 
     }
 

@@ -2,6 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
+             android:paddingTop="?android:attr/actionBarSize"
              android:background="@color/secondary_background">
 
 
@@ -9,7 +10,7 @@
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:columnWidth="@dimen/podcast_list_item_width"
+        android:columnWidth="@dimen/list_item_width"
         android:clipToPadding="false"/>
 
     <TextView

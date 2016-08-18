@@ -55,5 +55,13 @@ public class Utils {
                 .into(view);
     }
 
+    public static void loadPreviewWithGlide(Context context, String url, ImageView view) {
+        Glide.with(context)
+                .load(url)
+                .crossFade()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(view);
+    }
+
 
 }

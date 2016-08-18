@@ -63,7 +63,7 @@ public class GenreItemFragment extends ContractFragment<GenreItemFragment.Contra
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             mContext = parent.getContext();
-            View view = LayoutInflater.from(mContext).inflate(R.layout.grid_item, parent, false);
+            View view = LayoutInflater.from(mContext).inflate(R.layout.genre_item, parent, false);
             return new ViewHolder(view);
         }
 
