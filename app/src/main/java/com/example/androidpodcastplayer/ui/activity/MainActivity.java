@@ -66,8 +66,8 @@ public class MainActivity extends AppCompatActivity implements
     private TabLayout mTabLayout;
     private int[] mTabIcons = {
             R.drawable.ic_explore,
-            R.drawable.ic_top_fifty,
             R.drawable.ic_subscription,
+            R.drawable.ic_favourites,
             R.drawable.ic_playlist
     };
 

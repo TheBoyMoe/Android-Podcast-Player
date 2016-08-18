@@ -59,7 +59,7 @@ public class PodcastFragment extends ContractFragment<PodcastFragment.Contract>{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.content_podcast_recycler, container, false);
+        View view = inflater.inflate(R.layout.content_podcast, container, false);
         mEmptyView = (TextView) view.findViewById(R.id.empty_view);
         mRecyclerView = (AutofitRecyclerView) view.findViewById(R.id.recycler_view);
         mRecyclerView.addItemDecoration(new ItemSpacerDecoration(

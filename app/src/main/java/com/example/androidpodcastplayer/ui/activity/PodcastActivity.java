@@ -44,7 +44,7 @@ public class PodcastActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_genre);
+        setContentView(R.layout.activity_podcast);
         mLayout = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
 
         // instantiate the toolbar with up nav arrow

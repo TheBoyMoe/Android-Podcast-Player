@@ -7,19 +7,23 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
-public class TopFiftyFragment extends BaseFragment{
+public class EpisodeFragment extends ContractFragment<EpisodeFragment.Contract>{
 
-    public TopFiftyFragment() {}
+    public interface Contract {
+        void onItemClick(String episodeUrl);
+    }
 
-    public static TopFiftyFragment newInstance() {
-        return new TopFiftyFragment();
+    public EpisodeFragment() {}
+
+    public static EpisodeFragment newInstance() {
+        return new EpisodeFragment();
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = super.onCreateView(inflater, container, savedInstanceState);
-        mContent.setText("Top Fifty");
-        return view;
+        return null;
     }
+
+
 }

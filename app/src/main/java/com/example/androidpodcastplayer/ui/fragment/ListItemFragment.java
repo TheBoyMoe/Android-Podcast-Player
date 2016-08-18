@@ -30,7 +30,7 @@ public class ListItemFragment extends ContractFragment<ListItemFragment.Contract
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.content_list_recycler, container, false);
+        View view = inflater.inflate(R.layout.content_recycler_std, container, false);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
