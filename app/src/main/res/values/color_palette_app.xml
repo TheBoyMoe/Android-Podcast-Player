@@ -17,4 +17,9 @@
     <color name="secondary_icons">@color/md_grey_600</color>
     <color name="divider">@color/md_grey_400</color>
 
+    <color name="color_swipe_1">@color/md_pink_300</color>
+    <color name="color_swipe_2">@color/md_pink_400</color>
+    <color name="color_swipe_3">@color/md_pink_600</color>
+    <color name="color_swipe_4">@color/md_pink_800</color>
+
 </resources>

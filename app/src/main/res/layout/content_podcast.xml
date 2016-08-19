@@ -23,4 +23,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:indeterminateDrawable="@drawable/progress_bar_circular"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:layout_width="@dimen/progress_bar_size"
+        android:layout_height="@dimen/progress_bar_size"/>
+
 </FrameLayout>

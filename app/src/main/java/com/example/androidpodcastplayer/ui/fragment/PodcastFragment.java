@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.androidpodcastplayer.R;
@@ -20,6 +21,7 @@ import com.example.androidpodcastplayer.model.Results;
 import com.example.androidpodcastplayer.rest.ApiClient;
 import com.example.androidpodcastplayer.rest.ApiInterface;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -30,16 +32,16 @@ import timber.log.Timber;
 
 public class PodcastFragment extends ContractFragment<PodcastFragment.Contract>{
 
-    private AutofitRecyclerView mRecyclerView;
-    private PodcastListAdapter mAdapter;
-
     public interface Contract {
         void onItemClick(String feedUrl);
         void downloadError(String message);
     }
 
+    private PodcastListAdapter mAdapter;
+    private AutofitRecyclerView mRecyclerView;
     private TextView mEmptyView;
-    private List<Podcast> mPodcastList;
+    private List<Podcast> mPodcastList = new ArrayList<>();
+    private ProgressBar mProgressBar;
 
     public PodcastFragment() {}
 
@@ -60,6 +62,7 @@ public class PodcastFragment extends ContractFragment<PodcastFragment.Contract>{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.content_podcast, container, false);
+        mProgressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
         mEmptyView = (TextView) view.findViewById(R.id.empty_view);
         mRecyclerView = (AutofitRecyclerView) view.findViewById(R.id.recycler_view);
         mRecyclerView.addItemDecoration(new ItemSpacerDecoration(
@@ -67,6 +70,9 @@ public class PodcastFragment extends ContractFragment<PodcastFragment.Contract>{
                 getResources().getDimensionPixelOffset(R.dimen.grid_item_margin)
         ));
         mRecyclerView.setHasFixedSize(true);
+        // provide an empty list allowing the adapter to be attached
+        mAdapter = new PodcastListAdapter(mPodcastList);
+        mRecyclerView.setAdapter(mAdapter);
         // download data and bind to the adapter
         displayContent();
 
@@ -86,6 +92,7 @@ public class PodcastFragment extends ContractFragment<PodcastFragment.Contract>{
     private void executeGenreQuery(int genreId) {
         // instantiate retrofit client and execute rest call asynchronously
         Timber.i("%s: executing download task", Constants.LOG_TAG);
+        mProgressBar.setVisibility(View.VISIBLE);
         ApiInterface restService = ApiClient.getClient().create(ApiInterface.class);
         Call<Results> call = restService.getGenrePodcasts(
                 Constants.REST_TERM, genreId, Constants.REST_LIMIT
@@ -93,10 +100,11 @@ public class PodcastFragment extends ContractFragment<PodcastFragment.Contract>{
         call.enqueue(new Callback<Results>() {
             @Override
             public void onResponse(Call<Results> call, Response<Results> response) {
+                mProgressBar.setVisibility(View.GONE);
                 mPodcastList = response.body().getResults();
                 if (mPodcastList != null && mPodcastList.size() > 0) {
-                    PodcastListAdapter adapter = new PodcastListAdapter(mPodcastList);
-                    mRecyclerView.setAdapter(adapter);
+                    mAdapter = new PodcastListAdapter(mPodcastList);
+                    mRecyclerView.swapAdapter(mAdapter, true);
                     mEmptyView.setVisibility(View.GONE);
                 } else {
                     getContract().downloadError("Error downloading podcasts");
@@ -106,8 +114,11 @@ public class PodcastFragment extends ContractFragment<PodcastFragment.Contract>{
 
             @Override
             public void onFailure(Call<Results> call, Throwable t) {
-                Timber.e("%s error %s", Constants.LOG_TAG, t.getMessage());
+                mProgressBar.setVisibility(View.GONE);
+                Timber.e("%s Retrofit error: %s", Constants.LOG_TAG, t.getMessage());
                 getContract().downloadError(t.getMessage());
+                mEmptyView.setText(R.string.error_connecting_text);
+                mEmptyView.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -136,7 +147,7 @@ public class PodcastFragment extends ContractFragment<PodcastFragment.Contract>{
 
         @Override
         public int getItemCount() {
-            return mList.size();
+            return (mList != null) ? mList.size() : 0;
         }
 
 
