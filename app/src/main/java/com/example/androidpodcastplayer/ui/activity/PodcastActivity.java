@@ -13,17 +13,29 @@ import android.view.MenuItem;
 import com.example.androidpodcastplayer.R;
 import com.example.androidpodcastplayer.common.Constants;
 import com.example.androidpodcastplayer.common.Utils;
+import com.example.androidpodcastplayer.rest.ApiClient;
 import com.example.androidpodcastplayer.ui.fragment.PodcastFragment;
 
 
-public class PodcastActivity extends AppCompatActivity implements
+
+import retrofit2.Retrofit;
+
+import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
+import timber.log.Timber;
+
+
+public class PodcastActivity extends BaseActivity implements
         PodcastFragment.Contract{
 
     // impl of contract methods
     @Override
     public void onItemClick(String feedUrl) {
-        // TODO download episodes for that particular podcast
-        Utils.showSnackbar(mLayout, "rss feed: " + feedUrl);
+        // launch EpisodeActivity and display Podcast Info and episode list
+        if (Utils.isClientConnected(this)) {
+            EpisodeActivity.launch(this, feedUrl);
+        } else {
+            Utils.showSnackbar(mLayout, getString(R.string.no_network_connection));
+        }
     }
 
     @Override
@@ -48,39 +60,40 @@ public class PodcastActivity extends AppCompatActivity implements
         mLayout = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
 
         // instantiate the toolbar with up nav arrow
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back);
-        }
+        initToolbar();
+
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back);
+//        }
 
         // set the title to match the genre
         String genreTitle = getIntent().getStringExtra(Constants.GENRE_TITLE);
         if (genreTitle != null) {
             setTitle(genreTitle + " Genre");
         }
+
         // retrieve the genreId and load the genre fragment
-        int genreId = getIntent().getIntExtra(Constants.GENRE_ID, 0);
         if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_container, PodcastFragment.newInstance(genreId))
-                    .commit();
+            int genreId = getIntent().getIntExtra(Constants.GENRE_ID, 0);
+            initFragment(PodcastFragment.newInstance(genreId));
         }
 
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case android.R.id.home:
+//                onBackPressed();
+//                return true;
+//            default:
+//                return super.onOptionsItemSelected(item);
+//        }
+//    }
+//
 
 
 }

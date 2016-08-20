@@ -14,8 +14,8 @@ import com.example.androidpodcastplayer.R;
 import com.example.androidpodcastplayer.common.Utils;
 import com.example.androidpodcastplayer.custom.ItemSpacerDecoration;
 import com.example.androidpodcastplayer.custom.AutofitRecyclerView;
-import com.example.androidpodcastplayer.model.ItunesGenre;
-import com.example.androidpodcastplayer.model.ItunesGenreDataCache;
+import com.example.androidpodcastplayer.model.genre.ItunesGenre;
+import com.example.androidpodcastplayer.model.genre.ItunesGenreDataCache;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,7 +24,7 @@ import java.util.List;
 public class GenreItemFragment extends ContractFragment<GenreItemFragment.Contract>{
 
     public interface Contract {
-        void gridItemClick(int genreId, String title);
+        void genreItemClick(int genreId, String title);
     }
 
     public GenreItemFragment() {}
@@ -102,7 +102,7 @@ public class GenreItemFragment extends ContractFragment<GenreItemFragment.Contra
             @Override
             public void onClick(View view) {
                 // forward click event to hosting fragment
-                getContract().gridItemClick(mId, mTitleText);
+                getContract().genreItemClick(mId, mTitleText);
             }
         }
 

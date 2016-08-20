@@ -13,6 +13,10 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.facebook.stetho.okhttp3.StethoInterceptor;
+
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 
 public class Utils {
 
@@ -62,6 +66,17 @@ public class Utils {
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(view);
     }
+
+    public static OkHttpClient getsOkHttpClient() {
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
+
+        return new OkHttpClient.Builder()
+                .addInterceptor(logging)
+                .addNetworkInterceptor(new StethoInterceptor()) // enable network inspection via chrome
+                .build();
+    }
+
 
 
 }

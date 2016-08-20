@@ -4,11 +4,10 @@ import com.example.androidpodcastplayer.common.Constants;
 import com.example.androidpodcastplayer.common.Utils;
 
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
-public class ApiClient {
+public class RssClient {
 
-    // example url: https://itunes.apple.com/search?term=podcasts&genreId=1406&limit=10
     private static Retrofit sRetrofit;
 
     public static Retrofit getClient() {
@@ -16,11 +15,12 @@ public class ApiClient {
             sRetrofit = new Retrofit.Builder()
                     .client(Utils.getsOkHttpClient())
                     .baseUrl(Constants.BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create())
+                    .addConverterFactory(SimpleXmlConverterFactory.create())
                     .build();
         }
         return sRetrofit;
     }
+
 
 
 }

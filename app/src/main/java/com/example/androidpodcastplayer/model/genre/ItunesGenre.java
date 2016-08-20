@@ -1,4 +1,4 @@
-package com.example.androidpodcastplayer.model;
+package com.example.androidpodcastplayer.model.genre;
 
 public class ItunesGenre {
 

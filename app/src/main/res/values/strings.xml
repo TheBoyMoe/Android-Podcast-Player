@@ -99,4 +99,5 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="error_connecting_text">Error connecting, try again</string>
+    <string name="no_network_connection">No network connection</string>
 </resources>

@@ -1,6 +1,6 @@
-package com.example.androidpodcastplayer.model;
+package com.example.androidpodcastplayer.model.genre;
 
-public class PodcastGenreIdConstants {
+public class ItunesGenreIdConstants {
 
     // a selection of genres/categories available from the iTunes search api
     public static final int PODCAST_ARTS = 1301;

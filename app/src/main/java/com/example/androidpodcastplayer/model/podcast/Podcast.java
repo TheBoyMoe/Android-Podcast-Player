@@ -1,4 +1,4 @@
-package com.example.androidpodcastplayer.model;
+package com.example.androidpodcastplayer.model.podcast;
 
 /*
     Search results: https://itunes.apple.com/search?term=paleo&entity=podcast&limit=10

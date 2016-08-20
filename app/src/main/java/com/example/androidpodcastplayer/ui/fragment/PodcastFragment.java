@@ -16,8 +16,8 @@ import com.example.androidpodcastplayer.common.Constants;
 import com.example.androidpodcastplayer.common.Utils;
 import com.example.androidpodcastplayer.custom.AutofitRecyclerView;
 import com.example.androidpodcastplayer.custom.ItemSpacerDecoration;
-import com.example.androidpodcastplayer.model.Podcast;
-import com.example.androidpodcastplayer.model.Results;
+import com.example.androidpodcastplayer.model.podcast.Podcast;
+import com.example.androidpodcastplayer.model.podcast.Results;
 import com.example.androidpodcastplayer.rest.ApiClient;
 import com.example.androidpodcastplayer.rest.ApiInterface;
 

@@ -12,4 +12,9 @@ public class Constants {
     public static final String GENRE_ID = "genre_id";
     public static final String GENRE_TITLE = "genre_title";
 
+    public static final String BASE_URL = "https://itunes.apple.com/";
+
+    public static final String RSS_FEED_URL = "rss_feed_url";
+
+
 }

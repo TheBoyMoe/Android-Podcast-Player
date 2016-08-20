@@ -1,20 +1,23 @@
-package com.example.androidpodcastplayer.model;
+package com.example.androidpodcastplayer.model.episode;
 
 
-import com.google.gson.annotations.SerializedName;
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Root;
 
-public class Enclosure {
+import java.io.Serializable;
+@Root(strict = false)
+public class EpisodeInfo implements Serializable{
 
-    @SerializedName("_length")
+    @Attribute(name = "length", required = false)
     private String length;
 
-    @SerializedName("_type")
+    @Attribute(name = "type", required = false)
     private String type;
 
-    @SerializedName("_url")
+    @Attribute(name = "url", required = false)
     private String url;
 
-    public Enclosure() { }
+    public EpisodeInfo() { }
 
     public String getLength() {
         return length;

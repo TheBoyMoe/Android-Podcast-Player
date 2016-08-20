@@ -47,13 +47,13 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void gridItemClick(int genreId, String genreTitle) {
+    public void genreItemClick(int genreId, String genreTitle) {
         // launch PodcastActivity which will execute download of podcasts
         // for the relevant genre and display the results
         if (Utils.isClientConnected(this)) {
             PodcastActivity.launch(this, genreId, genreTitle);
         } else {
-            Utils.showSnackbar(mLayout, "No network connection");
+            Utils.showSnackbar(mLayout, getString(R.string.no_network_connection));
         }
     }
     // END

@@ -37,12 +37,12 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_episode"/>
+    <!--<include layout="@layout/content_episode"/>-->
 
-    <!--<FrameLayout-->
-        <!--android:id="@+id/fragment_container"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"/>-->
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
     <!-- used to save podcast to subscriptions -->
     <android.support.design.widget.FloatingActionButton
