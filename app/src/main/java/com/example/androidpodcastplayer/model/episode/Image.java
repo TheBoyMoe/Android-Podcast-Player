@@ -10,11 +10,8 @@ import java.io.Serializable;
 @Root(strict = false)
 public class Image implements Serializable{
 
-    @Element(name = "url", required = false)
+    @Attribute(name = "href", required = false)
     private String url;
-
-    @Element(name = "title", required = false)
-    private String title;
 
     public Image() {  }
 
@@ -26,12 +23,5 @@ public class Image implements Serializable{
         this.url = url;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
 
 }

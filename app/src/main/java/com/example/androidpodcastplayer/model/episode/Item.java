@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 
 @Root(strict = false)
-public class Episode implements Serializable {
+public class Item implements Serializable {
 
     @Element(name = "title", required = false)
     private String title;
@@ -24,12 +24,12 @@ public class Episode implements Serializable {
     private String author;
     @Namespace(reference = "http://www.itunes.com/dtds/podcast-1.0.dtd")
     @Element(name = "image", required = false)
-    private EpisodeImage image;
+    private Image image;
     @Element(name = "enclosure", required = false)
     private EpisodeInfo episodeInfo;
 
 
-    public Episode() { }
+    public Item() { }
 
     public String getTitle() {
         return title;
@@ -71,20 +71,20 @@ public class Episode implements Serializable {
         this.author = author;
     }
 
-    public EpisodeImage getImage() {
-        return image;
-    }
-
-    public void setImage(EpisodeImage image) {
-        this.image = image;
-    }
-
     public EpisodeInfo getEpisodeInfo() {
         return episodeInfo;
     }
 
     public void setEpisodeInfo(EpisodeInfo episodeInfo) {
         this.episodeInfo = episodeInfo;
+    }
+
+    public Image getImage() {
+        return image;
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
     }
 
 

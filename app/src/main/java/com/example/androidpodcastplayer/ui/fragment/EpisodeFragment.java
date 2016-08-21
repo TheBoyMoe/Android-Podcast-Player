@@ -7,8 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.androidpodcastplayer.common.Constants;
-import com.example.androidpodcastplayer.model.episode.Episode;
+import com.example.androidpodcastplayer.model.episode.Author;
+import com.example.androidpodcastplayer.model.episode.Category;
+import com.example.androidpodcastplayer.model.episode.Channel;
 import com.example.androidpodcastplayer.model.episode.Feed;
+import com.example.androidpodcastplayer.model.episode.Image;
+import com.example.androidpodcastplayer.model.episode.Item;
 import com.example.androidpodcastplayer.rest.RssClient;
 import com.example.androidpodcastplayer.rest.RssInterface;
 
@@ -55,12 +59,42 @@ public class EpisodeFragment extends ContractFragment<EpisodeFragment.Contract>{
         call.enqueue(new Callback<Feed>() {
             @Override
             public void onResponse(Call<Feed> call, Response<Feed> response) {
-                Timber.i("%s success!", Constants.LOG_TAG);
-//                List<Episode> episodes = response.body().getChannel().getItems();
-//                for (Episode episode:episodes) {
-//                    Timber.i("%s: title: %s",
-//                            Constants.LOG_TAG, episode.getTitle());
-//                }
+                Channel channel = response.body().getChannel();
+
+                List<Image> images = channel.getImages();
+                String url = null;
+                for (Image image : images) {
+                    url = image.getUrl();
+                    if (url != null) break;
+                }
+                String cat = null;
+                List<Category> categories = channel.getCategory();
+                for (Category category : categories) {
+                    cat = category.getCategory();
+                    if (cat != null) break;
+                }
+                Timber.i("%s title: %s, pubDate: %s, buildDate: %s, language: %s, author: %s, description: %s, image link %s, category %s, episodes %s",
+                    Constants.LOG_TAG, channel.getTitle(), channel.getPubDate(), channel.getBuildDate(), channel.getLanguage(),
+                        channel.getAuthor(), channel.getDescription(), url, cat, channel.getItemList().size());
+
+                // episode list
+                List<Item> episodes = channel.getItemList();
+                if (episodes != null && episodes.size() > 0) {
+                    for (int i = 0; i < 5; i++) {
+                        Item episode = episodes.get(i);
+                        String imageUrl = null;
+                        if (episode.getImage() != null) {
+                            imageUrl = episode.getImage().getUrl();
+                        }
+
+                        Timber.i("%s title: %s, pubDate: %s, duration: %s, description: %s, " +
+                                "author: %s, imageUrl: %s, episodeLength: %s, episodeType: %s, episodeUrl: %s",
+                                Constants.LOG_TAG, episode.getTitle(), episode.getPubDate(),
+                                episode.getDuration(), episode.getDescription(), episode.getAuthor(),
+                                imageUrl, episode.getEpisodeInfo().getLength(),
+                                episode.getEpisodeInfo().getType(), episode.getEpisodeInfo().getUrl());
+                    }
+                }
             }
 
             @Override
@@ -68,6 +102,7 @@ public class EpisodeFragment extends ContractFragment<EpisodeFragment.Contract>{
                 Timber.e("%s failure, error: %s", Constants.LOG_TAG, t.getMessage());
                 getContract().downloadError("Error downloading podcast feed");
             }
+
         });
     }
 

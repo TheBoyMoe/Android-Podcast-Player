@@ -16,20 +16,23 @@ public class Channel implements Serializable{
     private String title;
     @Element(name = "pubDate", required = false)
     private String pubDate;
+    @Element(name = "lastBuildDate", required = false)
+    private String buildDate;
     @Element(name = "language", required = false)
     private String language;
-    @ElementList(name = "description", required = false, inline = true)
-    private List<String> description;
+    @Element(name = "description", required = false)
+    private String description;
     @Namespace(reference = "http://www.itunes.com/dtds/podcast-1.0.dtd")
     @Element(name = "author", required = false)
     private String author;
+    @Namespace(reference = "http://www.itunes.com/dtds/podcast-1.0.dtd")
     @ElementList(name = "image", required = false, inline = true)
-    private List<Image> image;
+    private List<Image> images;
     @Namespace(reference = "http://www.itunes.com/dtds/podcast-1.0.dtd")
     @ElementList(name = "category", required = false, inline = true)
     private List<Category> category;
     @ElementList(name = "item", required = false, inline = true)
-    private List<Episode> items;
+    private List<Item> list;
 
     public Channel() { }
 
@@ -57,30 +60,6 @@ public class Channel implements Serializable{
         this.language = language;
     }
 
-    public String getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
-    public List<Episode> getItems() {
-        return items;
-    }
-
-    public void setItems(List<Episode> items) {
-        this.items = items;
-    }
-
-    public List<Image> getImage() {
-        return image;
-    }
-
-    public void setImage(List<Image> image) {
-        this.image = image;
-    }
-
     public List<Category> getCategory() {
         return category;
     }
@@ -89,12 +68,43 @@ public class Channel implements Serializable{
         this.category = category;
     }
 
-    public List<String> getDescription() {
+    public String getDescription() {
         return description;
     }
 
-    public void setDescription(List<String> description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 
+    public List<Item> getItemList() {
+        return list;
+    }
+
+    public void setItemList(List<Item> list) {
+        this.list = list;
+    }
+
+    public List<Image> getImages() {
+        return images;
+    }
+
+    public void setImages(List<Image> images) {
+        this.images = images;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getBuildDate() {
+        return buildDate;
+    }
+
+    public void setBuildDate(String buildDate) {
+        this.buildDate = buildDate;
+    }
 }

@@ -28,7 +28,7 @@ public class EpisodeActivity extends BaseActivity implements
 
     @Override
     public void downloadError(String message) {
-        // TODO
+        // TODO send message back to PodcastActivity to display snackbar
         finish();
     }
 
