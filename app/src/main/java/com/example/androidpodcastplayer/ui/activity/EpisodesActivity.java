@@ -8,10 +8,10 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.example.androidpodcastplayer.R;
 import com.example.androidpodcastplayer.common.Constants;
-import com.example.androidpodcastplayer.ui.fragment.EpisodeFragment;
+import com.example.androidpodcastplayer.ui.fragment.EpisodesFragment;
 
-public class EpisodeActivity extends AppCompatActivity implements
-        EpisodeFragment.Contract{
+public class EpisodesActivity extends AppCompatActivity implements
+        EpisodesFragment.Contract{
 
     // impl of contract method
     @Override
@@ -31,7 +31,7 @@ public class EpisodeActivity extends AppCompatActivity implements
     }
 
     public static void launch(Activity activity, String feedUrl) {
-        Intent intent = new Intent(activity, EpisodeActivity.class);
+        Intent intent = new Intent(activity, EpisodesActivity.class);
         intent.putExtra(Constants.RSS_FEED_URL, feedUrl);
         activity.startActivity(intent);
     }
@@ -44,7 +44,7 @@ public class EpisodeActivity extends AppCompatActivity implements
 
         if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) == null) {
             String feedUrl = getIntent().getStringExtra(Constants.RSS_FEED_URL);
-            initFragment(EpisodeFragment.newInstance(feedUrl));
+            initFragment(EpisodesFragment.newInstance(feedUrl));
         }
     }
 

@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.example.androidpodcastplayer.ui.activity.EpisodeActivity">
+    tools:context="com.example.androidpodcastplayer.ui.activity.EpisodesActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
@@ -37,7 +37,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <!--<include layout="@layout/content_episode"/>-->
+    <!--<include layout="@layout/content_episodes"/>-->
 
     <!--<FrameLayout-->
         <!--android:id="@+id/fragment_container"-->
@@ -45,6 +45,8 @@
         <!--android:layout_height="match_parent"/>-->
 
     <!-- Add recycler view -->
+
+    <include layout="@layout/content_auto_recycler_list"/>
 
     <!-- used to save podcast to subscriptions -->
     <android.support.design.widget.FloatingActionButton

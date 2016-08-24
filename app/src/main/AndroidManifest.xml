@@ -46,7 +46,7 @@
             android:exported="false"/>
 
         <activity
-            android:name=".ui.activity.EpisodeActivity"
+            android:name=".ui.activity.EpisodesActivity"
             android:label="@string/title_activity_episode"
             android:parentActivityName=".ui.activity.PodcastActivity"
             android:theme="@style/AppTheme.NoActionBar">

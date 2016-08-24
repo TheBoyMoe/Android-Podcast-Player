@@ -61,15 +61,8 @@ public class PodcastFragment extends ContractFragment<PodcastFragment.Contract>{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.content_podcast, container, false);
-        mProgressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
-        mEmptyView = (TextView) view.findViewById(R.id.empty_view);
-        mRecyclerView = (AutofitRecyclerView) view.findViewById(R.id.recycler_view);
-        mRecyclerView.addItemDecoration(new ItemSpacerDecoration(
-                getResources().getDimensionPixelOffset(R.dimen.grid_item_margin),
-                getResources().getDimensionPixelOffset(R.dimen.grid_item_margin)
-        ));
-        mRecyclerView.setHasFixedSize(true);
+        View view = inflater.inflate(R.layout.content_auto_recycler_list, container, false);
+        setupView(view);
         // provide an empty list allowing the adapter to be attached
         mAdapter = new PodcastListAdapter(mPodcastList);
         mRecyclerView.setAdapter(mAdapter);
@@ -77,6 +70,17 @@ public class PodcastFragment extends ContractFragment<PodcastFragment.Contract>{
         displayContent();
 
         return view;
+    }
+
+    private void setupView(View view) {
+        mProgressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
+        mEmptyView = (TextView) view.findViewById(R.id.empty_view);
+        mRecyclerView = (AutofitRecyclerView) view.findViewById(R.id.recycler_view);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.addItemDecoration(new ItemSpacerDecoration(
+                getResources().getDimensionPixelOffset(R.dimen.grid_item_margin),
+                getResources().getDimensionPixelOffset(R.dimen.grid_item_margin)
+        ));
     }
 
     private void displayContent() {
@@ -91,7 +95,7 @@ public class PodcastFragment extends ContractFragment<PodcastFragment.Contract>{
 
     private void executeGenreQuery(int genreId) {
         // instantiate retrofit client and execute rest call asynchronously
-        Timber.i("%s: executing download task", Constants.LOG_TAG);
+        Timber.i("%s: executing podcast download task", Constants.LOG_TAG);
         mProgressBar.setVisibility(View.VISIBLE);
         ApiInterface restService = ApiClient.getClient().create(ApiInterface.class);
         Call<Results> call = restService.getGenrePodcasts(
@@ -139,6 +143,7 @@ public class PodcastFragment extends ContractFragment<PodcastFragment.Contract>{
             View view = LayoutInflater.from(mContext).inflate(R.layout.podcast_item, parent, false);
             return new ViewHolder(view);
         }
+
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
