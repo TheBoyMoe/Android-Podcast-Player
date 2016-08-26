@@ -3,6 +3,8 @@ package com.example.androidpodcastplayer.ui.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
@@ -38,6 +40,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import timber.log.Timber;
 
+/**
+ * References:
+ * [1] http://stackoverflow.com/questions/31662416/show-collapsingtoolbarlayout-title-only-when-collapsed
+ */
 
 public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract>{
 
@@ -47,13 +53,13 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
         void onNavigationIconBackPressed();
     }
 
+    private CollapsingToolbarLayout collapsingToolbarLayout;
     private CoordinatorLayout mLayout;
     private String mPodcastName;
     private AutofitRecyclerView mRecyclerView;
     private TextView mEmptyView;
     private ProgressBar mProgressBar;
     private EpisodeListAdapter mAdapter;
-    private View mWrapper;
 
     public EpisodesFragment() {}
 
@@ -72,6 +78,7 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
         setupListView(view);
         initToolbar(view);
         initFab(view);
+        setupAppBar(view);
 
         // bind the adapter to the view
         mAdapter = new EpisodeListAdapter(new ArrayList<Item>());
@@ -118,8 +125,8 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
 
     private void setupListView(View view) {
         mLayout = (CoordinatorLayout) view.findViewById(R.id.coordinator_layout);
-        mWrapper = view.findViewById(R.id.autofitrecycler_container);
-        mWrapper.setPadding(0, 0, 0, 0);
+        View wrapper = view.findViewById(R.id.autofitrecycler_container);
+        wrapper.setPadding(0, 0, 0, 0); // remove top padding
         mProgressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
         mEmptyView = (TextView) view.findViewById(R.id.empty_view);
         mRecyclerView = (AutofitRecyclerView) view.findViewById(R.id.recycler_view);
@@ -129,6 +136,30 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
                 getResources().getDimensionPixelOffset(R.dimen.grid_item_margin)
         ));
     }
+
+    private void setupAppBar(View view) {
+        final CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) view.findViewById(R.id.collapsing_toolbar);
+        final AppBarLayout appbar = (AppBarLayout) view.findViewById(R.id.app_bar);
+        appbar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            boolean isShow = false;
+            int scrollRange = -1;
+
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (scrollRange == -1) {
+                    scrollRange = appbar.getTotalScrollRange();
+                }
+                if (scrollRange + verticalOffset == 0) {
+                    collapsingToolbarLayout.setTitle(mPodcastName != null ? mPodcastName : "Episode list");
+                    isShow = true;
+                } else if (isShow) {
+                    collapsingToolbarLayout.setTitle(" ");
+                    isShow = false;
+                }
+            }
+        });
+    }
+
 
     private void displayContent() {
         String urlFeed = getArguments().getString(Constants.RSS_FEED_URL);
