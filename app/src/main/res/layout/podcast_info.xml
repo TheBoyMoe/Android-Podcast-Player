@@ -2,7 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_marginTop="?attr/actionBarSize"
-                android:padding="@dimen/normal"
+                android:paddingTop="@dimen/medium"
+                android:paddingBottom="@dimen/normal"
+                android:paddingRight="@dimen/normal"
+                android:paddingLeft="@dimen/normal"
                 android:gravity="center_vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -15,7 +18,6 @@
         android:layout_height="@dimen/podcast_thumbnail_size"
         android:layout_marginEnd="@dimen/normal"
         tools:src="@mipmap/ic_launcher"
-        android:src="@mipmap/ic_launcher"
         tools:ignore="ContentDescription"/>
 
 
@@ -28,36 +30,30 @@
         <TextView
             android:id="@+id/podcast_title"
             tools:text="Another one bites the dust"
-            android:text="Another one bites the dust"
             android:maxLines="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
         <TextView
+            android:id="@+id/podcast_author"
+            android:maxLines="1"
+            tools:text="Marc Maron"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
             android:id="@+id/podcast_description"
-            android:maxLines="3"
+            android:maxLines="2"
             tools:text="@string/podast_desciption"
-            android:text="@string/podast_desciption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
         <TextView
             android:id="@+id/podcast_pub_date"
-            android:maxLines="3"
-            tools:text="Lastest episode: 26 Aug 2016"
-            android:text="Lastest episode: 26 Aug 2016"
+            android:maxLines="1"
+            tools:text="Last episode: 26 Aug 2016"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
-
-
-        <TextView
-            android:id="@+id/podcast_episodes_number"
-            android:maxLines="3"
-            tools:text="Episodes: 264"
-            android:text="Episodes: 264"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
 
     </LinearLayout>
 

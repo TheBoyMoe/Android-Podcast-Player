@@ -23,7 +23,6 @@ import com.example.androidpodcastplayer.common.Constants;
 import com.example.androidpodcastplayer.common.Utils;
 import com.example.androidpodcastplayer.custom.AutofitRecyclerView;
 import com.example.androidpodcastplayer.custom.ItemSpacerDecoration;
-import com.example.androidpodcastplayer.model.episode.Category;
 import com.example.androidpodcastplayer.model.episode.Channel;
 import com.example.androidpodcastplayer.model.episode.Feed;
 import com.example.androidpodcastplayer.model.episode.Image;
@@ -60,6 +59,11 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
     private TextView mEmptyView;
     private ProgressBar mProgressBar;
     private EpisodeListAdapter mAdapter;
+    private TextView mPodcastTitle;
+    private TextView mPodcastAuthor;
+    private TextView mPodcastDescription;
+    private TextView mPodcastPubDate;
+    private ImageView mPodcastThumbnail;
 
     public EpisodesFragment() {}
 
@@ -76,6 +80,7 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.content_episodes, container, false);
         setupListView(view);
+        setupInfoView(view);
         initToolbar(view);
         initFab(view);
         setupAppBar(view);
@@ -123,20 +128,6 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
         });
     }
 
-    private void setupListView(View view) {
-        mLayout = (CoordinatorLayout) view.findViewById(R.id.coordinator_layout);
-        View wrapper = view.findViewById(R.id.autofitrecycler_container);
-        wrapper.setPadding(0, 0, 0, 0); // remove top padding
-        mProgressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
-        mEmptyView = (TextView) view.findViewById(R.id.empty_view);
-        mRecyclerView = (AutofitRecyclerView) view.findViewById(R.id.recycler_view);
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.addItemDecoration(new ItemSpacerDecoration(
-                getResources().getDimensionPixelOffset(R.dimen.grid_item_margin),
-                getResources().getDimensionPixelOffset(R.dimen.grid_item_margin)
-        ));
-    }
-
     private void setupAppBar(View view) {
         final CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) view.findViewById(R.id.collapsing_toolbar);
         final AppBarLayout appbar = (AppBarLayout) view.findViewById(R.id.app_bar);
@@ -160,6 +151,27 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
         });
     }
 
+    private void setupInfoView(View view) {
+        mPodcastTitle = (TextView) view.findViewById(R.id.podcast_title);
+        mPodcastAuthor = (TextView) view.findViewById(R.id.podcast_author);
+        mPodcastDescription = (TextView) view.findViewById(R.id.podcast_description);
+        mPodcastPubDate = (TextView) view.findViewById(R.id.podcast_pub_date);
+        mPodcastThumbnail = (ImageView) view.findViewById(R.id.podcast_thumbnail);
+    }
+
+    private void setupListView(View view) {
+        mLayout = (CoordinatorLayout) view.findViewById(R.id.coordinator_layout);
+        View wrapper = view.findViewById(R.id.autofitrecycler_container);
+        wrapper.setPadding(0, 0, 0, 0); // remove top padding
+        mProgressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
+        mEmptyView = (TextView) view.findViewById(R.id.empty_view);
+        mRecyclerView = (AutofitRecyclerView) view.findViewById(R.id.recycler_view);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.addItemDecoration(new ItemSpacerDecoration(
+                getResources().getDimensionPixelOffset(R.dimen.grid_item_margin),
+                getResources().getDimensionPixelOffset(R.dimen.grid_item_margin)
+        ));
+    }
 
     private void displayContent() {
         String urlFeed = getArguments().getString(Constants.RSS_FEED_URL);
@@ -182,22 +194,38 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
             @Override
             public void onResponse(Call<Feed> call, Response<Feed> response) {
                 Channel channel = response.body().getChannel();
-                mPodcastName = channel.getTitle();
                 List<Image> images = channel.getImages();
                 String url = null;
-                for (Image image : images) {
-                    url = image.getUrl();
-                    if (url != null) break;
+                if (images != null) {
+                    for (Image image : images) {
+                        url = image.getUrl();
+                        if (url != null) break;
+                    }
                 }
-                String cat = null;
-                List<Category> categories = channel.getCategory();
-                for (Category category : categories) {
-                    cat = category.getCategory();
-                    if (cat != null) break;
-                }
-                Timber.i("%s title: %s, pubDate: %s, buildDate: %s, language: %s, author: %s, description: %s, image link %s, category %s, episodes %s",
-                        Constants.LOG_TAG, channel.getTitle(), channel.getPubDate(), channel.getBuildDate(), channel.getLanguage(),
-                        channel.getAuthor(), channel.getDescription(), url, cat, channel.getItemList().size());
+
+                // populate podcast info layout
+                mPodcastName = channel.getTitle();
+                mPodcastTitle.setText(channel.getTitle());
+                mPodcastAuthor.setText(channel.getAuthor());
+                mPodcastDescription.setText(channel.getDescription());
+                mPodcastPubDate.setText(channel.getPubDate());
+                //if (url != null && !url.isEmpty()) {
+                    Utils.loadPreviewWithGlide(getActivity(), url, mPodcastThumbnail);
+//                } else {
+//                    mPodcastThumbnail.setImageResource(R.mipmap.ic_launcher);
+//                }
+
+                // DEBUG
+                // String cat = null;
+                // List<Category> categories = channel.getCategory();
+                // for (Category category : categories) {
+                //     cat = category.getCategory();
+                //     if (cat != null) break;
+                // }
+
+                // Timber.i("%s title: %s, pubDate: %s, buildDate: %s, language: %s, author: %s, description: %s, image link %s, category %s, episodes %s",
+                //        Constants.LOG_TAG, channel.getTitle(), channel.getPubDate(), channel.getBuildDate(), channel.getLanguage(),
+                //        channel.getAuthor(), channel.getDescription(), url, cat, channel.getItemList().size());
 
                 // episode list
                 mProgressBar.setVisibility(View.GONE);
