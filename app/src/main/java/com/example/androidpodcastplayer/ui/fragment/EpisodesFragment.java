@@ -92,6 +92,7 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeAsUpIndicator(R.drawable.ic_back);
+            actionBar.setTitle("");
             toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
