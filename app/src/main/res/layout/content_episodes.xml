@@ -35,16 +35,25 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <!--<include layout="@layout/content_episodes"/>-->
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <!--<FrameLayout-->
-        <!--android:id="@+id/fragment_container"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"/>-->
+        <LinearLayout
+            android:paddingTop="?attr/actionBarSize"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <!-- Add recycler view -->
+            <include layout="@layout/episode_info"
+                     android:id="@+id/episode_info_view"/>
 
-    <include layout="@layout/content_auto_recycler_list"/>
+            <include layout="@layout/content_auto_recycler_list"/>
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
 
     <!-- used to save podcast to subscriptions -->
     <android.support.design.widget.FloatingActionButton
@@ -52,7 +61,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
-        app:layout_anchor="@id/app_bar"
+        app:layout_anchor="@id/episode_info_view"
         app:layout_anchorGravity="bottom|end"
         android:src="@drawable/ic_subscription"/>
 

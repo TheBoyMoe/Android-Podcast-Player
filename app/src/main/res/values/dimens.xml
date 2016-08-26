@@ -24,5 +24,6 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="progress_bar_size">56dp</dimen>
+    <dimen name="podcast_thumbnail_size">120dp</dimen>
 
 </resources>

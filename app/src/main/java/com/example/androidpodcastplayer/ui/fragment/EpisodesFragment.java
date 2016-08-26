@@ -53,6 +53,7 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
     private TextView mEmptyView;
     private ProgressBar mProgressBar;
     private EpisodeListAdapter mAdapter;
+    private View mWrapper;
 
     public EpisodesFragment() {}
 
@@ -116,6 +117,8 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
 
     private void setupListView(View view) {
         mLayout = (CoordinatorLayout) view.findViewById(R.id.coordinator_layout);
+        mWrapper = view.findViewById(R.id.autofitrecycler_container);
+        mWrapper.setPadding(0, 0, 0, 0);
         mProgressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
         mEmptyView = (TextView) view.findViewById(R.id.empty_view);
         mRecyclerView = (AutofitRecyclerView) view.findViewById(R.id.recycler_view);
