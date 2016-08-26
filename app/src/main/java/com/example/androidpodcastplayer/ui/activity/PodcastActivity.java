@@ -21,7 +21,11 @@ public class PodcastActivity extends BaseActivity implements
     public void onItemClick(String feedUrl) {
         // launch EpisodesActivity and display Podcast Info and episode list
         if (Utils.isClientConnected(this)) {
-            EpisodesActivity.launch(this, feedUrl);
+            if (feedUrl.contains(Constants.FEED_BURNER_BASE_URL)) {
+                Utils.showSnackbar(mLayout, getString(R.string.feed_not_available));
+            } else {
+                EpisodesActivity.launch(this, feedUrl);
+            }
         } else {
             Utils.showSnackbar(mLayout, getString(R.string.no_network_connection));
         }

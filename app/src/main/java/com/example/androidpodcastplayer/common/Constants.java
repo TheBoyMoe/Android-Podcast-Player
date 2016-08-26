@@ -7,13 +7,13 @@ public class Constants {
     public static final int REQUEST_CODE_HISTORY_CLEARED = 101;
 
     public static final String REST_TERM = "podcasts";
-    public static final int REST_LIMIT = 50;
+    public static final int REST_LIMIT = 100;
 
     public static final String GENRE_ID = "genre_id";
     public static final String GENRE_TITLE = "genre_title";
 
     public static final String BASE_URL = "https://itunes.apple.com/";
-
+    public static final String FEED_BURNER_BASE_URL = "http://feeds.feedburner.com";
     public static final String RSS_FEED_URL = "rss_feed_url";
 
 

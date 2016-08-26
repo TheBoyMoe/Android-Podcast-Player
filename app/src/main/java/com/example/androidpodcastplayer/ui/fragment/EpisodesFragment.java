@@ -209,11 +209,8 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
                 mPodcastAuthor.setText(channel.getAuthor());
                 mPodcastDescription.setText(channel.getDescription());
                 mPodcastPubDate.setText(channel.getPubDate());
-                //if (url != null && !url.isEmpty()) {
-                    Utils.loadPreviewWithGlide(getActivity(), url, mPodcastThumbnail);
-//                } else {
-//                    mPodcastThumbnail.setImageResource(R.mipmap.ic_launcher);
-//                }
+                Utils.loadPreviewWithGlide(getActivity(), url, mPodcastThumbnail);
+
 
                 // DEBUG
                 // String cat = null;
@@ -266,11 +263,11 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
 
             @Override
             public void onFailure(Call<Feed> call, Throwable t) {
-                Timber.e("%s failure, error: %s", Constants.LOG_TAG, t.getMessage());
-                // getContract().downloadError("Error downloading podcast feed");
-                mEmptyView.setText(R.string.error_connecting_text);
-                mEmptyView.setVisibility(View.VISIBLE);
                 mProgressBar.setVisibility(View.GONE);
+                Timber.e("%s failure, error: %s", Constants.LOG_TAG, t.getMessage());
+                getContract().downloadError("Error downloading podcast feed");
+                //mEmptyView.setText(R.string.error_connecting_text);
+                //mEmptyView.setVisibility(View.VISIBLE);
             }
 
         });
