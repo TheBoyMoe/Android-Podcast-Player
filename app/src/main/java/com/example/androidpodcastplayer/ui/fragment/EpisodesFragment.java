@@ -361,7 +361,8 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
 
             public void bindModelItem(Item episode) {
                 mEpisodeDay.setText("26");
-                mEpisodeNumber.setText(String.format(Locale.ENGLISH, "Episode no: %d", (mTrackCount - getAdapterPosition())));
+                String episodeNumber = String.valueOf((mTrackCount - getAdapterPosition()) >= 0 ? mTrackCount - getAdapterPosition() : "");
+                mEpisodeNumber.setText(String.format(Locale.ENGLISH, "Episode no: %s", episodeNumber));
                 mEpisodeMonth.setText("Aug");
                 mEpisodeTitle.setText(episode.getTitle());
                 if (episode.getDuration() != null)
