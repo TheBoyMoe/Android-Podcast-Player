@@ -17,7 +17,7 @@ public class Channel implements Serializable{
     @Element(name = "pubDate", required = false)
     private String pubDate;
     @Element(name = "lastBuildDate", required = false)
-    private String buildDate;
+    private String lastBuildDate;
     @Element(name = "language", required = false)
     private String language;
     @Element(name = "description", required = false)
@@ -100,11 +100,13 @@ public class Channel implements Serializable{
         this.author = author;
     }
 
-    public String getBuildDate() {
-        return buildDate;
+    public String getLastBuildDate() {
+        return lastBuildDate;
     }
 
-    public void setBuildDate(String buildDate) {
-        this.buildDate = buildDate;
+    public void setLastBuildDate(String lastBuildDate) {
+        this.lastBuildDate = lastBuildDate;
     }
+
+
 }

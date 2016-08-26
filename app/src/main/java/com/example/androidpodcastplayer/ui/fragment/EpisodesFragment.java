@@ -25,8 +25,8 @@ import com.example.androidpodcastplayer.custom.AutofitRecyclerView;
 import com.example.androidpodcastplayer.custom.ItemSpacerDecoration;
 import com.example.androidpodcastplayer.model.episode.Channel;
 import com.example.androidpodcastplayer.model.episode.Feed;
-import com.example.androidpodcastplayer.model.episode.Image;
 import com.example.androidpodcastplayer.model.episode.Item;
+import com.example.androidpodcastplayer.model.podcast.Podcast;
 import com.example.androidpodcastplayer.rest.RssClient;
 import com.example.androidpodcastplayer.rest.RssInterface;
 
@@ -55,6 +55,7 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private CoordinatorLayout mLayout;
     private String mPodcastName;
+    private int mTrackCount;
     private AutofitRecyclerView mRecyclerView;
     private TextView mEmptyView;
     private ProgressBar mProgressBar;
@@ -71,6 +72,14 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
         EpisodesFragment fragment = new EpisodesFragment();
         Bundle args = new Bundle();
         args.putString(Constants.RSS_FEED_URL, feedUrl);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static EpisodesFragment newInstance(Podcast item) {
+        EpisodesFragment fragment = new EpisodesFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(Constants.PODCAST_ITEM, item);
         fragment.setArguments(args);
         return fragment;
     }
@@ -174,13 +183,23 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
     }
 
     private void displayContent() {
-        String urlFeed = getArguments().getString(Constants.RSS_FEED_URL);
-        if (urlFeed != null) {
-            Timber.i("%s feed: %s", Constants.LOG_TAG, urlFeed);
-            executeEpisodeQuery(urlFeed);
-        } else {
-            mEmptyView.setText("Error, downloading episode list");
-            mEmptyView.setVisibility(View.VISIBLE);
+        // String urlFeed = getArguments().getString(Constants.RSS_FEED_URL);
+        Podcast item = getArguments().getParcelable(Constants.PODCAST_ITEM);
+        if (item != null) {
+            mPodcastName = item.getTrackName();
+            mTrackCount = item.getTrackCount();
+            mPodcastTitle.setText(item.getTrackName());
+            mPodcastAuthor.setText(item.getArtistName());
+            mPodcastDescription.setText(item.getCollectionName());
+            Utils.loadPreviewWithGlide(getActivity(), item.getArtworkUrl100(), mPodcastThumbnail);
+
+            if (item.getFeedUrl() != null && !item.getFeedUrl().isEmpty()) {
+                Timber.i("%s feed: %s", Constants.LOG_TAG, item.getFeedUrl());
+                executeEpisodeQuery(item.getFeedUrl());
+            } else {
+                mEmptyView.setText(R.string.error_downloading_episode_list);
+                mEmptyView.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -194,22 +213,33 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
             @Override
             public void onResponse(Call<Feed> call, Response<Feed> response) {
                 Channel channel = response.body().getChannel();
-                List<Image> images = channel.getImages();
-                String url = null;
-                if (images != null) {
-                    for (Image image : images) {
-                        url = image.getUrl();
-                        if (url != null) break;
+                String description = channel.getDescription();
+                if (description != null && !description.isEmpty())
+                    mPodcastDescription.setText(description);
+                String pubDate = channel.getPubDate();
+                if (pubDate != null && !pubDate.isEmpty()) {
+                    mPodcastPubDate.setText(pubDate);
+                } else {
+                    String lastBuildDate = channel.getLastBuildDate();
+                    if (lastBuildDate != null && !lastBuildDate.isEmpty()) {
+                        mPodcastPubDate.setText(lastBuildDate);
                     }
                 }
+//                List<Image> images = channel.getImages();
+//                String url = null;
+//                if (images != null) {
+//                    for (Image image : images) {
+//                        url = image.getUrl();
+//                        if (url != null) break;
+//                    }
+//                }
 
                 // populate podcast info layout
-                mPodcastName = channel.getTitle();
-                mPodcastTitle.setText(channel.getTitle());
-                mPodcastAuthor.setText(channel.getAuthor());
-                mPodcastDescription.setText(channel.getDescription());
-                mPodcastPubDate.setText(channel.getPubDate());
-                Utils.loadPreviewWithGlide(getActivity(), url, mPodcastThumbnail);
+//                mPodcastName = channel.getTitle();
+//                mPodcastTitle.setText(channel.getTitle());
+//                mPodcastAuthor.setText(channel.getAuthor());
+//                mPodcastPubDate.setText(channel.getPubDate());
+//                Utils.loadPreviewWithGlide(getActivity(), url, mPodcastThumbnail);
 
 
                 // DEBUG
@@ -232,8 +262,8 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
                     mRecyclerView.swapAdapter(mAdapter, true);
                     mEmptyView.setVisibility(View.GONE);
                 } else {
-                    Utils.showSnackbar(mLayout, "Error downloading episodes");
-                    mEmptyView.setText("Error downloading episode list");
+                    Utils.showSnackbar(mLayout, getString(R.string.error_downloading_episode_list));
+                    mEmptyView.setText(R.string.error_downloading_episode_list);
                     mEmptyView.setVisibility(View.VISIBLE);
                 }
 
@@ -265,9 +295,9 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
             public void onFailure(Call<Feed> call, Throwable t) {
                 mProgressBar.setVisibility(View.GONE);
                 Timber.e("%s failure, error: %s", Constants.LOG_TAG, t.getMessage());
-                getContract().downloadError("Error downloading podcast feed");
-                //mEmptyView.setText(R.string.error_connecting_text);
-                //mEmptyView.setVisibility(View.VISIBLE);
+                // getContract().downloadError("Error downloading podcast feed");
+                mEmptyView.setText(R.string.error_downloading_episode_list);
+                mEmptyView.setVisibility(View.VISIBLE);
             }
 
         });
@@ -331,10 +361,11 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
 
             public void bindModelItem(Item episode) {
                 mEpisodeDay.setText("26");
-                mEpisodeNumber.setText(String.format(Locale.ENGLISH, "Episode no: %d", (mEpisodeList.size() - getAdapterPosition())));
+                mEpisodeNumber.setText(String.format(Locale.ENGLISH, "Episode no: %d", (mTrackCount - getAdapterPosition())));
                 mEpisodeMonth.setText("Aug");
                 mEpisodeTitle.setText(episode.getTitle());
-                mEpisodeDuration.setText(String.format(Locale.ENGLISH, "%s mins", episode.getDuration()));
+                if (episode.getDuration() != null)
+                    mEpisodeDuration.setText(String.format(Locale.ENGLISH, "%s mins", episode.getDuration()));
             }
 
             @Override

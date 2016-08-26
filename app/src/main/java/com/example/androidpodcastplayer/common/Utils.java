@@ -65,7 +65,6 @@ public class Utils {
                 .load(url)
                 .crossFade()
                 .error(R.mipmap.ic_launcher)
-                .placeholder(R.mipmap.ic_launcher)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(view);
     }

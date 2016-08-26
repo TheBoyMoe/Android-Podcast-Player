@@ -15,6 +15,7 @@ public class Constants {
     public static final String BASE_URL = "https://itunes.apple.com/";
     public static final String FEED_BURNER_BASE_URL = "http://feeds.feedburner.com";
     public static final String RSS_FEED_URL = "rss_feed_url";
+    public static final String PODCAST_ITEM ="podcast_item";
 
 
 }

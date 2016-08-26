@@ -10,6 +10,7 @@ import android.support.design.widget.CoordinatorLayout;
 import com.example.androidpodcastplayer.R;
 import com.example.androidpodcastplayer.common.Constants;
 import com.example.androidpodcastplayer.common.Utils;
+import com.example.androidpodcastplayer.model.podcast.Podcast;
 import com.example.androidpodcastplayer.ui.fragment.PodcastFragment;
 
 
@@ -18,13 +19,13 @@ public class PodcastActivity extends BaseActivity implements
 
     // impl of contract methods
     @Override
-    public void onItemClick(String feedUrl) {
+    public void onItemClick(Podcast item) {
         // launch EpisodesActivity and display Podcast Info and episode list
         if (Utils.isClientConnected(this)) {
-            if (feedUrl.contains(Constants.FEED_BURNER_BASE_URL)) {
+            if (item.getFeedUrl().contains(Constants.FEED_BURNER_BASE_URL)) {
                 Utils.showSnackbar(mLayout, getString(R.string.feed_not_available));
             } else {
-                EpisodesActivity.launch(this, feedUrl);
+                EpisodesActivity.launch(this, item);
             }
         } else {
             Utils.showSnackbar(mLayout, getString(R.string.no_network_connection));

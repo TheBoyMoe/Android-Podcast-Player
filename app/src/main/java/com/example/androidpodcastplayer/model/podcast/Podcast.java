@@ -56,8 +56,10 @@ package com.example.androidpodcastplayer.model.podcast;
 */
 
 
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class Podcast {
+public class Podcast implements Parcelable {
 
     private String wrapperType;
     private String kind;
@@ -208,4 +210,59 @@ public class Podcast {
     }
 
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.wrapperType);
+        dest.writeString(this.kind);
+        dest.writeString(this.collectionId);
+        dest.writeString(this.trackId);
+        dest.writeString(this.artistName);
+        dest.writeString(this.collectionName);
+        dest.writeString(this.trackName);
+        dest.writeString(this.collectionViewUrl);
+        dest.writeString(this.feedUrl);
+        dest.writeString(this.trackViewUrl);
+        dest.writeString(this.artworkUrl100);
+        dest.writeString(this.artworkUrl600);
+        dest.writeString(this.releaseDate);
+        dest.writeInt(this.trackCount);
+        dest.writeString(this.country);
+        dest.writeString(this.primaryGenreName);
+    }
+
+    protected Podcast(Parcel in) {
+        this.wrapperType = in.readString();
+        this.kind = in.readString();
+        this.collectionId = in.readString();
+        this.trackId = in.readString();
+        this.artistName = in.readString();
+        this.collectionName = in.readString();
+        this.trackName = in.readString();
+        this.collectionViewUrl = in.readString();
+        this.feedUrl = in.readString();
+        this.trackViewUrl = in.readString();
+        this.artworkUrl100 = in.readString();
+        this.artworkUrl600 = in.readString();
+        this.releaseDate = in.readString();
+        this.trackCount = in.readInt();
+        this.country = in.readString();
+        this.primaryGenreName = in.readString();
+    }
+
+    public static final Parcelable.Creator<Podcast> CREATOR = new Parcelable.Creator<Podcast>() {
+        @Override
+        public Podcast createFromParcel(Parcel source) {
+            return new Podcast(source);
+        }
+
+        @Override
+        public Podcast[] newArray(int size) {
+            return new Podcast[size];
+        }
+    };
 }

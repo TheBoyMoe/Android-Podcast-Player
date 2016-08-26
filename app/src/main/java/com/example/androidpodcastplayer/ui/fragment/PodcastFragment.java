@@ -33,7 +33,8 @@ import timber.log.Timber;
 public class PodcastFragment extends ContractFragment<PodcastFragment.Contract>{
 
     public interface Contract {
-        void onItemClick(String feedUrl);
+        // void onItemClick(String feedUrl);
+        void onItemClick(Podcast podcast);
         void downloadError(String message);
     }
 
@@ -158,6 +159,7 @@ public class PodcastFragment extends ContractFragment<PodcastFragment.Contract>{
 
         class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+            Podcast podcast;
             String mFeedUrl;
             ImageView mThumbnail;
             TextView mArtistName;
@@ -177,6 +179,7 @@ public class PodcastFragment extends ContractFragment<PodcastFragment.Contract>{
             }
 
             public void bindModelItem(Podcast item) {
+                podcast = item;
                 mFeedUrl = item.getFeedUrl();
                 mArtistName.setText(item.getArtistName());
                 mCollectionName.setText(item.getCollectionName());
@@ -189,7 +192,7 @@ public class PodcastFragment extends ContractFragment<PodcastFragment.Contract>{
             @Override
             public void onClick(View view) {
                 // forward the podcast rss feed to the hosting activity
-                getContract().onItemClick(mFeedUrl);
+                getContract().onItemClick(podcast);
             }
         }
 
