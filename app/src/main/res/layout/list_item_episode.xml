@@ -2,11 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/episode_item"
         android:paddingTop="@dimen/normal"
         android:paddingBottom="@dimen/normal"
         android:orientation="vertical"
         android:weightSum="5"
-        android:background="@color/colorPrimaryBackground"
+        android:background="@drawable/touch_selector"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 

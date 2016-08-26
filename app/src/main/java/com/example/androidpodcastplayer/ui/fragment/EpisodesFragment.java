@@ -207,6 +207,7 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
                 // getContract().downloadError("Error downloading podcast feed");
                 mEmptyView.setText(R.string.error_connecting_text);
                 mEmptyView.setVisibility(View.VISIBLE);
+                mProgressBar.setVisibility(View.GONE);
             }
 
         });
@@ -249,9 +250,11 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
             TextView mEpisodeDuration;
             ImageView mEpisodeDownload;
             ImageView mEpisodePlaylist;
+            View mEpisodeItem;
 
             public ViewHolder(View itemView) {
                 super(itemView);
+                mEpisodeItem = itemView.findViewById(R.id.episode_item);
                 mEpisodeDay = (TextView) itemView.findViewById(R.id.episode_day);
                 mEpisodeNumber = (TextView) itemView.findViewById(R.id.episode_number);
                 mEpisodeMonth = (TextView) itemView.findViewById(R.id.episode_month);
@@ -260,6 +263,7 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
                 mEpisodePlay = (ImageView) itemView.findViewById(R.id.episode_play);
                 mEpisodeDownload = (ImageView) itemView.findViewById(R.id.episode_download);
                 mEpisodePlaylist = (ImageView) itemView.findViewById(R.id.episode_playlist);
+                mEpisodeItem.setOnClickListener(this);
                 mEpisodePlay.setOnClickListener(this);
                 mEpisodeDownload.setOnClickListener(this);
                 mEpisodePlaylist.setOnClickListener(this);
@@ -276,6 +280,9 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
             @Override
             public void onClick(View view) {
                 switch (view.getId()) {
+                    case R.id.episode_item:
+                        Utils.showSnackbar(mLayout, "clicked item");
+                        break;
                     case R.id.episode_play:
                         Utils.showSnackbar(mLayout, "Clicked play");
                         break;
