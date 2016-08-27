@@ -5,12 +5,10 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Namespace;
 import org.simpleframework.xml.Root;
 
-import java.io.Serializable;
-
 
 @Root(name = "rss", strict = false)
 @Namespace(reference = "http://www.itunes.com/dtds/podcast-1.0.dtd")
-public class Feed implements Serializable{
+public class Feed {
 
     @Element(name = "channel")
     private Channel channel;

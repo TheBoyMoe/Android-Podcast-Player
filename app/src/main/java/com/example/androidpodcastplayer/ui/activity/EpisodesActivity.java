@@ -3,20 +3,29 @@ package com.example.androidpodcastplayer.ui.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 
 import com.example.androidpodcastplayer.R;
 import com.example.androidpodcastplayer.common.Constants;
+import com.example.androidpodcastplayer.model.episode.Item;
 import com.example.androidpodcastplayer.model.podcast.Podcast;
 import com.example.androidpodcastplayer.ui.fragment.EpisodesFragment;
 
-public class EpisodesActivity extends AppCompatActivity implements
+public class EpisodesActivity extends BlankActivity implements
         EpisodesFragment.Contract{
 
     // impl of contract method
     @Override
-    public void onItemClick(String podcastName) {
+    public void launchPlayer(Item episode) {
+        EpisodeActivity.launch(this, episode);
+    }
+
+    @Override
+    public void addEpisodeToPlaylist() {
+        // TODO
+    }
+
+    @Override
+    public void downloadEpisode() {
         // TODO
     }
 
@@ -30,6 +39,8 @@ public class EpisodesActivity extends AppCompatActivity implements
     public void onNavigationIconBackPressed() {
         onBackPressed();
     }
+    // END
+
 
     public static void launch(Activity activity, String feedUrl) {
         Intent intent = new Intent(activity, EpisodesActivity.class);
@@ -47,20 +58,15 @@ public class EpisodesActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_episode);
 
         if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) == null) {
             // String feedUrl = getIntent().getStringExtra(Constants.RSS_FEED_URL);
             Podcast item = getIntent().getParcelableExtra(Constants.PODCAST_ITEM);
-            initFragment(EpisodesFragment.newInstance(item));
+            if (item != null)
+                initFragment(EpisodesFragment.newInstance(item));
         }
     }
 
-    private void initFragment(Fragment fragment) {
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container, fragment)
-                .commit();
-    }
 
 
 

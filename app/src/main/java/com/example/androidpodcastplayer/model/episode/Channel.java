@@ -6,11 +6,10 @@ import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Namespace;
 import org.simpleframework.xml.Root;
 
-import java.io.Serializable;
 import java.util.List;
 
 @Root(strict = false)
-public class Channel implements Serializable{
+public class Channel {
 
     @Element(name = "title", required = false)
     private String title;

@@ -52,7 +52,9 @@ import timber.log.Timber;
 public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract>{
 
     public interface Contract {
-        void onItemClick(String podcastName);
+        void launchPlayer(Item episode);
+        void addEpisodeToPlaylist();
+        void downloadEpisode();
         void downloadError(String message);
         void onNavigationIconBackPressed();
     }
@@ -120,7 +122,7 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
         ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_back);
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_back_white);
             actionBar.setTitle("");
             toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
@@ -370,6 +372,7 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
 
         class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+            Item mEpisode;
             TextView mEpisodeDay;
             TextView mEpisodeNumber;
             TextView mEpisodeMonth;
@@ -398,6 +401,7 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
             }
 
             public void bindModelItem(Item episode) {
+                mEpisode = episode;
                 mEpisodeDay.setText("26");
                 String episodeNumber = String.valueOf((mTrackCount - getAdapterPosition()) >= 0 ? mTrackCount - getAdapterPosition() : "");
                 mEpisodeNumber.setText(String.format(Locale.ENGLISH, "Episode no: %s", episodeNumber));
@@ -411,15 +415,17 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
             public void onClick(View view) {
                 switch (view.getId()) {
                     case R.id.episode_item:
-                        Utils.showSnackbar(mLayout, "clicked item");
+                        getContract().launchPlayer(mEpisode);
                         break;
                     case R.id.episode_play:
-                        Utils.showSnackbar(mLayout, "Clicked play");
+                        getContract().launchPlayer(mEpisode);
                         break;
                     case R.id.episode_download:
+                        // TODO
                         Utils.showSnackbar(mLayout, "Clicked download");
                         break;
                     case R.id.episode_playlist:
+                        // TODO
                         Utils.showSnackbar(mLayout, "Clicked playlist");
                         break;
                 }

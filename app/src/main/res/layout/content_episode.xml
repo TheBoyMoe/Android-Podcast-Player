@@ -22,7 +22,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                tools:src="@drawable/health_100x100"
+                tools:src="@drawable/business_100x100"
                 tools:ignore="ContentDescription"/>
 
 
@@ -45,7 +45,7 @@
                     android:id="@+id/episode_description"
                     style="@style/TextStyle.PodcastPlayer"
                     android:maxLines="2"
-                    tools:text="the episode about the last of the great spenders"
+                    tools:text="the episode about the last of the great spenders,\nthe giraffe and the cat"
                     />
 
             </LinearLayout>
@@ -103,7 +103,7 @@
         android:id="@+id/progress_bar"
         android:indeterminateDrawable="@drawable/progress_bar_circular"
         android:layout_centerInParent="true"
-        android:visibility="visible"
+        android:visibility="gone"
         android:layout_width="@dimen/progress_bar_size"
         android:layout_height="@dimen/progress_bar_size"/>
 

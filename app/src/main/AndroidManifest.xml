@@ -22,10 +22,8 @@
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH"/>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable"/>
@@ -53,6 +51,16 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.androidpodcastplayer.ui.activity.PodcastActivity"/>
+        </activity>
+
+        <activity
+            android:name=".ui.activity.EpisodeActivity"
+            android:label="@string/title_activity_episode"
+            android:parentActivityName=".ui.activity.EpisodesActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.androidpodcastplayer.ui.activity.EpisodesActivity"/>
         </activity>
 
     </application>

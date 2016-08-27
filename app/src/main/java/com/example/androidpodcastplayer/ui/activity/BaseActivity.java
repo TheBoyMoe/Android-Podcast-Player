@@ -21,7 +21,7 @@ public class BaseActivity extends BlankActivity{
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back);
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back_white);
         }
     }
 

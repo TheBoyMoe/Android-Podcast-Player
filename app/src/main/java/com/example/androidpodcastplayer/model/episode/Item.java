@@ -1,14 +1,15 @@
 package com.example.androidpodcastplayer.model.episode;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Namespace;
 import org.simpleframework.xml.Root;
 
-import java.io.Serializable;
-
 
 @Root(strict = false)
-public class Item implements Serializable {
+public class Item implements Parcelable {
 
     @Element(name = "title", required = false)
     private String title;
@@ -88,4 +89,41 @@ public class Item implements Serializable {
     }
 
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.title);
+        dest.writeString(this.pubDate);
+        dest.writeString(this.duration);
+        dest.writeString(this.description);
+        dest.writeString(this.author);
+        dest.writeParcelable(this.image, flags);
+        dest.writeParcelable(this.episodeInfo, flags);
+    }
+
+    protected Item(Parcel in) {
+        this.title = in.readString();
+        this.pubDate = in.readString();
+        this.duration = in.readString();
+        this.description = in.readString();
+        this.author = in.readString();
+        this.image = in.readParcelable(Image.class.getClassLoader());
+        this.episodeInfo = in.readParcelable(EpisodeInfo.class.getClassLoader());
+    }
+
+    public static final Parcelable.Creator<Item> CREATOR = new Parcelable.Creator<Item>() {
+        @Override
+        public Item createFromParcel(Parcel source) {
+            return new Item(source);
+        }
+
+        @Override
+        public Item[] newArray(int size) {
+            return new Item[size];
+        }
+    };
 }
