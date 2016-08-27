@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <color name="colorPrimary">@color/primary</color>
     <color name="colorPrimaryDark">@color/primary_dark</color>
     <color name="colorPrimaryLight">@color/primary_light</color>
+    <color name="colorPrimaryBackgroundLight">@color/primary_background_light</color>
     <color name="colorAccent">@color/accent</color>
     <color name="colorAccentDark">@color/accent_dark</color>
     <color name="colorAccentLight">@color/accent_light</color>
@@ -14,5 +16,8 @@
     <color name="colorSelectedBackground">@color/selected_background</color>
     <color name="colorPrimaryIcons">@color/primary_icons</color>
     <color name="colorSecondaryIcons">@color/secondary_icons</color>
+    <color name="colorNeutral">@color/neutral</color>
+    <color name="colorGradientStart">@color/gradient_start</color>
+    <color name="colorGradientEnd">@color/gradient_end</color>
 
 </resources>

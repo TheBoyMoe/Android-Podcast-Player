@@ -3,7 +3,8 @@
 
     <color name="primary">@color/md_pink_500</color>
     <color name="primary_dark">@color/md_pink_700</color>
-    <color name="primary_light">@color/md_pink_50</color>
+    <color name="primary_light">@color/md_pink_100</color>
+    <color name="primary_background_light">@color/md_pink_50</color>
     <color name="accent">@color/md_amber_500</color>
     <color name="accent_dark">@color/md_amber_700</color>
     <color name="accent_light">@color/md_amber_50</color>
@@ -16,6 +17,9 @@
     <color name="primary_icons">@color/md_white_1000</color>
     <color name="secondary_icons">@color/md_grey_600</color>
     <color name="divider">@color/md_grey_400</color>
+    <color name="neutral">@android:color/transparent</color>
+    <color name="gradient_start">@color/accent</color>
+    <color name="gradient_end">@color/accent_dark</color>
 
     <color name="color_swipe_1">@color/md_pink_300</color>
     <color name="color_swipe_2">@color/md_pink_400</color>
