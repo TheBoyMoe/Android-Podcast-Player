@@ -11,11 +11,16 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.androidpodcastplayer.R;
@@ -52,7 +57,9 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
         void onNavigationIconBackPressed();
     }
 
-    private CollapsingToolbarLayout collapsingToolbarLayout;
+    //private CollapsingToolbarLayout collapsingToolbarLayout;
+    private FrameLayout mListContainer;
+    private RelativeLayout mPodcastInfo;
     private CoordinatorLayout mLayout;
     private String mPodcastName;
     private int mTrackCount;
@@ -93,6 +100,7 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
         initToolbar(view);
         initFab(view);
         setupAppBar(view);
+        centerProgressBar();
 
         // bind the adapter to the view
         mAdapter = new EpisodeListAdapter(new ArrayList<Item>());
@@ -161,6 +169,7 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
     }
 
     private void setupInfoView(View view) {
+        mPodcastInfo = (RelativeLayout) view.findViewById(R.id.podcast_info);
         mPodcastTitle = (TextView) view.findViewById(R.id.podcast_title);
         mPodcastAuthor = (TextView) view.findViewById(R.id.podcast_author);
         mPodcastDescription = (TextView) view.findViewById(R.id.podcast_description);
@@ -170,8 +179,8 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
 
     private void setupListView(View view) {
         mLayout = (CoordinatorLayout) view.findViewById(R.id.coordinator_layout);
-        View wrapper = view.findViewById(R.id.autofitrecycler_container);
-        wrapper.setPadding(0, 0, 0, 0); // remove top padding
+        mListContainer = (FrameLayout) view.findViewById(R.id.autofitrecycler_container);
+        mListContainer.setPadding(0, 0, 0, 0); // remove top padding
         mProgressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
         mEmptyView = (TextView) view.findViewById(R.id.empty_view);
         mRecyclerView = (AutofitRecyclerView) view.findViewById(R.id.recycler_view);
@@ -202,6 +211,35 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
             }
         }
     }
+
+    private void centerProgressBar() {
+
+        // calculate height of display in dp
+        Display display = getActivity().getWindowManager().getDefaultDisplay();
+        DisplayMetrics metrics = new DisplayMetrics();
+        display.getMetrics(metrics);
+        final float density = getActivity().getResources().getDisplayMetrics().density;
+        float dpHeight = metrics.heightPixels/density;
+
+        ViewTreeObserver infoViewObserver = mPodcastInfo.getViewTreeObserver();
+        if (infoViewObserver.isAlive()) {
+
+            final float finalDpDisplayHeight = dpHeight;
+            final float actionBarHeight = 56f;
+
+            infoViewObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    mPodcastInfo.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    float dpInfoHeight = mPodcastInfo.getHeight()/density;
+                    //mProgressBar.setY(finalDpDisplayHeight - (dpInfoHeight + actionBarHeight));
+                    mProgressBar.setY(finalDpDisplayHeight - dpInfoHeight );
+                }
+            });
+        }
+
+    }
+
 
     // download the podcast episode list
     private void executeEpisodeQuery(String feedUrl) {

@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_marginTop="?attr/actionBarSize"
+                android:id="@+id/podcast_info"
                 android:paddingTop="@dimen/medium"
                 android:paddingBottom="@dimen/normal"
                 android:paddingRight="@dimen/normal"
