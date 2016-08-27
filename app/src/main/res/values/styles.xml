@@ -51,5 +51,17 @@
         <item name="android:gravity">center_horizontal</item>
     </style>
 
+    <style name="TextStyle.PodcastPlayer">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:textColor">@color/colorInverseText</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="TextStyle.PodcastPlayer.Title">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+
 
 </resources>

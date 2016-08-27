@@ -5,7 +5,7 @@
 
             <corners android:radius="80dp"/>
             <stroke android:width="2dp" android:color="@color/colorPrimaryLight"/>
-            <solid android:color="@color/colorPrimaryBackgroundLight" />
+            <solid android:color="@color/colorPrimaryBackground" />
 
         </shape>
     </item>

@@ -14,6 +14,7 @@
     <color name="colorPrimaryBackground">@color/primary_background</color>
     <color name="colorSecondaryBackground">@color/secondary_background</color>
     <color name="colorSelectedBackground">@color/selected_background</color>
+    <color name="colorPlayerBackground">@color/player_background</color>
     <color name="colorPrimaryIcons">@color/primary_icons</color>
     <color name="colorSecondaryIcons">@color/secondary_icons</color>
     <color name="colorNeutral">@color/neutral</color>

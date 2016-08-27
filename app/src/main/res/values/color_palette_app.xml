@@ -14,6 +14,7 @@
     <color name="primary_background">@color/md_white_1000</color>
     <color name="secondary_background">#F1F5F8</color>
     <color name="selected_background">@color/md_grey_100</color>
+    <color name="player_background">@color/md_black_1000</color>
     <color name="primary_icons">@color/md_white_1000</color>
     <color name="secondary_icons">@color/md_grey_600</color>
     <color name="divider">@color/md_grey_400</color>

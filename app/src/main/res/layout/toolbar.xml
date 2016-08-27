@@ -5,4 +5,5 @@
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
+    android:background="@drawable/gradient_bg_90"
     app:popupTheme="@style/AppTheme.PopupOverlay"/>
