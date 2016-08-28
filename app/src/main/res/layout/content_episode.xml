@@ -6,20 +6,12 @@
                 android:layout_height="match_parent">
 
 
-    <ProgressBar
-        android:id="@+id/progress_bar"
-        android:indeterminateDrawable="@drawable/progress_bar_circular"
-        android:layout_centerInParent="true"
-        android:visibility="gone"
-        android:layout_width="@dimen/progress_bar_size"
-        android:layout_height="@dimen/progress_bar_size"/>
-
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/progress_bar">
+        tools:ignore="UselessParent">
 
         <!-- background image and info -->
         <RelativeLayout
@@ -64,21 +56,6 @@
 
         </RelativeLayout>
 
-        <!--<LinearLayout-->
-            <!--android:orientation="vertical"-->
-            <!--android:paddingTop="@dimen/normal"-->
-            <!--android:paddingBottom="@dimen/normal"-->
-            <!--android:gravity="center_horizontal"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content">-->
-
-            <!--<ImageView-->
-                <!--android:id="@+id/episode_play"-->
-                <!--android:src="@drawable/ic_play_filled_circle_white"-->
-                <!--android:layout_width="56dp"-->
-                <!--android:layout_height="56dp"/>-->
-
-        <!--</LinearLayout>-->
 
         <!-- player controls -->
         <RelativeLayout
@@ -124,6 +101,16 @@
 
 
     </LinearLayout>
+
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:indeterminateDrawable="@drawable/progress_bar_circular"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:layout_width="@dimen/progress_bar_size"
+        android:layout_height="@dimen/progress_bar_size"/>
+
 
 
 </RelativeLayout>
