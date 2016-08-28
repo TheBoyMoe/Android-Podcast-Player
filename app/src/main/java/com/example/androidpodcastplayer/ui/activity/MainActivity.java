@@ -22,15 +22,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 
-
 import com.example.androidpodcastplayer.R;
 import com.example.androidpodcastplayer.common.Utils;
-
 import com.example.androidpodcastplayer.custom.QuerySuggestionProvider;
 import com.example.androidpodcastplayer.ui.fragment.GenreItemFragment;
 import com.example.androidpodcastplayer.ui.fragment.ListItemFragment;
-import com.example.androidpodcastplayer.ui.fragment.PlaylistFragment;
-import com.example.androidpodcastplayer.ui.fragment.SubscriptionFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +63,6 @@ public class MainActivity extends AppCompatActivity implements
     private int[] mTabIcons = {
             R.drawable.ic_explore,
             R.drawable.ic_subscription,
-            R.drawable.ic_favourites,
             R.drawable.ic_playlist
     };
 
@@ -175,15 +170,16 @@ public class MainActivity extends AppCompatActivity implements
         mTabLayout.getTabAt(0).setIcon(mTabIcons[0]);
         mTabLayout.getTabAt(1).setIcon(mTabIcons[1]);
         mTabLayout.getTabAt(2).setIcon(mTabIcons[2]);
-        mTabLayout.getTabAt(3).setIcon(mTabIcons[3]);
+        //mTabLayout.getTabAt(3).setIcon(mTabIcons[3]);
     }
 
     private void setupViewPager(ViewPager viewPager) {
         CustomViewPagerAdapter adapter = new CustomViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(GenreItemFragment.newInstance(), "Explore");
-        adapter.addFragment(ListItemFragment.newInstance(), "Categories");
-        adapter.addFragment(SubscriptionFragment.newInstance(), "Subscription");
-        adapter.addFragment(PlaylistFragment.newInstance(), "Playlist");
+        adapter.addFragment(ListItemFragment.newInstance(), "Subscription");
+        adapter.addFragment(ListItemFragment.newInstance(), "Playlist");
+        // adapter.addFragment(SubscriptionFragment.newInstance(), "Subscription");
+        // adapter.addFragment(PlaylistFragment.newInstance(), "Playlist");
         viewPager.setAdapter(adapter);
     }
 
