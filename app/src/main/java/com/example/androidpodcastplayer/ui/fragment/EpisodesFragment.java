@@ -59,7 +59,6 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
         void onNavigationIconBackPressed();
     }
 
-    // private CollapsingToolbarLayout collapsingToolbarLayout;
     private RelativeLayout mListContainer;
     private RelativeLayout mPodcastInfo;
     private CoordinatorLayout mLayout;

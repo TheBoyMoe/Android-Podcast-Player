@@ -23,13 +23,23 @@ import android.view.ViewGroup;
 import android.view.Window;
 
 import com.example.androidpodcastplayer.R;
+import com.example.androidpodcastplayer.common.Constants;
 import com.example.androidpodcastplayer.common.Utils;
 import com.example.androidpodcastplayer.custom.QuerySuggestionProvider;
+import com.example.androidpodcastplayer.model.podcast.Podcast;
+import com.example.androidpodcastplayer.model.podcast.Results;
+import com.example.androidpodcastplayer.rest.ApiClient;
+import com.example.androidpodcastplayer.rest.ApiInterface;
 import com.example.androidpodcastplayer.ui.fragment.GenreItemFragment;
 import com.example.androidpodcastplayer.ui.fragment.ListItemFragment;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import timber.log.Timber;
 
 
 public class MainActivity extends AppCompatActivity implements
@@ -153,8 +163,30 @@ public class MainActivity extends AppCompatActivity implements
     };
 
     private void executeSearchQuery(String query) {
-        // TODO search iTunes
-        Utils.showSnackbar(mLayout, "Execute search: " + query);
+        // search iTunes
+        Timber.i("%s execute iTunes search, query: %s", Constants.LOG_TAG, query);
+        ApiInterface searchService = ApiClient.getClient().create(ApiInterface.class);
+        Call<Results> call = searchService.getGenrePodcasts(
+                query, Constants.PODCAST_ID, Constants.REST_LIMIT
+        );
+        call.enqueue(new Callback<Results>() {
+            @Override
+            public void onResponse(Call<Results> call, Response<Results> response) {
+                List<Podcast> results = response.body().getResults();
+                if (results != null && results.size() > 0) {
+
+                } else {
+                    Utils.showSnackbar(mLayout, "No results returned, try another term");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Results> call, Throwable t) {
+                Utils.showSnackbar(mLayout, "Server error, try again");
+                Timber.e("%s error executing search: %s", Constants.LOG_TAG, t.getMessage());
+            }
+        });
+
     }
 
     public void confirmHistoryCleared(boolean historyCleared) {
