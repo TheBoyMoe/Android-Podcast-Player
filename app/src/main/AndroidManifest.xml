@@ -32,22 +32,17 @@
         <activity
             android:name=".ui.activity.PodcastActivity"
             android:parentActivityName=".ui.activity.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/CustomMaterialTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.activity.MainActivity"/>
         </activity>
 
-        <provider
-            android:name=".custom.QuerySuggestionProvider"
-            android:authorities="com.example.androidpodcastplayer.custom.QuerySuggestionProvider"
-            android:exported="false"/>
-
         <activity
             android:name=".ui.activity.EpisodesActivity"
             android:label="@string/title_activity_episode"
             android:parentActivityName=".ui.activity.PodcastActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/CustomMaterialTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.androidpodcastplayer.ui.activity.PodcastActivity"/>
@@ -57,11 +52,16 @@
             android:name=".ui.activity.EpisodeActivity"
             android:label="@string/title_activity_episode"
             android:parentActivityName=".ui.activity.EpisodesActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/CustomMaterialTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.androidpodcastplayer.ui.activity.EpisodesActivity"/>
         </activity>
+
+        <provider
+            android:name=".custom.QuerySuggestionProvider"
+            android:authorities="com.example.androidpodcastplayer.custom.QuerySuggestionProvider"
+            android:exported="false"/>
 
     </application>
 
