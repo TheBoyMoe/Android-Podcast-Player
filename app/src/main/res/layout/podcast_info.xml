@@ -3,8 +3,8 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_marginTop="?attr/actionBarSize"
                 android:id="@+id/podcast_info"
-                android:paddingTop="@dimen/medium"
-                android:paddingBottom="@dimen/normal"
+                android:paddingTop="@dimen/normal"
+
                 android:paddingRight="@dimen/normal"
                 android:paddingLeft="@dimen/normal"
                 android:gravity="center_vertical"

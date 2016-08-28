@@ -25,7 +25,7 @@
     <dimen name="text_margin">16dp</dimen>
     <dimen name="progress_bar_size">56dp</dimen>
     <dimen name="podcast_thumbnail_size">100dp</dimen>
-    <dimen name="appbar_layout_size">206dp</dimen>
+    <dimen name="appbar_layout_size">216dp</dimen>
     <dimen name="audio_player_button_size">56dp</dimen>
     <dimen name="audio_player_margin">40dp</dimen>
     <dimen name="audio_player_thumb_size">16dp</dimen>
