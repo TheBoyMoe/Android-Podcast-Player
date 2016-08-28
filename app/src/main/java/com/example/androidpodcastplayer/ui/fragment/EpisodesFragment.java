@@ -190,8 +190,8 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
         mRecyclerView = (AutofitRecyclerView) view.findViewById(R.id.recycler_view);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.addItemDecoration(new ItemSpacerDecoration(
-                getResources().getDimensionPixelOffset(R.dimen.grid_item_margin),
-                getResources().getDimensionPixelOffset(R.dimen.grid_item_margin)
+                getResources().getDimensionPixelOffset(R.dimen.list_item_vertical_margin),
+                getResources().getDimensionPixelOffset(R.dimen.list_item_horizontal_margin)
         ));
     }
 
