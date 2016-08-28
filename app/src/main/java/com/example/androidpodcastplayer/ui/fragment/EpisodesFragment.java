@@ -17,7 +17,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -60,8 +59,8 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
         void onNavigationIconBackPressed();
     }
 
-    //private CollapsingToolbarLayout collapsingToolbarLayout;
-    private FrameLayout mListContainer;
+    // private CollapsingToolbarLayout collapsingToolbarLayout;
+    private RelativeLayout mListContainer;
     private RelativeLayout mPodcastInfo;
     private CoordinatorLayout mLayout;
     private String mPodcastName;
@@ -104,7 +103,7 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
         initToolbar(view);
         initFab(view);
         setupAppBar(view);
-        centerProgressBar();
+        // centerProgressBar();
 
         // bind the adapter to the view
         mAdapter = new EpisodeListAdapter(new ArrayList<Item>());
@@ -183,10 +182,12 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
 
     private void setupListView(View view) {
         mLayout = (CoordinatorLayout) view.findViewById(R.id.coordinator_layout);
-        mListContainer = (FrameLayout) view.findViewById(R.id.autofitrecycler_container);
+        mListContainer = (RelativeLayout) view.findViewById(R.id.autofitrecycler_container);
         mListContainer.setPadding(0, 0, 0, 0); // remove top padding
         mProgressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
+        mProgressBar.setY(-206f); // move up to counter height of podcast info view
         mEmptyView = (TextView) view.findViewById(R.id.empty_view);
+        mEmptyView.setY(-206f);
         mRecyclerView = (AutofitRecyclerView) view.findViewById(R.id.recycler_view);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.addItemDecoration(new ItemSpacerDecoration(
@@ -237,7 +238,7 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
                     mPodcastInfo.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                     float dpInfoHeight = mPodcastInfo.getHeight()/density;
                     //mProgressBar.setY(finalDpDisplayHeight - (dpInfoHeight + actionBarHeight));
-                    mProgressBar.setY(finalDpDisplayHeight - dpInfoHeight );
+                    mProgressBar.setY(finalDpDisplayHeight);
                 }
             });
         }
