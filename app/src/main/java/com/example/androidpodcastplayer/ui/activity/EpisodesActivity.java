@@ -15,8 +15,8 @@ public class EpisodesActivity extends BlankActivity implements
 
     // impl of contract method
     @Override
-    public void launchPlayer(Item episode) {
-        EpisodeActivity.launch(this, episode);
+    public void launchPlayer(Item episode, String imageUrl) {
+        EpisodeActivity.launch(this, episode, imageUrl);
     }
 
     @Override

@@ -41,10 +41,11 @@ public class EpisodeFragment extends ContractFragment<EpisodeFragment.Contract>{
 
     public EpisodeFragment() {}
 
-    public static EpisodeFragment newInstance(Item episode) {
+    public static EpisodeFragment newInstance(Item episode, String imageUrl) {
         EpisodeFragment fragment = new EpisodeFragment();
         Bundle args = new Bundle();
         args.putParcelable(Constants.EPISODE_ITEM, episode);
+        args.putString(Constants.PODCAST_IMAGE, imageUrl);
         fragment.setArguments(args);
         return fragment;
     }
@@ -63,7 +64,8 @@ public class EpisodeFragment extends ContractFragment<EpisodeFragment.Contract>{
         initToolbar(view);
         setupView(view);
         Item episode = getArguments().getParcelable(Constants.EPISODE_ITEM);
-        populateView(episode);
+        String imageUrl = getArguments().getString(Constants.PODCAST_IMAGE);
+        populateView(episode, imageUrl);
         return view;
     }
 
@@ -115,19 +117,20 @@ public class EpisodeFragment extends ContractFragment<EpisodeFragment.Contract>{
         mStopButton = (ImageButton) view.findViewById(R.id.action_stop);
     }
 
-    private void populateView(Item episode) {
+    private void populateView(Item episode, String imageUrl) {
         if (episode != null) {
-            mEpisodeTitle.setText(episode.getTitle() != null ? episode.getTitle() : "" );
+            mEpisodeTitle.setText(episode.getTitle() != null ? episode.getTitle() : "");
             mEpisodeDescription.setText(episode.getDescription() != null ? episode.getDescription() : "");
-            // FIXME many item objects do not have and image object - use channel
-            if (episode.getImage() != null) {
-                if (episode.getImage().getUrl() != null) {
-                    Utils.loadPreviewWithGlide(getActivity(), episode.getImage().getUrl(), mEpisodeThumbnail);
-                }
+            if (imageUrl != null) { // use the full size image
+                Utils.loadPreviewWithGlide(getActivity(), imageUrl, mEpisodeThumbnail);
             } else {
-                // TODO use channel
-            }
+                if (episode.getImage() != null) {
+                    if (episode.getImage().getUrl() != null) {
+                        Utils.loadPreviewWithGlide(getActivity(), episode.getImage().getUrl(), mEpisodeThumbnail);
+                    }
+                }
 
+            }
         }
     }
 

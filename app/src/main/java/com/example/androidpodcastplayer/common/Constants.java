@@ -16,7 +16,7 @@ public class Constants {
     public static final String FEED_BURNER_BASE_URL = "http://feeds.feedburner.com";
     public static final String RSS_FEED_URL = "rss_feed_url";
     public static final String PODCAST_ITEM ="podcast_item";
+    public static final String PODCAST_IMAGE = "podcast_image";
     public static final String EPISODE_ITEM = "episode_item";
-
 
 }

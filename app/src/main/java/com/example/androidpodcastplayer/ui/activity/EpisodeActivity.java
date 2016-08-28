@@ -34,9 +34,10 @@ public class EpisodeActivity extends BlankActivity implements
 
     private FrameLayout mLayout;
 
-    public static void launch(Activity activity, Item episode) {
+    public static void launch(Activity activity, Item episode, String imageUrl) {
         Intent intent = new Intent(activity, EpisodeActivity.class);
         intent.putExtra(Constants.EPISODE_ITEM, episode);
+        intent.putExtra(Constants.PODCAST_IMAGE, imageUrl);
         activity.startActivity(intent);
     }
 
@@ -46,8 +47,11 @@ public class EpisodeActivity extends BlankActivity implements
         mLayout = (FrameLayout) findViewById(R.id.fragment_container);
         if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) == null) {
             Item episode = getIntent().getParcelableExtra(Constants.EPISODE_ITEM);
-            if (episode != null)
-                initFragment(EpisodeFragment.newInstance(episode));
+            String imageUrl = getIntent().getStringExtra(Constants.PODCAST_IMAGE);
+            if (episode != null) {
+                initFragment(EpisodeFragment.newInstance(episode, imageUrl));
+            }
+
         }
 
     }

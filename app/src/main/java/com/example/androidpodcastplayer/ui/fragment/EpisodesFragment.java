@@ -30,6 +30,7 @@ import com.example.androidpodcastplayer.custom.AutofitRecyclerView;
 import com.example.androidpodcastplayer.custom.ItemSpacerDecoration;
 import com.example.androidpodcastplayer.model.episode.Channel;
 import com.example.androidpodcastplayer.model.episode.Feed;
+import com.example.androidpodcastplayer.model.episode.Image;
 import com.example.androidpodcastplayer.model.episode.Item;
 import com.example.androidpodcastplayer.model.podcast.Podcast;
 import com.example.androidpodcastplayer.rest.RssClient;
@@ -52,7 +53,7 @@ import timber.log.Timber;
 public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract>{
 
     public interface Contract {
-        void launchPlayer(Item episode);
+        void launchPlayer(Item episode, String imageUrl);
         void addEpisodeToPlaylist();
         void downloadEpisode();
         void downloadError(String message);
@@ -74,6 +75,7 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
     private TextView mPodcastDescription;
     private TextView mPodcastPubDate;
     private ImageView mPodcastThumbnail;
+    private String mImageUrl;
 
     public EpisodesFragment() {}
 
@@ -253,28 +255,29 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
             @Override
             public void onResponse(Call<Feed> call, Response<Feed> response) {
                 Channel channel = response.body().getChannel();
-                String description = channel.getDescription();
-                if (description != null && !description.isEmpty())
-                    mPodcastDescription.setText(description);
-                String pubDate = channel.getPubDate();
-                if (pubDate != null && !pubDate.isEmpty()) {
-                    mPodcastPubDate.setText(pubDate);
-                } else {
-                    String lastBuildDate = channel.getLastBuildDate();
-                    if (lastBuildDate != null && !lastBuildDate.isEmpty()) {
-                        mPodcastPubDate.setText(lastBuildDate);
+                if (channel != null) {
+                    String description = channel.getDescription();
+                    if (description != null && !description.isEmpty())
+                        mPodcastDescription.setText(description);
+                    String pubDate = channel.getPubDate();
+                    if (pubDate != null && !pubDate.isEmpty()) {
+                        mPodcastPubDate.setText(pubDate);
+                    } else {
+                        String lastBuildDate = channel.getLastBuildDate();
+                        if (lastBuildDate != null && !lastBuildDate.isEmpty()) {
+                            mPodcastPubDate.setText(lastBuildDate);
+                        }
                     }
-                }
-//                List<Image> images = channel.getImages();
-//                String url = null;
-//                if (images != null) {
-//                    for (Image image : images) {
-//                        url = image.getUrl();
-//                        if (url != null) break;
-//                    }
-//                }
+                    List<Image> images = channel.getImages();
+                    if (images != null) {
+                        for (Image image : images) {
+                            mImageUrl = image.getUrl();
+                            if (mImageUrl != null) break;
+                        }
+                    }
+                    Timber.i("%s image url: %s", Constants.LOG_TAG, mImageUrl);
 
-                // populate podcast info layout
+                    // populate podcast info layout
 //                mPodcastName = channel.getTitle();
 //                mPodcastTitle.setText(channel.getTitle());
 //                mPodcastAuthor.setText(channel.getAuthor());
@@ -282,32 +285,33 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
 //                Utils.loadPreviewWithGlide(getActivity(), url, mPodcastThumbnail);
 
 
-                // DEBUG
-                // String cat = null;
-                // List<Category> categories = channel.getCategory();
-                // for (Category category : categories) {
-                //     cat = category.getCategory();
-                //     if (cat != null) break;
-                // }
+                    // DEBUG
+                    // String cat = null;
+                    // List<Category> categories = channel.getCategory();
+                    // for (Category category : categories) {
+                    //     cat = category.getCategory();
+                    //     if (cat != null) break;
+                    // }
 
-                // Timber.i("%s title: %s, pubDate: %s, buildDate: %s, language: %s, author: %s, description: %s, image link %s, category %s, episodes %s",
-                //        Constants.LOG_TAG, channel.getTitle(), channel.getPubDate(), channel.getBuildDate(), channel.getLanguage(),
-                //        channel.getAuthor(), channel.getDescription(), url, cat, channel.getItemList().size());
+                    // Timber.i("%s title: %s, pubDate: %s, buildDate: %s, language: %s, author: %s, description: %s, image link %s, category %s, episodes %s",
+                    //        Constants.LOG_TAG, channel.getTitle(), channel.getPubDate(), channel.getBuildDate(), channel.getLanguage(),
+                    //        channel.getAuthor(), channel.getDescription(), url, cat, channel.getItemList().size());
 
-                // episode list
-                mProgressBar.setVisibility(View.GONE);
-                List<Item> episodes = channel.getItemList();
-                if (episodes != null && episodes.size() > 0) {
-                    mAdapter = new EpisodeListAdapter(episodes);
-                    mRecyclerView.swapAdapter(mAdapter, true);
-                    mEmptyView.setVisibility(View.GONE);
-                } else {
-                    Utils.showSnackbar(mLayout, getString(R.string.error_downloading_episode_list));
-                    mEmptyView.setText(R.string.error_downloading_episode_list);
-                    mEmptyView.setVisibility(View.VISIBLE);
-                }
+                    // episode list
 
-                // DEBUG
+                    mProgressBar.setVisibility(View.GONE);
+                    List<Item> episodes = channel.getItemList();
+                    if (episodes != null && episodes.size() > 0) {
+                        mAdapter = new EpisodeListAdapter(episodes);
+                        mRecyclerView.swapAdapter(mAdapter, true);
+                        mEmptyView.setVisibility(View.GONE);
+                    } else {
+                        Utils.showSnackbar(mLayout, getString(R.string.error_downloading_episode_list));
+                        mEmptyView.setText(R.string.error_downloading_episode_list);
+                        mEmptyView.setVisibility(View.VISIBLE);
+                    }
+
+                    // DEBUG
 //                if (episodes != null && episodes.size() > 0) {
 //                    int count = 5;
 //                    if (episodes.size() < count) {
@@ -328,7 +332,9 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
 //                                episode.getEpisodeInfo().getType(), episode.getEpisodeInfo().getUrl());
 //                    }
 //                }
-                // END
+                    // END
+
+                }
             }
 
             @Override
@@ -415,10 +421,8 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
             public void onClick(View view) {
                 switch (view.getId()) {
                     case R.id.episode_item:
-                        getContract().launchPlayer(mEpisode);
-                        break;
                     case R.id.episode_play:
-                        getContract().launchPlayer(mEpisode);
+                        getContract().launchPlayer(mEpisode, mImageUrl);
                         break;
                     case R.id.episode_download:
                         // TODO
