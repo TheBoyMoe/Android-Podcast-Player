@@ -32,7 +32,9 @@
                 android:orientation="vertical"
                 android:layout_alignParentBottom="true"
                 android:background="@drawable/gradient_bg_270"
-                android:padding="@dimen/normal"
+                android:paddingStart="@dimen/normal"
+                android:paddingEnd="@dimen/normal"
+                android:paddingTop="@dimen/xlarge"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -60,8 +62,8 @@
         <!-- player controls -->
         <RelativeLayout
 
-            android:layout_marginTop="@dimen/large"
-            android:layout_marginBottom="@dimen/large"
+            android:layout_marginTop="@dimen/small"
+            android:layout_marginBottom="@dimen/normal"
             android:layout_marginEnd="@dimen/normal"
             android:layout_marginStart="@dimen/normal"
             android:layout_width="match_parent"

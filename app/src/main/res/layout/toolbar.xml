@@ -6,4 +6,5 @@
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
     android:background="@drawable/gradient_bg_90"
+    android:paddingBottom="@dimen/normal"
     app:popupTheme="@style/AppTheme.PopupOverlay"/>
