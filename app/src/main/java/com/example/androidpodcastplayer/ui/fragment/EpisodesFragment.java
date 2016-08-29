@@ -90,7 +90,6 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
         initFab(view);
         setupInfoView(view);
         setupListView(view);
-        // centerProgressBar();
 
         Podcast podcast = getArguments().getParcelable(Constants.PODCAST_ITEM);
         Channel channel = getArguments().getParcelable(Constants.PODCAST_CHANNEL);
@@ -149,10 +148,6 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
         mLayout = (CoordinatorLayout) view.findViewById(R.id.coordinator_layout);
         RelativeLayout listContainer = (RelativeLayout) view.findViewById(R.id.autofitrecycler_container);
         listContainer.setPadding(0, 0, 0, 0); // remove top padding
-        // mProgressBar = (ProgressBar) view.findViewById(R.id.progress_bar); // FIXME
-        // mProgressBar.setY(-206f); // move up to counter height of podcast info view
-        // mEmptyView = (TextView) view.findViewById(R.id.empty_view); // FIXME
-        // mEmptyView.setY(-206f);
         mRecyclerView = (AutofitRecyclerView) view.findViewById(R.id.recycler_view);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.addItemDecoration(new ItemSpacerDecoration(

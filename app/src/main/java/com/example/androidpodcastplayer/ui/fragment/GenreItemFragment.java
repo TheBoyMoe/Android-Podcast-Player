@@ -43,7 +43,6 @@ public class GenreItemFragment extends ContractFragment<GenreItemFragment.Contra
                 getResources().getDimensionPixelOffset(R.dimen.grid_item_margin)
         ));
         recyclerView.setHasFixedSize(true);
-        //List<Integer> list = new ArrayList<>(Arrays.asList(mGridIcons));
         List<ItunesGenre> list = new ArrayList<>(Arrays.asList(ItunesGenreDataCache.list));
         GridItemAdapter adapter = new GridItemAdapter(list);
         recyclerView.setAdapter(adapter);

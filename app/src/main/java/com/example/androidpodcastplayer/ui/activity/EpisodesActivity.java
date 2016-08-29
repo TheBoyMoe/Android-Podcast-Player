@@ -42,13 +42,6 @@ public class EpisodesActivity extends BlankActivity implements
     }
     // END
 
-
-    public static void launch(Activity activity, String feedUrl) {
-        Intent intent = new Intent(activity, EpisodesActivity.class);
-        intent.putExtra(Constants.RSS_FEED_URL, feedUrl);
-        activity.startActivity(intent);
-    }
-
     public static void launch(Activity activity, Podcast item, Channel channel) {
         Intent intent = new Intent(activity, EpisodesActivity.class);
         intent.putExtra(Constants.PODCAST_ITEM, item);
@@ -62,15 +55,12 @@ public class EpisodesActivity extends BlankActivity implements
         super.onCreate(savedInstanceState);
 
         if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) == null) {
-            // String feedUrl = getIntent().getStringExtra(Constants.RSS_FEED_URL);
             Podcast item = getIntent().getParcelableExtra(Constants.PODCAST_ITEM);
             Channel channel = getIntent().getParcelableExtra(Constants.PODCAST_CHANNEL);
             if (item != null && channel != null)
                 initFragment(EpisodesFragment.newInstance(item, channel));
         }
     }
-
-
 
 
 }
