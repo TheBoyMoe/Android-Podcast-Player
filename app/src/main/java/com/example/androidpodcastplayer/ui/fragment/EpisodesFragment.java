@@ -362,7 +362,7 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             mContext = parent.getContext();
-            View view = LayoutInflater.from(mContext).inflate(R.layout.list_item_episode, parent, false);
+            View view = LayoutInflater.from(mContext).inflate(R.layout.episode_item, parent, false);
             return new ViewHolder(view);
         }
 

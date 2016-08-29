@@ -7,8 +7,12 @@ public class Constants {
     public static final int REQUEST_CODE_HISTORY_CLEARED = 101;
 
     public static final int PODCAST_ID = 26;
+    public static final String PODCAST_LIST = "podcast_list";
+    public static final String PODCAST_QUERY = "search_query";
+    public static final String PODCAST_SEARCH = "is_results_of_search";
+    public static final String PODCAST_TITLE = "podcast_title";
     public static final String REST_TERM = "podcasts";
-    public static final int REST_LIMIT = 10;
+    public static final int REST_LIMIT = 100;
 
     public static final String GENRE_ID = "genre_id";
     public static final String GENRE_TITLE = "genre_title";
@@ -16,7 +20,7 @@ public class Constants {
     public static final String BASE_URL = "https://itunes.apple.com/";
     public static final String FEED_BURNER_BASE_URL = "http://feeds.feedburner.com";
     public static final String RSS_FEED_URL = "rss_feed_url";
-    public static final String PODCAST_ITEM ="podcast_item";
+    public static final String PODCAST_ITEM = "podcast_item";
     public static final String PODCAST_IMAGE = "podcast_image";
     public static final String EPISODE_ITEM = "episode_item";
 

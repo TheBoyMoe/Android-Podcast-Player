@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.ProgressBar;
 
 import com.example.androidpodcastplayer.R;
 import com.example.androidpodcastplayer.common.Constants;
@@ -33,6 +34,7 @@ import com.example.androidpodcastplayer.rest.ApiInterface;
 import com.example.androidpodcastplayer.ui.fragment.GenreItemFragment;
 import com.example.androidpodcastplayer.ui.fragment.ListItemFragment;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +46,8 @@ import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity implements
         GenreItemFragment.Contract,
-        ListItemFragment.Contract{
+        ListItemFragment.Contract {
+
 
     // implementation of interface methods
     @Override
@@ -57,7 +60,8 @@ public class MainActivity extends AppCompatActivity implements
         // launch PodcastActivity which will execute download of podcasts
         // for the relevant genre and display the results
         if (Utils.isClientConnected(this)) {
-            PodcastActivity.launch(this, genreId, genreTitle);
+            // PodcastActivity.launch(this, genreId, genreTitle);
+            executeGenreQuery(genreId, genreTitle);
         } else {
             Utils.showSnackbar(mLayout, getString(R.string.no_network_connection));
         }
@@ -69,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements
     private MenuItem mSearchItem;
     private SearchView mSearchView;
     private CoordinatorLayout mLayout;
+    private ProgressBar mProgressBar;
     private TabLayout mTabLayout;
     private int[] mTabIcons = {
             R.drawable.ic_explore,
@@ -81,8 +86,10 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mLayout = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
-        ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
+        mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        mProgressBar.setY(112f); // center progressbar, move down due to TabLayout
         mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
 
         // instantiate the toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -101,7 +108,6 @@ public class MainActivity extends AppCompatActivity implements
         );
 
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -147,7 +153,13 @@ public class MainActivity extends AppCompatActivity implements
                     QuerySuggestionProvider.MODE);
             // save queries to suggestions provider
             mRecentSuggestions.saveRecentQuery(query, null);
-            executeSearchQuery(query);
+
+            // if we're connected, execute the search
+            if (Utils.isClientConnected(MainActivity.this)) {
+                executeSearchQuery(query);
+            } else {
+                Utils.showSnackbar(mLayout, getString(R.string.no_network_connection));
+            }
 
             // hide the soft keyboard & close the search view
             Utils.hideKeyboard(MainActivity.this, mSearchView.getWindowToken());
@@ -162,9 +174,9 @@ public class MainActivity extends AppCompatActivity implements
         }
     };
 
-    private void executeSearchQuery(String query) {
-        // search iTunes
-        Timber.i("%s execute iTunes search, query: %s", Constants.LOG_TAG, query);
+    // search iTunes for podcasts matching the search query
+    private void executeSearchQuery(final String query) {
+        mProgressBar.setVisibility(View.VISIBLE);
         ApiInterface searchService = ApiClient.getClient().create(ApiInterface.class);
         Call<Results> call = searchService.getGenrePodcasts(
                 query, Constants.PODCAST_ID, Constants.REST_LIMIT
@@ -172,21 +184,52 @@ public class MainActivity extends AppCompatActivity implements
         call.enqueue(new Callback<Results>() {
             @Override
             public void onResponse(Call<Results> call, Response<Results> response) {
-                List<Podcast> results = response.body().getResults();
+                mProgressBar.setVisibility(View.GONE);
+                ArrayList<Podcast> results = (ArrayList<Podcast>) response.body().getResults();
                 if (results != null && results.size() > 0) {
-
+                    // display results in PodcastActivity/Fragment
+                    PodcastActivity.launch(MainActivity.this, results, query, true);
                 } else {
-                    Utils.showSnackbar(mLayout, "No results returned, try another term");
+                    Utils.showSnackbar(mLayout, "No results returned");
                 }
             }
 
             @Override
             public void onFailure(Call<Results> call, Throwable t) {
+                mProgressBar.setVisibility(View.GONE);
                 Utils.showSnackbar(mLayout, "Server error, try again");
-                Timber.e("%s error executing search: %s", Constants.LOG_TAG, t.getMessage());
+                Timber.e("%s error executing search query: %s", Constants.LOG_TAG, t.getMessage());
             }
         });
+    }
 
+    // return a list of podcasts for the supplied genre
+    private void executeGenreQuery(int genreId, final String genreTitle) {
+        mProgressBar.setVisibility(View.VISIBLE);
+        Timber.i("%s: executing podcast download task", Constants.LOG_TAG);
+        ApiInterface restService = ApiClient.getClient().create(ApiInterface.class);
+        Call<Results> call = restService.getGenrePodcasts(
+                Constants.REST_TERM, genreId, Constants.REST_LIMIT
+        );
+        call.enqueue(new Callback<Results>() {
+            @Override
+            public void onResponse(Call<Results> call, Response<Results> response) {
+                mProgressBar.setVisibility(View.GONE);
+                ArrayList<Podcast> list = (ArrayList<Podcast>) response.body().getResults();
+                if (list != null && list.size() > 0) {
+                    PodcastActivity.launch(MainActivity.this, list, genreTitle, false);
+                } else {
+                    Utils.showSnackbar(mLayout, "No results found");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Results> call, Throwable t) {
+                mProgressBar.setVisibility(View.GONE);
+                Utils.showSnackbar(mLayout, "Server error, try again");
+                Timber.e("%s error executing genre query: %s", Constants.LOG_TAG, t.getMessage());
+            }
+        });
     }
 
     public void confirmHistoryCleared(boolean historyCleared) {
@@ -248,11 +291,12 @@ public class MainActivity extends AppCompatActivity implements
     }
 
 
-    public static class ClearHistoryDialog extends DialogFragment implements View.OnClickListener{
+    public static class ClearHistoryDialog extends DialogFragment implements View.OnClickListener {
 
         private boolean mHistoryCleared = false;
 
-        public ClearHistoryDialog() {}
+        public ClearHistoryDialog() {
+        }
 
         @Nullable
         @Override
@@ -271,7 +315,7 @@ public class MainActivity extends AppCompatActivity implements
                     mHistoryCleared = true;
                     break;
             }
-            ((MainActivity)getActivity()).confirmHistoryCleared(mHistoryCleared);
+            ((MainActivity) getActivity()).confirmHistoryCleared(mHistoryCleared);
             dismiss();
         }
 

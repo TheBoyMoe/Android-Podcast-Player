@@ -13,6 +13,9 @@ import com.example.androidpodcastplayer.common.Utils;
 import com.example.androidpodcastplayer.model.podcast.Podcast;
 import com.example.androidpodcastplayer.ui.fragment.PodcastFragment;
 
+import java.util.ArrayList;
+import java.util.Locale;
+
 
 public class PodcastActivity extends BaseActivity implements
         PodcastFragment.Contract{
@@ -31,17 +34,13 @@ public class PodcastActivity extends BaseActivity implements
             Utils.showSnackbar(mLayout, getString(R.string.no_network_connection));
         }
     }
-
-    @Override
-    public void downloadError(String message) {
-        Utils.showSnackbar(mLayout, message);
-    }
     // END
 
-    public static void launch(Activity activity, int genreId, String genreTitle) {
+    public static void launch(Activity activity, ArrayList<Podcast> list, String title, boolean isSearch) {
         Intent intent = new Intent(activity, PodcastActivity.class);
-        intent.putExtra(Constants.GENRE_ID, genreId);
-        intent.putExtra(Constants.GENRE_TITLE, genreTitle);
+        intent.putParcelableArrayListExtra(Constants.PODCAST_LIST, list);
+        intent.putExtra(Constants.PODCAST_TITLE, title);
+        intent.putExtra(Constants.PODCAST_SEARCH, isSearch);
         activity.startActivity(intent);
     }
 
@@ -53,19 +52,22 @@ public class PodcastActivity extends BaseActivity implements
         setContentView(R.layout.activity_podcast);
         mLayout = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
 
-        // instantiate the toolbar with up nav arrow
+        // instantiate the toolbar with up nav arrow and set page title
         initToolbar();
-
-        // set the title to match the genre
-        String genreTitle = getIntent().getStringExtra(Constants.GENRE_TITLE);
-        if (genreTitle != null) {
-            setTitle(genreTitle + " Genre");
+        boolean isSearch = getIntent().getBooleanExtra(Constants.PODCAST_SEARCH, false);
+        String title = getIntent().getStringExtra(Constants.PODCAST_TITLE);
+        if (title != null) {
+            if (isSearch) {
+                setTitle(String.format(Locale.ENGLISH, "Results for: %s", title));
+            } else {
+                setTitle(String.format(Locale.ENGLISH, "%s genre", title));
+            }
         }
 
         // retrieve the genreId and load the genre fragment
         if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) == null) {
-            int genreId = getIntent().getIntExtra(Constants.GENRE_ID, 0);
-            initFragment(PodcastFragment.newInstance(genreId));
+            ArrayList<Podcast> list = getIntent().getParcelableArrayListExtra(Constants.PODCAST_LIST);
+            initFragment(PodcastFragment.newInstance(list));
         }
 
     }
