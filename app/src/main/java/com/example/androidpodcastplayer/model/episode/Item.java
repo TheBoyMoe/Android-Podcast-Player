@@ -5,29 +5,39 @@ import android.os.Parcelable;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Namespace;
+import org.simpleframework.xml.Path;
 import org.simpleframework.xml.Root;
+import org.simpleframework.xml.Text;
 
 
 @Root(strict = false)
 public class Item implements Parcelable {
 
-    @Element(name = "title", required = false)
+    // @Element(name = "title", required = false)
+    @Path("title")
+    @Text(required = false)
     private String title;
     @Element(name = "pubDate", required = false)
     private String pubDate;
     @Namespace(reference = "http://www.itunes.com/dtds/podcast-1.0.dtd")
     @Element(name = "duration", required = false)
     private String duration;
-    @Element(name = "description", required = false)
+    // @Element(name = "description", required = false)
+    @Path("description")
+    @Text(required = false)
     private String description;
     @Namespace(reference = "http://www.itunes.com/dtds/podcast-1.0.dtd")
-    @Element(name = "author", required = false)
+    // @Element(name = "author", required = false)
+    @Path("author")
+    @Text(required = false)
     private String author;
     @Namespace(reference = "http://www.itunes.com/dtds/podcast-1.0.dtd")
     @Element(name = "image", required = false)
     private Image image;
     @Element(name = "enclosure", required = false)
-    private EpisodeInfo episodeInfo;
+    @Path("enclosure")
+    @Text(required = false)
+    private Enclosure enclosure;
 
 
     public Item() { }
@@ -72,12 +82,12 @@ public class Item implements Parcelable {
         this.author = author;
     }
 
-    public EpisodeInfo getEpisodeInfo() {
-        return episodeInfo;
+    public Enclosure getEnclosure() {
+        return enclosure;
     }
 
-    public void setEpisodeInfo(EpisodeInfo episodeInfo) {
-        this.episodeInfo = episodeInfo;
+    public void setEnclosure(Enclosure enclosure) {
+        this.enclosure = enclosure;
     }
 
     public Image getImage() {
@@ -102,7 +112,7 @@ public class Item implements Parcelable {
         dest.writeString(this.description);
         dest.writeString(this.author);
         dest.writeParcelable(this.image, flags);
-        dest.writeParcelable(this.episodeInfo, flags);
+        dest.writeParcelable(this.enclosure, flags);
     }
 
     protected Item(Parcel in) {
@@ -112,7 +122,7 @@ public class Item implements Parcelable {
         this.description = in.readString();
         this.author = in.readString();
         this.image = in.readParcelable(Image.class.getClassLoader());
-        this.episodeInfo = in.readParcelable(EpisodeInfo.class.getClassLoader());
+        this.enclosure = in.readParcelable(Enclosure.class.getClassLoader());
     }
 
     public static final Parcelable.Creator<Item> CREATOR = new Parcelable.Creator<Item>() {

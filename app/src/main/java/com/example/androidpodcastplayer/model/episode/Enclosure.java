@@ -6,8 +6,9 @@ import android.os.Parcelable;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
+
 @Root(strict = false)
-public class EpisodeInfo implements Parcelable {
+public class Enclosure implements Parcelable {
 
     @Attribute(name = "length", required = false)
     private String length;
@@ -18,7 +19,7 @@ public class EpisodeInfo implements Parcelable {
     @Attribute(name = "url", required = false)
     private String url;
 
-    public EpisodeInfo() { }
+    public Enclosure() { }
 
     public String getLength() {
         return length;
@@ -57,21 +58,21 @@ public class EpisodeInfo implements Parcelable {
         dest.writeString(this.url);
     }
 
-    protected EpisodeInfo(Parcel in) {
+    protected Enclosure(Parcel in) {
         this.length = in.readString();
         this.type = in.readString();
         this.url = in.readString();
     }
 
-    public static final Parcelable.Creator<EpisodeInfo> CREATOR = new Parcelable.Creator<EpisodeInfo>() {
+    public static final Parcelable.Creator<Enclosure> CREATOR = new Parcelable.Creator<Enclosure>() {
         @Override
-        public EpisodeInfo createFromParcel(Parcel source) {
-            return new EpisodeInfo(source);
+        public Enclosure createFromParcel(Parcel source) {
+            return new Enclosure(source);
         }
 
         @Override
-        public EpisodeInfo[] newArray(int size) {
-            return new EpisodeInfo[size];
+        public Enclosure[] newArray(int size) {
+            return new Enclosure[size];
         }
     };
 }

@@ -7,14 +7,18 @@ import android.os.Parcelable;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Namespace;
+import org.simpleframework.xml.Path;
 import org.simpleframework.xml.Root;
+import org.simpleframework.xml.Text;
 
 import java.util.List;
 
 @Root(strict = false)
 public class Channel implements Parcelable {
 
-    @Element(name = "title", required = false)
+    // @Element(name = "title", required = false)
+    @Path("title")
+    @Text(required = false)
     private String title;
     @Element(name = "pubDate", required = false)
     private String pubDate;
@@ -22,10 +26,14 @@ public class Channel implements Parcelable {
     private String lastBuildDate;
     @Element(name = "language", required = false)
     private String language;
-    @Element(name = "description", required = false)
+    // @Element(name = "description", required = false)
+    @Path("description")
+    @Text(required = false)
     private String description;
     @Namespace(reference = "http://www.itunes.com/dtds/podcast-1.0.dtd")
-    @Element(name = "author", required = false)
+    // @Element(name = "author", required = false)
+    @Path("author")
+    @Text(required = false)
     private String author;
     @Namespace(reference = "http://www.itunes.com/dtds/podcast-1.0.dtd")
     @ElementList(name = "image", required = false, inline = true)
