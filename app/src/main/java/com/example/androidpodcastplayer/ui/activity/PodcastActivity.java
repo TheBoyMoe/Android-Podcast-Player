@@ -6,15 +6,26 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import com.example.androidpodcastplayer.R;
 import com.example.androidpodcastplayer.common.Constants;
 import com.example.androidpodcastplayer.common.Utils;
+import com.example.androidpodcastplayer.model.episode.Channel;
+import com.example.androidpodcastplayer.model.episode.Feed;
 import com.example.androidpodcastplayer.model.podcast.Podcast;
+import com.example.androidpodcastplayer.rest.RssClient;
+import com.example.androidpodcastplayer.rest.RssInterface;
 import com.example.androidpodcastplayer.ui.fragment.PodcastFragment;
 
 import java.util.ArrayList;
 import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import timber.log.Timber;
 
 
 public class PodcastActivity extends BaseActivity implements
@@ -25,11 +36,14 @@ public class PodcastActivity extends BaseActivity implements
     public void onItemClick(Podcast item) {
         // launch EpisodesActivity and display Podcast Info and episode list
         if (Utils.isClientConnected(this)) {
-            if (item.getFeedUrl().contains(Constants.FEED_BURNER_BASE_URL)) {
-                Utils.showSnackbar(mLayout, getString(R.string.feed_not_available));
+            if (item.getFeedUrl() != null && !item.getFeedUrl().isEmpty()) {
+//                if (item.getFeedUrl().contains(Constants.FEED_BURNER_BASE_URL)) { // FIXME
+//                    Utils.showSnackbar(mLayout, getString(R.string.feed_not_available));
+//                } else {
+                    executeEpisodeQuery(item);
+                //}
             } else {
-                // TODO execute query instead of forwarding it on
-                EpisodesActivity.launch(this, item);
+                Utils.showSnackbar(mLayout, getString(R.string.feed_not_available));
             }
         } else {
             Utils.showSnackbar(mLayout, getString(R.string.no_network_connection));
@@ -46,12 +60,14 @@ public class PodcastActivity extends BaseActivity implements
     }
 
     private CoordinatorLayout mLayout;
+    private ProgressBar mProgressBar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_podcast);
         mLayout = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
+        mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
         // instantiate the toolbar with up nav arrow and set page title
         initToolbar();
@@ -61,7 +77,7 @@ public class PodcastActivity extends BaseActivity implements
             if (isSearch) {
                 setTitle(String.format(Locale.ENGLISH, "Results for: %s", title));
             } else {
-                setTitle(String.format(Locale.ENGLISH, "%s genre", title));
+                setTitle(String.format(Locale.ENGLISH, "Genre: %s", title));
             }
         }
 
@@ -73,5 +89,34 @@ public class PodcastActivity extends BaseActivity implements
 
     }
 
+
+    // download the podcast episode list
+    private void executeEpisodeQuery(final Podcast item) {
+        Timber.i("%s execute episode list download", Constants.LOG_TAG);
+        mProgressBar.setVisibility(View.VISIBLE);
+        RssInterface rssService = RssClient.getClient().create(RssInterface.class);
+        Call<Feed> call = rssService.getItems(item.getFeedUrl());
+        call.enqueue(new Callback<Feed>() {
+            @Override
+            public void onResponse(Call<Feed> call, Response<Feed> response) {
+                mProgressBar.setVisibility(View.GONE);
+                Channel channel = response.body().getChannel();
+                if (channel != null && channel.getItemList() != null && channel.getItemList().size() > 0) {
+                    // display episode list
+                    EpisodesActivity.launch(PodcastActivity.this, item, channel);
+                } else {
+                    Utils.showSnackbar(mLayout, getString(R.string.error_downloading_episode_list));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Feed> call, Throwable t) {
+                mProgressBar.setVisibility(View.GONE);
+                Timber.e("%s failure, error: %s", Constants.LOG_TAG, t.getMessage());
+                Utils.showSnackbar(mLayout, getString(R.string.feed_not_available));
+            }
+
+        });
+    }
 
 }

@@ -18,7 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -28,21 +27,12 @@ import com.example.androidpodcastplayer.common.Utils;
 import com.example.androidpodcastplayer.custom.AutofitRecyclerView;
 import com.example.androidpodcastplayer.custom.ItemSpacerDecoration;
 import com.example.androidpodcastplayer.model.episode.Channel;
-import com.example.androidpodcastplayer.model.episode.Feed;
 import com.example.androidpodcastplayer.model.episode.Image;
 import com.example.androidpodcastplayer.model.episode.Item;
 import com.example.androidpodcastplayer.model.podcast.Podcast;
-import com.example.androidpodcastplayer.rest.RssClient;
-import com.example.androidpodcastplayer.rest.RssInterface;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import timber.log.Timber;
 
 /**
  * References:
@@ -59,19 +49,17 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
         void onNavigationIconBackPressed();
     }
 
-    private RelativeLayout mListContainer;
     private RelativeLayout mPodcastInfo;
     private CoordinatorLayout mLayout;
     private String mPodcastName;
     private int mTrackCount;
     private AutofitRecyclerView mRecyclerView;
-    private TextView mEmptyView;
-    private ProgressBar mProgressBar;
-    private EpisodeListAdapter mAdapter;
+    // private TextView mEmptyView;
+    // private ProgressBar mProgressBar;
     private TextView mPodcastTitle;
     private TextView mPodcastAuthor;
     private TextView mPodcastDescription;
-    private TextView mPodcastPubDate;
+    private TextView mPodcastGenre;
     private ImageView mPodcastThumbnail;
     private String mImageUrl;
 
@@ -85,10 +73,11 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
         return fragment;
     }
 
-    public static EpisodesFragment newInstance(Podcast item) {
+    public static EpisodesFragment newInstance(Podcast item, Channel channel) {
         EpisodesFragment fragment = new EpisodesFragment();
         Bundle args = new Bundle();
         args.putParcelable(Constants.PODCAST_ITEM, item);
+        args.putParcelable(Constants.PODCAST_CHANNEL, channel);
         fragment.setArguments(args);
         return fragment;
     }
@@ -97,18 +86,18 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.content_episodes, container, false);
-        setupListView(view);
-        setupInfoView(view);
         initToolbar(view);
         initFab(view);
-        setupAppBar(view);
+        setupInfoView(view);
+        setupListView(view);
         // centerProgressBar();
 
-        // bind the adapter to the view
-        mAdapter = new EpisodeListAdapter(new ArrayList<Item>());
-        mRecyclerView.setAdapter(mAdapter);
-
-        displayContent();
+        Podcast podcast = getArguments().getParcelable(Constants.PODCAST_ITEM);
+        Channel channel = getArguments().getParcelable(Constants.PODCAST_CHANNEL);
+        if (podcast != null && channel != null) {
+            displayContent(podcast, channel);
+            setupAppBar(view);
+        }
 
         return view;
     }
@@ -147,6 +136,90 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
         });
     }
 
+    private void setupInfoView(View view) {
+        mPodcastInfo = (RelativeLayout) view.findViewById(R.id.podcast_info);
+        mPodcastTitle = (TextView) view.findViewById(R.id.podcast_title);
+        mPodcastAuthor = (TextView) view.findViewById(R.id.podcast_author);
+        mPodcastDescription = (TextView) view.findViewById(R.id.podcast_description);
+        mPodcastGenre = (TextView) view.findViewById(R.id.podcast_genre);
+        mPodcastThumbnail = (ImageView) view.findViewById(R.id.podcast_thumbnail);
+    }
+
+    private void setupListView(View view) {
+        mLayout = (CoordinatorLayout) view.findViewById(R.id.coordinator_layout);
+        RelativeLayout listContainer = (RelativeLayout) view.findViewById(R.id.autofitrecycler_container);
+        listContainer.setPadding(0, 0, 0, 0); // remove top padding
+        // mProgressBar = (ProgressBar) view.findViewById(R.id.progress_bar); // FIXME
+        // mProgressBar.setY(-206f); // move up to counter height of podcast info view
+        // mEmptyView = (TextView) view.findViewById(R.id.empty_view); // FIXME
+        // mEmptyView.setY(-206f);
+        mRecyclerView = (AutofitRecyclerView) view.findViewById(R.id.recycler_view);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.addItemDecoration(new ItemSpacerDecoration(
+                getResources().getDimensionPixelOffset(R.dimen.list_item_vertical_margin),
+                getResources().getDimensionPixelOffset(R.dimen.list_item_horizontal_margin)
+        ));
+    }
+
+    private void displayContent(Podcast podcast, Channel channel) {
+
+        // page and podcast title
+        if (channel.getTitle()!= null && !channel.getTitle().isEmpty()) {
+            mPodcastName = channel.getTitle();
+        } else {
+            mPodcastName = podcast.getTrackName() != null ? podcast.getTrackName() : " ";
+        }
+        mPodcastTitle.setText(mPodcastName);
+
+        mTrackCount = podcast.getTrackCount();
+
+        // author
+        if (channel.getAuthor() != null && !channel.getAuthor().isEmpty()) {
+            mPodcastAuthor.setText(channel.getAuthor());
+        } else {
+            mPodcastAuthor.setText(podcast.getArtistName() != null ? podcast.getArtistName() : "");
+        }
+
+        // description
+        if (channel.getDescription() != null && !channel.getDescription().isEmpty()) {
+            mPodcastDescription.setText(channel.getDescription());
+        } else {
+            mPodcastDescription.setText(podcast.getCollectionName() != null ? podcast.getCollectionName() : "");
+        }
+
+        // genre
+        if (podcast.getPrimaryGenreName() != null && !podcast.getPrimaryGenreName().isEmpty()) {
+            mPodcastGenre.setText(podcast.getPrimaryGenreName());
+        }
+
+        // thumbnail
+        List<Image> images = channel.getImages();
+        if (images != null) {
+            for (Image image : images) {
+                mImageUrl = image.getUrl();
+                if (mImageUrl != null) break; // returns full size
+            }
+        }
+        String imageUrl = null;
+        if (podcast.getArtworkUrl100() != null && !podcast.getArtworkUrl100().isEmpty()) {
+            imageUrl = podcast.getArtworkUrl100();
+        } else if (podcast.getArtworkUrl600() != null && !podcast.getArtworkUrl600().isEmpty()) {
+            imageUrl = podcast.getArtworkUrl600();
+        } else {
+            imageUrl = mImageUrl;
+        }
+        Utils.loadPreviewWithGlide(getActivity(), imageUrl, mPodcastThumbnail);
+
+        // instantiate and bind adapter
+        List<Item> episodes = channel.getItemList();
+        if (episodes != null && episodes.size() > 0) {
+            EpisodeListAdapter adapter = new EpisodeListAdapter(episodes);
+            mRecyclerView.setAdapter(adapter);
+        }
+
+    }
+
+    // display the page title when toolbar collapses
     private void setupAppBar(View view) {
         final CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) view.findViewById(R.id.collapsing_toolbar);
         final AppBarLayout appbar = (AppBarLayout) view.findViewById(R.id.app_bar);
@@ -160,7 +233,7 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
                     scrollRange = appbar.getTotalScrollRange();
                 }
                 if (scrollRange + verticalOffset == 0) {
-                    collapsingToolbarLayout.setTitle(mPodcastName != null ? mPodcastName : "Episode list");
+                    collapsingToolbarLayout.setTitle(mPodcastName);
                     isShow = true;
                 } else if (isShow) {
                     collapsingToolbarLayout.setTitle(" ");
@@ -169,186 +242,6 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
             }
         });
     }
-
-    private void setupInfoView(View view) {
-        mPodcastInfo = (RelativeLayout) view.findViewById(R.id.podcast_info);
-        mPodcastTitle = (TextView) view.findViewById(R.id.podcast_title);
-        mPodcastAuthor = (TextView) view.findViewById(R.id.podcast_author);
-        mPodcastDescription = (TextView) view.findViewById(R.id.podcast_description);
-        mPodcastPubDate = (TextView) view.findViewById(R.id.podcast_pub_date);
-        mPodcastThumbnail = (ImageView) view.findViewById(R.id.podcast_thumbnail);
-    }
-
-    private void setupListView(View view) {
-        mLayout = (CoordinatorLayout) view.findViewById(R.id.coordinator_layout);
-        mListContainer = (RelativeLayout) view.findViewById(R.id.autofitrecycler_container);
-        mListContainer.setPadding(0, 0, 0, 0); // remove top padding
-        mProgressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
-        mProgressBar.setY(-206f); // move up to counter height of podcast info view
-        mEmptyView = (TextView) view.findViewById(R.id.empty_view);
-        mEmptyView.setY(-206f);
-        mRecyclerView = (AutofitRecyclerView) view.findViewById(R.id.recycler_view);
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.addItemDecoration(new ItemSpacerDecoration(
-                getResources().getDimensionPixelOffset(R.dimen.list_item_vertical_margin),
-                getResources().getDimensionPixelOffset(R.dimen.list_item_horizontal_margin)
-        ));
-    }
-
-    private void displayContent() {
-        // String urlFeed = getArguments().getString(Constants.RSS_FEED_URL);
-        Podcast item = getArguments().getParcelable(Constants.PODCAST_ITEM);
-        if (item != null) {
-            mPodcastName = item.getTrackName();
-            mTrackCount = item.getTrackCount();
-            mPodcastTitle.setText(item.getTrackName());
-            mPodcastAuthor.setText(item.getArtistName());
-            mPodcastDescription.setText(item.getCollectionName());
-            Utils.loadPreviewWithGlide(getActivity(), item.getArtworkUrl100(), mPodcastThumbnail);
-
-            if (item.getFeedUrl() != null && !item.getFeedUrl().isEmpty()) {
-                Timber.i("%s feed: %s", Constants.LOG_TAG, item.getFeedUrl());
-                executeEpisodeQuery(item.getFeedUrl());
-            } else {
-                mEmptyView.setText(R.string.error_downloading_episode_list);
-                mEmptyView.setVisibility(View.VISIBLE);
-            }
-        }
-    }
-
-    private void centerProgressBar() {
-
-        // calculate height of display in dp
-        Display display = getActivity().getWindowManager().getDefaultDisplay();
-        DisplayMetrics metrics = new DisplayMetrics();
-        display.getMetrics(metrics);
-        final float density = getActivity().getResources().getDisplayMetrics().density;
-        float dpHeight = metrics.heightPixels/density;
-
-        ViewTreeObserver infoViewObserver = mPodcastInfo.getViewTreeObserver();
-        if (infoViewObserver.isAlive()) {
-
-            final float finalDpDisplayHeight = dpHeight;
-            final float actionBarHeight = 56f;
-
-            infoViewObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                @Override
-                public void onGlobalLayout() {
-                    mPodcastInfo.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                    float dpInfoHeight = mPodcastInfo.getHeight()/density;
-                    //mProgressBar.setY(finalDpDisplayHeight - (dpInfoHeight + actionBarHeight));
-                    mProgressBar.setY(finalDpDisplayHeight);
-                }
-            });
-        }
-
-    }
-
-
-    // download the podcast episode list
-    private void executeEpisodeQuery(String feedUrl) {
-        Timber.i("%s execute episode list download", Constants.LOG_TAG);
-        mProgressBar.setVisibility(View.VISIBLE);
-        RssInterface rssService = RssClient.getClient().create(RssInterface.class);
-        Call<Feed> call = rssService.getItems(feedUrl);
-        call.enqueue(new Callback<Feed>() {
-            @Override
-            public void onResponse(Call<Feed> call, Response<Feed> response) {
-                Channel channel = response.body().getChannel();
-                if (channel != null) {
-                    String description = channel.getDescription();
-                    if (description != null && !description.isEmpty())
-                        mPodcastDescription.setText(description);
-                    String pubDate = channel.getPubDate();
-                    if (pubDate != null && !pubDate.isEmpty()) {
-                        mPodcastPubDate.setText(pubDate);
-                    } else {
-                        String lastBuildDate = channel.getLastBuildDate();
-                        if (lastBuildDate != null && !lastBuildDate.isEmpty()) {
-                            mPodcastPubDate.setText(lastBuildDate);
-                        }
-                    }
-                    List<Image> images = channel.getImages();
-                    if (images != null) {
-                        for (Image image : images) {
-                            mImageUrl = image.getUrl();
-                            if (mImageUrl != null) break;
-                        }
-                    }
-                    Timber.i("%s image url: %s", Constants.LOG_TAG, mImageUrl);
-
-                    // populate podcast info layout
-//                mPodcastName = channel.getTitle();
-//                mPodcastTitle.setText(channel.getTitle());
-//                mPodcastAuthor.setText(channel.getAuthor());
-//                mPodcastPubDate.setText(channel.getPubDate());
-//                Utils.loadPreviewWithGlide(getActivity(), url, mPodcastThumbnail);
-
-
-                    // DEBUG
-                    // String cat = null;
-                    // List<Category> categories = channel.getCategory();
-                    // for (Category category : categories) {
-                    //     cat = category.getCategory();
-                    //     if (cat != null) break;
-                    // }
-
-                    // Timber.i("%s title: %s, pubDate: %s, buildDate: %s, language: %s, author: %s, description: %s, image link %s, category %s, episodes %s",
-                    //        Constants.LOG_TAG, channel.getTitle(), channel.getPubDate(), channel.getBuildDate(), channel.getLanguage(),
-                    //        channel.getAuthor(), channel.getDescription(), url, cat, channel.getItemList().size());
-
-                    // episode list
-
-                    mProgressBar.setVisibility(View.GONE);
-                    List<Item> episodes = channel.getItemList();
-                    if (episodes != null && episodes.size() > 0) {
-                        mAdapter = new EpisodeListAdapter(episodes);
-                        mRecyclerView.swapAdapter(mAdapter, true);
-                        mEmptyView.setVisibility(View.GONE);
-                    } else {
-                        Utils.showSnackbar(mLayout, getString(R.string.error_downloading_episode_list));
-                        mEmptyView.setText(R.string.error_downloading_episode_list);
-                        mEmptyView.setVisibility(View.VISIBLE);
-                    }
-
-                    // DEBUG
-//                if (episodes != null && episodes.size() > 0) {
-//                    int count = 5;
-//                    if (episodes.size() < count) {
-//                        count = episodes.size();
-//                    }
-//                    for (int i = 0; i < episodes.size(); i++) {
-//                        Item episode = episodes.get(i);
-//                        String imageUrl = null;
-//                        if (episode.getImage() != null) {
-//                            imageUrl = episode.getImage().getUrl();
-//                        }
-//
-//                        Timber.i("%s title: %s, pubDate: %s, duration: %s, description: %s, " +
-//                                        "author: %s, imageUrl: %s, episodeLength: %s, episodeType: %s, episodeUrl: %s",
-//                                Constants.LOG_TAG, episode.getTitle(), episode.getPubDate(),
-//                                episode.getDuration(), episode.getDescription(), episode.getAuthor(),
-//                                imageUrl, episode.getEpisodeInfo().getLength(),
-//                                episode.getEpisodeInfo().getType(), episode.getEpisodeInfo().getUrl());
-//                    }
-//                }
-                    // END
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Feed> call, Throwable t) {
-                mProgressBar.setVisibility(View.GONE);
-                Timber.e("%s failure, error: %s", Constants.LOG_TAG, t.getMessage());
-                // getContract().downloadError("Error downloading podcast feed");
-                mEmptyView.setText(R.string.error_downloading_episode_list);
-                mEmptyView.setVisibility(View.VISIBLE);
-            }
-
-        });
-    }
-
 
     class EpisodeListAdapter extends RecyclerView.Adapter<EpisodeListAdapter.ViewHolder>{
 
@@ -408,12 +301,13 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
 
             public void bindModelItem(Item episode) {
                 mEpisode = episode;
-                mEpisodeDay.setText("26");
+                mEpisodeDay.setText("26"); // FIXME
+                // FIXME remove episode number
                 String episodeNumber = String.valueOf((mTrackCount - getAdapterPosition()) >= 0 ? mTrackCount - getAdapterPosition() : "");
                 mEpisodeNumber.setText(String.format(Locale.ENGLISH, "Episode no: %s", episodeNumber));
                 mEpisodeMonth.setText("Aug");
-                mEpisodeTitle.setText(episode.getTitle());
-                if (episode.getDuration() != null)
+                mEpisodeTitle.setText(episode.getTitle() != null ? episode.getTitle() : "");
+                if (episode.getDuration() != null && !episode.getDuration().isEmpty())
                     mEpisodeDuration.setText(String.format(Locale.ENGLISH, "%s mins", episode.getDuration()));
             }
 
@@ -438,5 +332,35 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
 
 
     }
+
+
+    private void centerProgressBar() {
+
+        // calculate height of display in dp
+        Display display = getActivity().getWindowManager().getDefaultDisplay();
+        DisplayMetrics metrics = new DisplayMetrics();
+        display.getMetrics(metrics);
+        final float density = getActivity().getResources().getDisplayMetrics().density;
+        float dpHeight = metrics.heightPixels/density;
+
+        ViewTreeObserver infoViewObserver = mPodcastInfo.getViewTreeObserver();
+        if (infoViewObserver.isAlive()) {
+
+            final float finalDpDisplayHeight = dpHeight;
+            final float actionBarHeight = 56f;
+
+            infoViewObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    mPodcastInfo.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    float dpInfoHeight = mPodcastInfo.getHeight()/density;
+                    //mProgressBar.setY(finalDpDisplayHeight - (dpInfoHeight + actionBarHeight));
+                    // mProgressBar.setY(finalDpDisplayHeight);
+                }
+            });
+        }
+
+    }
+
 
 }

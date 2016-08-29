@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import com.example.androidpodcastplayer.R;
 import com.example.androidpodcastplayer.common.Constants;
+import com.example.androidpodcastplayer.model.episode.Channel;
 import com.example.androidpodcastplayer.model.episode.Item;
 import com.example.androidpodcastplayer.model.podcast.Podcast;
 import com.example.androidpodcastplayer.ui.fragment.EpisodesFragment;
@@ -48,9 +49,10 @@ public class EpisodesActivity extends BlankActivity implements
         activity.startActivity(intent);
     }
 
-    public static void launch(Activity activity, Podcast item) {
+    public static void launch(Activity activity, Podcast item, Channel channel) {
         Intent intent = new Intent(activity, EpisodesActivity.class);
         intent.putExtra(Constants.PODCAST_ITEM, item);
+        intent.putExtra(Constants.PODCAST_CHANNEL, channel);
         activity.startActivity(intent);
     }
 
@@ -62,8 +64,9 @@ public class EpisodesActivity extends BlankActivity implements
         if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) == null) {
             // String feedUrl = getIntent().getStringExtra(Constants.RSS_FEED_URL);
             Podcast item = getIntent().getParcelableExtra(Constants.PODCAST_ITEM);
-            if (item != null)
-                initFragment(EpisodesFragment.newInstance(item));
+            Channel channel = getIntent().getParcelableExtra(Constants.PODCAST_CHANNEL);
+            if (item != null && channel != null)
+                initFragment(EpisodesFragment.newInstance(item, channel));
         }
     }
 

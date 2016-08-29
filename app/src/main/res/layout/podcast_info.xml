@@ -50,9 +50,9 @@
             android:layout_height="wrap_content"/>
 
         <TextView
-            android:id="@+id/podcast_pub_date"
+            android:id="@+id/podcast_genre"
             android:maxLines="1"
-            tools:text="Last episode: 26 Aug 2016"
+            tools:text="Health and Fitness"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 

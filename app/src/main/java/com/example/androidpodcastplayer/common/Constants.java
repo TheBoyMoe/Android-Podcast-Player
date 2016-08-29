@@ -11,6 +11,7 @@ public class Constants {
     public static final String PODCAST_QUERY = "search_query";
     public static final String PODCAST_SEARCH = "is_results_of_search";
     public static final String PODCAST_TITLE = "podcast_title";
+    public static final String PODCAST_CHANNEL = "podcast_channel";
     public static final String REST_TERM = "podcasts";
     public static final int REST_LIMIT = 100;
 
