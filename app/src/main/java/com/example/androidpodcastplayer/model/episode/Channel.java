@@ -1,6 +1,9 @@
 package com.example.androidpodcastplayer.model.episode;
 
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Namespace;
@@ -9,7 +12,7 @@ import org.simpleframework.xml.Root;
 import java.util.List;
 
 @Root(strict = false)
-public class Channel {
+public class Channel implements Parcelable {
 
     @Element(name = "title", required = false)
     private String title;
@@ -108,4 +111,45 @@ public class Channel {
     }
 
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.title);
+        dest.writeString(this.pubDate);
+        dest.writeString(this.lastBuildDate);
+        dest.writeString(this.language);
+        dest.writeString(this.description);
+        dest.writeString(this.author);
+        dest.writeTypedList(this.images);
+        dest.writeTypedList(this.category);
+        dest.writeTypedList(this.list);
+    }
+
+    protected Channel(Parcel in) {
+        this.title = in.readString();
+        this.pubDate = in.readString();
+        this.lastBuildDate = in.readString();
+        this.language = in.readString();
+        this.description = in.readString();
+        this.author = in.readString();
+        this.images = in.createTypedArrayList(Image.CREATOR);
+        this.category = in.createTypedArrayList(Category.CREATOR);
+        this.list = in.createTypedArrayList(Item.CREATOR);
+    }
+
+    public static final Parcelable.Creator<Channel> CREATOR = new Parcelable.Creator<Channel>() {
+        @Override
+        public Channel createFromParcel(Parcel source) {
+            return new Channel(source);
+        }
+
+        @Override
+        public Channel[] newArray(int size) {
+            return new Channel[size];
+        }
+    };
 }

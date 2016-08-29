@@ -28,6 +28,7 @@ public class PodcastActivity extends BaseActivity implements
             if (item.getFeedUrl().contains(Constants.FEED_BURNER_BASE_URL)) {
                 Utils.showSnackbar(mLayout, getString(R.string.feed_not_available));
             } else {
+                // TODO execute query instead of forwarding it on
                 EpisodesActivity.launch(this, item);
             }
         } else {
