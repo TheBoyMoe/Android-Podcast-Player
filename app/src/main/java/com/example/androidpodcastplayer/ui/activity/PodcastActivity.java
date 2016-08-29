@@ -13,6 +13,7 @@ import com.example.androidpodcastplayer.R;
 import com.example.androidpodcastplayer.common.Constants;
 import com.example.androidpodcastplayer.common.Utils;
 import com.example.androidpodcastplayer.model.episode.Channel;
+import com.example.androidpodcastplayer.model.episode.EpisodesDataCache;
 import com.example.androidpodcastplayer.model.episode.Feed;
 import com.example.androidpodcastplayer.model.podcast.Podcast;
 import com.example.androidpodcastplayer.rest.RssClient;
@@ -68,6 +69,7 @@ public class PodcastActivity extends BaseActivity implements
         setContentView(R.layout.activity_podcast);
         mLayout = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
         mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        mProgressBar.setY(66f);
 
         // instantiate the toolbar with up nav arrow and set page title
         initToolbar();
@@ -102,8 +104,10 @@ public class PodcastActivity extends BaseActivity implements
                 mProgressBar.setVisibility(View.GONE);
                 Channel channel = response.body().getChannel();
                 if (channel != null && channel.getItemList() != null && channel.getItemList().size() > 0) {
-                    // display episode list
-                    EpisodesActivity.launch(PodcastActivity.this, item, channel);
+                    // save feed to an in-memory cache since it's too large to send via IPC/intent
+                    EpisodesDataCache.getInstance().setPodcast(item);
+                    EpisodesDataCache.getInstance().setChannel(channel);
+                    EpisodesActivity.launch(PodcastActivity.this);
                 } else {
                     Utils.showSnackbar(mLayout, getString(R.string.error_downloading_episode_list));
                 }

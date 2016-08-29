@@ -54,8 +54,6 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
     private String mPodcastName;
     private int mTrackCount;
     private AutofitRecyclerView mRecyclerView;
-    // private TextView mEmptyView;
-    // private ProgressBar mProgressBar;
     private TextView mPodcastTitle;
     private TextView mPodcastAuthor;
     private TextView mPodcastDescription;
@@ -64,14 +62,6 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
     private String mImageUrl;
 
     public EpisodesFragment() {}
-
-    public static EpisodesFragment newInstance(String feedUrl) {
-        EpisodesFragment fragment = new EpisodesFragment();
-        Bundle args = new Bundle();
-        args.putString(Constants.RSS_FEED_URL, feedUrl);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     public static EpisodesFragment newInstance(Podcast item, Channel channel) {
         EpisodesFragment fragment = new EpisodesFragment();

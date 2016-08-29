@@ -7,6 +7,7 @@ import android.os.Bundle;
 import com.example.androidpodcastplayer.R;
 import com.example.androidpodcastplayer.common.Constants;
 import com.example.androidpodcastplayer.model.episode.Channel;
+import com.example.androidpodcastplayer.model.episode.EpisodesDataCache;
 import com.example.androidpodcastplayer.model.episode.Item;
 import com.example.androidpodcastplayer.model.podcast.Podcast;
 import com.example.androidpodcastplayer.ui.fragment.EpisodesFragment;
@@ -49,16 +50,23 @@ public class EpisodesActivity extends BlankActivity implements
         activity.startActivity(intent);
     }
 
+    public static void launch(Activity activity) {
+        Intent intent = new Intent(activity, EpisodesActivity.class);
+        activity.startActivity(intent);
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // retrieve downloaded data from the cache
+        Podcast item = EpisodesDataCache.getInstance().getPodcast();
+        Channel channel = EpisodesDataCache.getInstance().getChannel();
+
         if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) == null) {
-            Podcast item = getIntent().getParcelableExtra(Constants.PODCAST_ITEM);
-            Channel channel = getIntent().getParcelableExtra(Constants.PODCAST_CHANNEL);
             if (item != null && channel != null)
-                initFragment(EpisodesFragment.newInstance(item, channel));
+                 initFragment(EpisodesFragment.newInstance(item, channel));
         }
     }
 
