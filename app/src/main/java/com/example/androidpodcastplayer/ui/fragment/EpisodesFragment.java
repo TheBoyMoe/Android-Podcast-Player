@@ -34,6 +34,8 @@ import com.example.androidpodcastplayer.model.podcast.Podcast;
 import java.util.List;
 import java.util.Locale;
 
+import timber.log.Timber;
+
 /**
  * References:
  * [1] http://stackoverflow.com/questions/31662416/show-collapsingtoolbarlayout-title-only-when-collapsed
@@ -286,9 +288,23 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
 
             public void bindModelItem(Item episode) {
                 if (episode != null) {
+                    String day = " ";
+                    String month = " ";
                     mEpisode = episode;
-                    mEpisodeDay.setText("26"); // FIXME
-                    mEpisodeMonth.setText("Aug"); // FIXME
+                    if (mEpisode.getPubDate() != null && !mEpisode.getPubDate().isEmpty()) {
+                        // Timber.i("%s: date: %s",Constants.LOG_TAG, mEpisode.getPubDate());
+                        day = mEpisode.getPubDate().substring(5, 7);
+                        int length = day.length(); // two
+                        String temp = day.trim(); // any spaces are removed
+                        if (temp.length() < length) {
+                            day = temp;
+                            month = mEpisode.getPubDate().substring(7, 10);
+                        } else {
+                            month = mEpisode.getPubDate().substring(8, 11);
+                        }
+                    }
+                    mEpisodeDay.setText(day);
+                    mEpisodeMonth.setText(month);
 
                     // set title
                     mEpisodeTitle.setText(episode.getTitle() != null ? episode.getTitle() : "");
@@ -298,6 +314,7 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
                         mEpisodeDescription.setText(mEpisode.getSubtitle());
                     } else {
                         // description formatted as html // FIXME
+                        Timber.i("%s: Using html description", Constants.LOG_TAG);
                         mEpisodeDescription.setText(mEpisode.getDescription() != null ? mEpisode.getDescription() : "");
                     }
 
