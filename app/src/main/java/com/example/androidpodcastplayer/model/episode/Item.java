@@ -32,6 +32,10 @@ public class Item implements Parcelable {
     @Text(required = false)
     private String author;
     @Namespace(reference = "http://www.itunes.com/dtds/podcast-1.0.dtd")
+    @Path("subtitle")
+    @Text(required = false)
+    private String subtitle;
+    @Namespace(reference = "http://www.itunes.com/dtds/podcast-1.0.dtd")
     @Element(name = "image", required = false)
     private Image image;
     @Element(name = "enclosure", required = false)
@@ -48,6 +52,14 @@ public class Item implements Parcelable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getSubtitle() {
+        return subtitle;
+    }
+
+    public void setSubtitle(String subtitle) {
+        this.subtitle = subtitle;
     }
 
     public String getPubDate() {
@@ -111,6 +123,7 @@ public class Item implements Parcelable {
         dest.writeString(this.duration);
         dest.writeString(this.description);
         dest.writeString(this.author);
+        dest.writeString(this.subtitle);
         dest.writeParcelable(this.image, flags);
         dest.writeParcelable(this.enclosure, flags);
     }
@@ -121,11 +134,12 @@ public class Item implements Parcelable {
         this.duration = in.readString();
         this.description = in.readString();
         this.author = in.readString();
+        this.subtitle = in.readString();
         this.image = in.readParcelable(Image.class.getClassLoader());
         this.enclosure = in.readParcelable(Enclosure.class.getClassLoader());
     }
 
-    public static final Parcelable.Creator<Item> CREATOR = new Parcelable.Creator<Item>() {
+    public static final Creator<Item> CREATOR = new Creator<Item>() {
         @Override
         public Item createFromParcel(Parcel source) {
             return new Item(source);

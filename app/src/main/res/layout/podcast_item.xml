@@ -34,7 +34,7 @@
             <TextView
                 android:id="@+id/podcast_artist_name"
                 tools:text="Simon Jones"
-                style="@style/TextStyle.ListItem.Author"/>
+                style="@style/TextStyle.ListItem.Heading"/>
 
             <TextView
                 android:id="@+id/podcast_collection_name"

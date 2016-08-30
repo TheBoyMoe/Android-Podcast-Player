@@ -30,18 +30,28 @@
             <TextView
                 android:id="@+id/episode_day"
                 tools:text="26"
-                android:layout_height="wrap_content"
+                style="@style/TextStyle.ListItem.AllCaps"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:gravity="center"/>
 
+            <!--<TextView-->
+                <!--android:id="@+id/episode_number"-->
+                <!--tools:text="Episode: 33"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_weight="4"-->
+                <!--android:maxLines="1"/>-->
+
             <TextView
-                android:id="@+id/episode_number"
-                tools:text="Episode: 33"
-                android:layout_height="wrap_content"
+                android:id="@+id/episode_title"
+                tools:text="The one where the pig got away"
+                style="@style/TextStyle.ListItem.Heading"
+                android:paddingEnd="@dimen/normal"
                 android:layout_width="0dp"
                 android:layout_weight="4"
-                android:maxLines="1"/>
+                tools:ignore="RtlSymmetry"/>
+
 
         </LinearLayout>
 
@@ -54,22 +64,25 @@
             <TextView
                 android:id="@+id/episode_month"
                 tools:text="Aug"
-                android:layout_height="wrap_content"
+                style="@style/TextStyle.ListItem.AllCaps"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:gravity="center"/>
 
             <TextView
-                android:id="@+id/episode_title"
+                android:id="@+id/episode_description"
                 tools:text="The one where the pig got away"
-                android:maxLines="1"
+                style="@style/TextStyle.ListItem"
+                android:maxLines="4"
+                android:paddingEnd="@dimen/normal"
                 android:layout_width="0dp"
                 android:layout_weight="4"
-                android:layout_height="wrap_content"/>
+                tools:ignore="RtlSymmetry"/>
 
         </LinearLayout>
 
 
+        <!-- button row -->
         <LinearLayout
             android:orientation="horizontal"
             android:layout_marginTop="@dimen/normal"
@@ -89,7 +102,7 @@
             <TextView
                 android:id="@+id/episode_duration"
                 tools:text="56 min"
-                android:maxLines="1"
+                style="@style/TextStyle.ListItem"
                 android:gravity="center_vertical"
                 android:layout_width="0dp"
                 android:layout_weight="2"

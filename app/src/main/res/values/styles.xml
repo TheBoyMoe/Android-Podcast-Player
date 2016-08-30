@@ -32,17 +32,17 @@
     <style name="TextStyle.ListItem">
         <item name="android:maxLines">1</item>
         <item name="android:ellipsize">end</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">12sp</item>
     </style>
 
-    <style name="TextStyle.ListItem.Author">
+    <style name="TextStyle.ListItem.Heading">
         <item name="android:fontFamily">sans-serif-condensed-thin</item>
-        <item name="android:textSize">18sp</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="TextStyle.ListItem.AllCaps">
         <item name="android:fontFamily">sans-serif-condensed-thin</item>
-        <item name="android:textSize">13sp</item>
+        <item name="android:textSize">12sp</item>
         <item name="android:textAllCaps">true</item>
     </style>
 

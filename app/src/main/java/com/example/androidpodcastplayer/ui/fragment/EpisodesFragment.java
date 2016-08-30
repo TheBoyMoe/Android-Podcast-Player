@@ -139,7 +139,7 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
         RelativeLayout listContainer = (RelativeLayout) view.findViewById(R.id.autofitrecycler_container);
         listContainer.setPadding(0, 0, 0, 0); // remove top padding
         mRecyclerView = (AutofitRecyclerView) view.findViewById(R.id.recycler_view);
-        mRecyclerView.setHasFixedSize(true);
+        // mRecyclerView.setHasFixedSize(true);
         mRecyclerView.addItemDecoration(new ItemSpacerDecoration(
                 getResources().getDimensionPixelOffset(R.dimen.list_item_vertical_margin),
                 getResources().getDimensionPixelOffset(R.dimen.list_item_horizontal_margin)
@@ -258,7 +258,7 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
 
             Item mEpisode;
             TextView mEpisodeDay;
-            TextView mEpisodeNumber;
+            TextView mEpisodeDescription;
             TextView mEpisodeMonth;
             TextView mEpisodeTitle;
             ImageView mEpisodePlay;
@@ -271,7 +271,7 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
                 super(itemView);
                 mEpisodeItem = itemView.findViewById(R.id.episode_item);
                 mEpisodeDay = (TextView) itemView.findViewById(R.id.episode_day);
-                mEpisodeNumber = (TextView) itemView.findViewById(R.id.episode_number);
+                mEpisodeDescription = (TextView) itemView.findViewById(R.id.episode_description);
                 mEpisodeMonth = (TextView) itemView.findViewById(R.id.episode_month);
                 mEpisodeTitle = (TextView) itemView.findViewById(R.id.episode_title);
                 mEpisodeDuration = (TextView) itemView.findViewById(R.id.episode_duration);
@@ -285,15 +285,26 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
             }
 
             public void bindModelItem(Item episode) {
-                mEpisode = episode;
-                mEpisodeDay.setText("26"); // FIXME
-                // FIXME remove episode number
-                String episodeNumber = String.valueOf((mTrackCount - getAdapterPosition()) >= 0 ? mTrackCount - getAdapterPosition() : "");
-                mEpisodeNumber.setText(String.format(Locale.ENGLISH, "Episode no: %s", episodeNumber));
-                mEpisodeMonth.setText("Aug");
-                mEpisodeTitle.setText(episode.getTitle() != null ? episode.getTitle() : "");
-                if (episode.getDuration() != null && !episode.getDuration().isEmpty())
-                    mEpisodeDuration.setText(String.format(Locale.ENGLISH, "%s mins", episode.getDuration()));
+                if (episode != null) {
+                    mEpisode = episode;
+                    mEpisodeDay.setText("26"); // FIXME
+                    mEpisodeMonth.setText("Aug"); // FIXME
+
+                    // set title
+                    mEpisodeTitle.setText(episode.getTitle() != null ? episode.getTitle() : "");
+
+                    // set description
+                    if (mEpisode.getSubtitle() != null && !mEpisode.getSubtitle().isEmpty()) {
+                        mEpisodeDescription.setText(mEpisode.getSubtitle());
+                    } else {
+                        // description formatted as html // FIXME
+                        mEpisodeDescription.setText(mEpisode.getDescription() != null ? mEpisode.getDescription() : "");
+                    }
+
+                    // set episode duration
+                    if (episode.getDuration() != null && !episode.getDuration().isEmpty())
+                        mEpisodeDuration.setText(String.format(Locale.ENGLISH, "%s mins", episode.getDuration()));
+                }
             }
 
             @Override
