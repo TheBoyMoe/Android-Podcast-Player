@@ -11,21 +11,20 @@
     android:elevation="@dimen/item_elevation"
     app:cardCornerRadius="@dimen/corner_radius">
 
-    <RelativeLayout
-
+    <LinearLayout
+        android:orientation="vertical"
         android:background="@drawable/touch_selector"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/grid_item_height">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/item_icon"
-            android:layout_alignParentTop="true"
+            android:scaleType="centerCrop"
             android:layout_width="match_parent"
             android:layout_height="@dimen/grid_item_image_size"
             tools:ignore="ContentDescription"/>
 
-        <RelativeLayout
-            android:layout_alignParentBottom="true"
+        <LinearLayout
             android:gravity="center_vertical"
             android:layout_width="match_parent"
             android:layout_height="@dimen/grid_item_title_height">
@@ -34,8 +33,8 @@
                 android:id="@+id/item_title"
                 style="@style/TextStyle.GridItem"/>
 
-        </RelativeLayout>
+        </LinearLayout>
 
-    </RelativeLayout>
+    </LinearLayout>
 
 </android.support.v7.widget.CardView>
