@@ -16,8 +16,20 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.androidpodcastplayer.R;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
+import timber.log.Timber;
+
+/**
+    References:
+    [1] https://coderanch.com/t/381567/java/java/XML-dateTime-java-Date-SimpleDateFormat
+ */
 
 public class Utils {
 
@@ -77,6 +89,24 @@ public class Utils {
                 .addInterceptor(logging)
                 .addNetworkInterceptor(new StethoInterceptor()) // enable network inspection via chrome
                 .build();
+    }
+
+
+    public static String dateConverter(String dateTimeString) {
+        String formattedDate = null;
+        Date date = null;
+        SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-d'T'HH:mm:ss'Z'", Locale.ENGLISH);
+        try {
+            date = parser.parse(dateTimeString);
+            if (date != null) {
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(date);
+                formattedDate = cal.getTime().toString();
+            }
+        } catch (ParseException e) {
+            Timber.e("%s Error parsing date-time string, %s", Constants.LOG_TAG, e.getMessage());
+        }
+        return formattedDate;
     }
 
 

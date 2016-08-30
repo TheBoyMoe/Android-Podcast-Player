@@ -8,7 +8,7 @@
     <color name="accent">@color/md_amber_500</color>
     <color name="accent_dark">@color/md_amber_700</color>
     <color name="accent_light">@color/md_amber_50</color>
-    <color name="primary_text">@color/md_grey_700</color>
+    <color name="primary_text">@color/md_grey_800</color>
     <color name="secondary_text">@color/md_grey_500</color>
     <color name="inverse_text">@color/md_white_1000</color>
     <color name="primary_background">@color/md_white_1000</color>

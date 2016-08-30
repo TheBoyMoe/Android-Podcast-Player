@@ -19,6 +19,7 @@ import com.example.androidpodcastplayer.model.podcast.Podcast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 
 public class PodcastFragment extends ContractFragment<PodcastFragment.Contract>{
@@ -110,7 +111,7 @@ public class PodcastFragment extends ContractFragment<PodcastFragment.Contract>{
                 mArtistName = (TextView) itemView.findViewById(R.id.podcast_artist_name);
                 mCollectionName = (TextView) itemView.findViewById(R.id.podcast_collection_name);
                 mNumberOfEpisodes = (TextView) itemView.findViewById(R.id.podcast_episode_number);
-                mLatestPublicationDate = (TextView) itemView.findViewById(R.id.podcst_latest_pubdate);
+                mLatestPublicationDate = (TextView) itemView.findViewById(R.id.podcast_latest_pubdate);
             }
 
             public void bindModelItem(Podcast item) {
@@ -118,10 +119,24 @@ public class PodcastFragment extends ContractFragment<PodcastFragment.Contract>{
                 mFeedUrl = item.getFeedUrl();
                 mArtistName.setText(item.getArtistName());
                 mCollectionName.setText(item.getCollectionName());
-                mNumberOfEpisodes.setText(String.valueOf(item.getTrackCount()));
-                mLatestPublicationDate.setText(item.getReleaseDate());
+                mNumberOfEpisodes.setText(String.format(Locale.ENGLISH, "Episodes available: %d", item.getTrackCount()));
+
+                // format the dateTime string
+                if (item.getReleaseDate() != null) {
+                    String date = Utils.dateConverter(item.getReleaseDate());
+                    if (date != null) {
+                        String day = date.substring(8, 10);
+                        String month = date.substring(4, 7);
+                        String year = date.substring(date.length() - 4, date.length());
+                        mLatestPublicationDate.setText(String.format(Locale.ENGLISH, "Last published: %s %s %s", day, month, year));
+                    } else {
+                        mLatestPublicationDate.setText(R.string.publication_date_unknown);
+                    }
+                } else {
+                    mLatestPublicationDate.setText(R.string.publication_date_unknown);
+                }
                 // use glide to download and display image
-                Utils.loadPreviewWithGlide(mContext, item.getArtworkUrl100(), mThumbnail);
+                Utils.loadPreviewWithGlide(mContext, item.getArtworkUrl600(), mThumbnail);
             }
 
             @Override
