@@ -77,9 +77,9 @@ public class PodcastActivity extends BaseActivity implements
         String title = getIntent().getStringExtra(Constants.PODCAST_TITLE);
         if (title != null) {
             if (isSearch) {
-                setTitle(String.format(Locale.ENGLISH, "Results for: %s", title));
+                setTitle(String.format(Locale.ENGLISH, "Results for : %s", title));
             } else {
-                setTitle(String.format(Locale.ENGLISH, "Genre: %s", title));
+                setTitle(String.format(Locale.ENGLISH, "Genre : %s", title));
             }
         }
 
