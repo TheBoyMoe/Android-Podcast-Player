@@ -179,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements
         mProgressBar.setVisibility(View.VISIBLE);
         ApiInterface searchService = ApiClient.getClient().create(ApiInterface.class);
         Call<Results> call = searchService.getGenrePodcasts(
-                query, Constants.PODCAST_ID, Constants.REST_LIMIT
+                query, Constants.PODCAST_ID, Constants.REST_LIMIT, Constants.REST_SORT_RECENT
         );
         call.enqueue(new Callback<Results>() {
             @Override
@@ -209,7 +209,7 @@ public class MainActivity extends AppCompatActivity implements
         Timber.i("%s: executing podcast download task", Constants.LOG_TAG);
         ApiInterface restService = ApiClient.getClient().create(ApiInterface.class);
         Call<Results> call = restService.getGenrePodcasts(
-                Constants.REST_TERM, genreId, Constants.REST_LIMIT
+                Constants.REST_TERM, genreId, Constants.REST_LIMIT, Constants.REST_SORT_POPULAR
         );
         call.enqueue(new Callback<Results>() {
             @Override

@@ -14,6 +14,8 @@ public class Constants {
     public static final String PODCAST_CHANNEL = "podcast_channel";
     public static final String REST_TERM = "podcasts";
     public static final int REST_LIMIT = 100;
+    public static final String REST_SORT_RECENT = "recent";
+    public static final String REST_SORT_POPULAR = "popular";
 
     public static final String GENRE_ID = "genre_id";
     public static final String GENRE_TITLE = "genre_title";
