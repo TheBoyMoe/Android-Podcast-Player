@@ -180,7 +180,7 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
             mPodcastGenre.setText(podcast.getPrimaryGenreName());
         }
 
-        // thumbnail
+        // full size image
         List<Image> images = channel.getImages();
         if (images != null) {
             for (Image image : images) {
@@ -188,15 +188,13 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
                 if (mImageUrl != null) break; // returns full size
             }
         }
-        String imageUrl = null;
-        if (podcast.getArtworkUrl100() != null && !podcast.getArtworkUrl100().isEmpty()) {
-            imageUrl = podcast.getArtworkUrl100();
-        } else if (podcast.getArtworkUrl600() != null && !podcast.getArtworkUrl600().isEmpty()) {
-            imageUrl = podcast.getArtworkUrl600();
+
+        // use glide to download and display thumbnail
+        if (podcast.getArtworkUrl600() != null && !podcast.getArtworkUrl600().isEmpty()) {
+            Utils.loadPreviewWithGlide(getActivity(), podcast.getArtworkUrl600(), mPodcastThumbnail);
         } else {
-            imageUrl = mImageUrl;
+            Utils.loadPreviewWithGlide(getActivity(), R.drawable.no_image_600x600, mPodcastThumbnail);
         }
-        Utils.loadPreviewWithGlide(getActivity(), imageUrl, mPodcastThumbnail);
 
         // instantiate and bind adapter
         List<Item> episodes = channel.getItemList();

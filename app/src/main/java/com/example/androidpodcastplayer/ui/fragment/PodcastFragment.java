@@ -136,7 +136,11 @@ public class PodcastFragment extends ContractFragment<PodcastFragment.Contract>{
                     mLatestPublicationDate.setText(R.string.publication_date_unknown);
                 }
                 // use glide to download and display image
-                Utils.loadPreviewWithGlide(mContext, item.getArtworkUrl600(), mThumbnail);
+                if (item.getArtworkUrl600() != null && !item.getArtworkUrl600().isEmpty()) {
+                    Utils.loadPreviewWithGlide(mContext, item.getArtworkUrl600(), mThumbnail);
+                } else {
+                    Utils.loadPreviewWithGlide(mContext, R.drawable.no_image_600x600, mThumbnail);
+                }
             }
 
             @Override

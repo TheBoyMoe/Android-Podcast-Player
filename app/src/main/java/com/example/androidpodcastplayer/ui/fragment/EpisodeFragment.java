@@ -128,8 +128,9 @@ public class EpisodeFragment extends ContractFragment<EpisodeFragment.Contract>{
                     if (episode.getImage().getUrl() != null) {
                         Utils.loadPreviewWithGlide(getActivity(), episode.getImage().getUrl(), mEpisodeThumbnail);
                     }
+                } else {
+                    Utils.loadPreviewWithGlide(getActivity(), R.drawable.no_image_600x600, mEpisodeThumbnail);
                 }
-
             }
         }
     }

@@ -70,6 +70,7 @@ public class Utils {
         Glide.with(context)
                 .load(drawable)
                 .crossFade()
+                .error(R.drawable.no_image_600x600)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(view);
     }
@@ -78,7 +79,7 @@ public class Utils {
         Glide.with(context)
                 .load(url)
                 .crossFade()
-                .error(R.mipmap.ic_launcher)
+                .error(R.drawable.no_image_600x600)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(view);
     }
