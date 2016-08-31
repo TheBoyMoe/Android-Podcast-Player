@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_marginTop="?attr/actionBarSize"
                 android:id="@+id/podcast_info"
+                android:orientation="horizontal"
                 android:paddingTop="@dimen/normal"
-
                 android:paddingRight="@dimen/normal"
                 android:paddingLeft="@dimen/normal"
                 android:gravity="center_vertical"
@@ -23,39 +23,31 @@
 
 
     <LinearLayout
-        android:layout_toEndOf="@id/podcast_thumbnail"
         android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/podcast_title"
-            tools:text="Another one bites the dust"
-            android:maxLines="1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:id="@+id/podcast_author"
+            style="@style/TextStyle.PodcastInfo.Heading"
+            tools:text="Marc Maron"/>
 
         <TextView
-            android:id="@+id/podcast_author"
-            android:maxLines="1"
-            tools:text="Marc Maron"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:id="@+id/podcast_title"
+            tools:text="Another one bites the dust"
+            style="@style/TextStyle.PodcastInfo.AllCaps"/>
 
         <TextView
             android:id="@+id/podcast_description"
-            android:maxLines="2"
-            tools:text="@string/podast_desciption"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            style="@style/TextStyle.PodcastInfo"
+            android:maxLines="3"
+            tools:text="@string/podast_desciption"/>
 
         <TextView
             android:id="@+id/podcast_genre"
-            android:maxLines="1"
-            tools:text="Health and Fitness"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            style="@style/TextStyle.PodcastInfo"
+            tools:text="Health and Fitness"/>
 
     </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>

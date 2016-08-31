@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -33,8 +34,6 @@ import com.example.androidpodcastplayer.model.podcast.Podcast;
 
 import java.util.List;
 import java.util.Locale;
-
-import timber.log.Timber;
 
 /**
  * References:
@@ -52,10 +51,9 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
         void onNavigationIconBackPressed();
     }
 
-    private RelativeLayout mPodcastInfo;
+    private LinearLayout mPodcastInfo;
     private CoordinatorLayout mLayout;
     private String mPodcastName;
-    private int mTrackCount;
     private AutofitRecyclerView mRecyclerView;
     private TextView mPodcastTitle;
     private TextView mPodcastAuthor;
@@ -129,7 +127,7 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
     }
 
     private void setupInfoView(View view) {
-        mPodcastInfo = (RelativeLayout) view.findViewById(R.id.podcast_info);
+        mPodcastInfo = (LinearLayout) view.findViewById(R.id.podcast_info);
         mPodcastTitle = (TextView) view.findViewById(R.id.podcast_title);
         mPodcastAuthor = (TextView) view.findViewById(R.id.podcast_author);
         mPodcastDescription = (TextView) view.findViewById(R.id.podcast_description);
@@ -142,7 +140,7 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
         RelativeLayout listContainer = (RelativeLayout) view.findViewById(R.id.autofitrecycler_container);
         listContainer.setPadding(0, 0, 0, 0); // remove top padding
         mRecyclerView = (AutofitRecyclerView) view.findViewById(R.id.recycler_view);
-        // mRecyclerView.setHasFixedSize(true);
+        // mRecyclerView.setHasFixedSize(true); // height varies
         mRecyclerView.addItemDecoration(new ItemSpacerDecoration(
                 getResources().getDimensionPixelOffset(R.dimen.list_item_vertical_margin),
                 getResources().getDimensionPixelOffset(R.dimen.list_item_horizontal_margin)
@@ -153,40 +151,29 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
 
         // page and podcast title
         if (channel.getTitle()!= null && !channel.getTitle().isEmpty()) {
-            mPodcastName = channel.getTitle();
+            mPodcastName = Utils.htmlToStringParser(channel.getTitle());
         } else {
-            mPodcastName = podcast.getTrackName() != null ? podcast.getTrackName() : " ";
+            mPodcastName = podcast.getTrackName() != null ? Utils.htmlToStringParser(podcast.getTrackName()) : " ";
         }
         mPodcastTitle.setText(mPodcastName);
 
-        mTrackCount = podcast.getTrackCount();
-
         // author
         if (channel.getAuthor() != null && !channel.getAuthor().isEmpty()) {
-            mPodcastAuthor.setText(channel.getAuthor());
+            mPodcastAuthor.setText(Utils.htmlToStringParser(channel.getAuthor()));
         } else {
-            mPodcastAuthor.setText(podcast.getArtistName() != null ? podcast.getArtistName() : "");
+            mPodcastAuthor.setText(podcast.getArtistName() != null ? Utils.htmlToStringParser(podcast.getArtistName()) : "");
         }
 
         // description
         if (channel.getDescription() != null && !channel.getDescription().isEmpty()) {
-            mPodcastDescription.setText(channel.getDescription());
+            mPodcastDescription.setText(Utils.htmlToStringParser(channel.getDescription()));
         } else {
-            mPodcastDescription.setText(podcast.getCollectionName() != null ? podcast.getCollectionName() : "");
+            mPodcastDescription.setText(podcast.getCollectionName() != null ? Utils.htmlToStringParser(podcast.getCollectionName()) : "");
         }
 
         // genre
         if (podcast.getPrimaryGenreName() != null && !podcast.getPrimaryGenreName().isEmpty()) {
-            mPodcastGenre.setText(podcast.getPrimaryGenreName());
-        }
-
-        // full size image
-        List<Image> images = channel.getImages();
-        if (images != null) {
-            for (Image image : images) {
-                mImageUrl = image.getUrl();
-                if (mImageUrl != null) break; // returns full size
-            }
+            mPodcastGenre.setText(String.format("Genre : %s", podcast.getPrimaryGenreName()));
         }
 
         // use glide to download and display thumbnail
@@ -194,6 +181,15 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
             Utils.loadPreviewWithGlide(getActivity(), podcast.getArtworkUrl600(), mPodcastThumbnail);
         } else {
             Utils.loadPreviewWithGlide(getActivity(), R.drawable.no_image_600x600, mPodcastThumbnail);
+        }
+
+        // full size image
+        List<Image> images = channel.getImages();
+        if (images != null) {
+            for (Image image : images) {
+                mImageUrl = image.getUrl();
+                if (mImageUrl != null) break;
+            }
         }
 
         // instantiate and bind adapter
@@ -306,18 +302,23 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
                     mEpisodeMonth.setText(month);
 
                     // set title
-                    mEpisodeTitle.setText(episode.getTitle() != null ? episode.getTitle() : "");
+                    if (mEpisode.getTitle() != null && !mEpisode.getTitle().isEmpty()) {
+                        mEpisodeTitle.setText(Utils.htmlToStringParser(mEpisode.getTitle()));
+                    } else {
+                        mEpisodeTitle.setText(mEpisode.getAuthor() != null ? Utils.htmlToStringParser(mEpisode.getAuthor()) : "");
+                    }
+
 
                     // set description
                     if (mEpisode.getSubtitle() != null && !mEpisode.getSubtitle().isEmpty()) {
                         mEpisodeDescription.setText(Utils.htmlToStringParser(mEpisode.getSubtitle()));
+                    } else if (mEpisode.getDescription() != null && !mEpisode.getDescription().isEmpty()){
+                        mEpisodeDescription.setText(Utils.htmlToStringParser(mEpisode.getDescription()));
                     } else {
-                        // description formatted as html
-                        Timber.i("%s: Using html description", Constants.LOG_TAG);
-                        mEpisodeDescription.setText(mEpisode.getDescription() != null ? Utils.htmlToStringParser(mEpisode.getDescription()) : "");
+                        mEpisodeDescription.setText(mEpisode.getAuthor() != null ? Utils.htmlToStringParser(mEpisode.getAuthor()) : "");
                     }
 
-                    // set episode duration
+                    // set episode duration // FIXME
                     if (episode.getDuration() != null && !episode.getDuration().isEmpty())
                         mEpisodeDuration.setText(String.format(Locale.ENGLISH, "%s mins", episode.getDuration()));
                 }
