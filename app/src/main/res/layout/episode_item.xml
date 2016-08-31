@@ -6,7 +6,6 @@
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="center"
     app:cardUseCompatPadding="true"
     android:elevation="@dimen/item_elevation"
     app:cardCornerRadius="@dimen/corner_radius">
@@ -34,7 +33,7 @@
                 style="@style/TextStyle.ListItem.AllCaps"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:gravity="center"/>
+                android:gravity="center_horizontal"/>
 
             <TextView
                 android:id="@+id/episode_title"
@@ -45,13 +44,11 @@
                 android:layout_weight="4"
                 tools:ignore="RtlSymmetry"/>
 
-
         </LinearLayout>
 
         <!-- month and description -->
         <LinearLayout
             android:orientation="horizontal"
-            android:paddingBottom="@dimen/normal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -61,7 +58,7 @@
                 style="@style/TextStyle.ListItem.AllCaps"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:gravity="center"/>
+                android:gravity="center_horizontal"/>
 
             <TextView
                 android:id="@+id/episode_description"
@@ -78,6 +75,8 @@
         <!-- divider -->
         <View
             android:layout_width="match_parent"
+            android:layout_marginBottom="@dimen/normal"
+            android:layout_marginTop="@dimen/medium"
             android:layout_height="1dp"
             android:paddingStart="@dimen/normal"
             android:background="@color/colorDivider" />
@@ -86,7 +85,6 @@
         <!-- button row -->
         <LinearLayout
             android:orientation="horizontal"
-            android:layout_marginTop="@dimen/normal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
