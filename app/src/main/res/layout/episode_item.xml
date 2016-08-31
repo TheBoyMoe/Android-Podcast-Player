@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-
+        <!-- day and title -->
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
@@ -35,14 +35,6 @@
                 android:layout_weight="1"
                 android:gravity="center"/>
 
-            <!--<TextView-->
-                <!--android:id="@+id/episode_number"-->
-                <!--tools:text="Episode: 33"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_width="0dp"-->
-                <!--android:layout_weight="4"-->
-                <!--android:maxLines="1"/>-->
-
             <TextView
                 android:id="@+id/episode_title"
                 tools:text="The one where the pig got away"
@@ -55,7 +47,7 @@
 
         </LinearLayout>
 
-
+        <!-- month and description -->
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
@@ -81,7 +73,6 @@
 
         </LinearLayout>
 
-
         <!-- button row -->
         <LinearLayout
             android:orientation="horizontal"
@@ -96,7 +87,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_play"
+                android:src="@drawable/ic_play_dark"
                 tools:ignore="ContentDescription"/>
 
             <TextView
@@ -115,7 +106,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_download_black"
+                android:src="@drawable/ic_download_dark"
                 tools:ignore="ContentDescription"/>
 
 
@@ -126,7 +117,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_playlist_dark"
+                android:src="@drawable/ic_playlist_add_dark"
                 tools:ignore="ContentDescription"/>
 
 
