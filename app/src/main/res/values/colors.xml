@@ -20,5 +20,6 @@
     <color name="colorNeutral">@color/neutral</color>
     <color name="colorGradientStart">@color/gradient_start</color>
     <color name="colorGradientEnd">@color/gradient_end</color>
+    <color name="colorDivider">@color/divider</color>
 
 </resources>

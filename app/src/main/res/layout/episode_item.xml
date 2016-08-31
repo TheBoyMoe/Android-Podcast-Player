@@ -12,14 +12,15 @@
     app:cardCornerRadius="@dimen/corner_radius">
 
     <LinearLayout
-            android:id="@+id/episode_item"
-            android:paddingTop="@dimen/normal"
-            android:paddingBottom="@dimen/normal"
-            android:orientation="vertical"
-            android:weightSum="5"
-            android:background="@drawable/touch_selector"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        android:id="@+id/episode_item"
+        android:paddingTop="@dimen/normal"
+        android:paddingBottom="@dimen/normal"
+        android:orientation="vertical"
+        android:weightSum="5"
+        android:background="@drawable/touch_selector"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="RtlSymmetry">
 
         <!-- day and title -->
         <LinearLayout
@@ -50,6 +51,7 @@
         <!-- month and description -->
         <LinearLayout
             android:orientation="horizontal"
+            android:paddingBottom="@dimen/normal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -64,14 +66,22 @@
             <TextView
                 android:id="@+id/episode_description"
                 tools:text="The one where the pig got away"
+                android:paddingEnd="@dimen/normal"
                 style="@style/TextStyle.ListItem"
                 android:maxLines="4"
-                android:paddingEnd="@dimen/normal"
                 android:layout_width="0dp"
                 android:layout_weight="4"
                 tools:ignore="RtlSymmetry"/>
 
         </LinearLayout>
+
+        <!-- divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:paddingStart="@dimen/normal"
+            android:background="@color/colorDivider" />
+
 
         <!-- button row -->
         <LinearLayout
@@ -79,6 +89,7 @@
             android:layout_marginTop="@dimen/normal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
 
             <!-- play episode -->
             <ImageView

@@ -18,7 +18,7 @@
     <color name="player_background">@color/md_black_1000</color>
     <color name="primary_icons">@color/md_white_1000</color>
     <color name="secondary_icons">@color/md_grey_600</color>
-    <color name="divider">@color/md_grey_400</color>
+    <color name="divider">@color/md_grey_200</color>
     <color name="neutral">@android:color/transparent</color>
     <color name="gradient_start">@color/accent</color>
     <color name="gradient_end">@color/accent_dark</color>
