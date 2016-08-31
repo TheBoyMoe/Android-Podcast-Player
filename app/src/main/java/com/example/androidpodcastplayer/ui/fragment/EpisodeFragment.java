@@ -119,8 +119,19 @@ public class EpisodeFragment extends ContractFragment<EpisodeFragment.Contract>{
 
     private void populateView(Item episode, String imageUrl) {
         if (episode != null) {
-            mEpisodeTitle.setText(episode.getTitle() != null ? episode.getTitle() : "");
-            mEpisodeDescription.setText(episode.getDescription() != null ? episode.getDescription() : "");
+            // set episode title
+            if (episode.getTitle() != null && !episode.getTitle().isEmpty()) {
+                mEpisodeTitle.setText(Utils.htmlToStringParser(episode.getTitle()));
+            } else {
+                mEpisodeTitle.setText(episode.getAuthor() != null ? Utils.htmlToStringParser(episode.getAuthor()) : "");
+            }
+            // set episode description
+            if (episode.getSubtitle() != null && !episode.getSubtitle().isEmpty()) {
+                mEpisodeDescription.setText(Utils.htmlToStringParser(episode.getSubtitle()));
+            } else {
+                mEpisodeDescription.setText(episode.getDescription() != null ? Utils.htmlToStringParser(episode.getDescription()) : "");
+            }
+
             if (imageUrl != null) { // use the full size image
                 Utils.loadPreviewWithGlide(getActivity(), imageUrl, mEpisodeThumbnail);
             } else {
