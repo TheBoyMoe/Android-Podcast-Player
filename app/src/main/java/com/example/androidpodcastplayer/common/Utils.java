@@ -16,6 +16,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.androidpodcastplayer.R;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 
+import org.jsoup.Jsoup;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -110,5 +112,8 @@ public class Utils {
     }
 
 
+    public static String htmlToStringParser(String input) {
+        return Jsoup.parse(input).text();
+    }
 
 }

@@ -39,6 +39,7 @@ import timber.log.Timber;
 /**
  * References:
  * [1] http://stackoverflow.com/questions/31662416/show-collapsingtoolbarlayout-title-only-when-collapsed
+ * [2] http://stackoverflow.com/questions/240546/remove-html-tags-from-a-string
  */
 
 public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract>{
@@ -311,11 +312,11 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
 
                     // set description
                     if (mEpisode.getSubtitle() != null && !mEpisode.getSubtitle().isEmpty()) {
-                        mEpisodeDescription.setText(mEpisode.getSubtitle());
+                        mEpisodeDescription.setText(Utils.htmlToStringParser(mEpisode.getSubtitle()));
                     } else {
-                        // description formatted as html // FIXME
+                        // description formatted as html
                         Timber.i("%s: Using html description", Constants.LOG_TAG);
-                        mEpisodeDescription.setText(mEpisode.getDescription() != null ? mEpisode.getDescription() : "");
+                        mEpisodeDescription.setText(mEpisode.getDescription() != null ? Utils.htmlToStringParser(mEpisode.getDescription()) : "");
                     }
 
                     // set episode duration
