@@ -23,6 +23,8 @@ import com.example.androidpodcastplayer.common.Constants;
 import com.example.androidpodcastplayer.common.Utils;
 import com.example.androidpodcastplayer.model.episode.Item;
 
+import timber.log.Timber;
+
 public class EpisodeFragment extends ContractFragment<EpisodeFragment.Contract>{
 
     public interface Contract {
@@ -143,6 +145,13 @@ public class EpisodeFragment extends ContractFragment<EpisodeFragment.Contract>{
                     Utils.loadPreviewWithGlide(getActivity(), R.drawable.no_image_600x600, mEpisodeThumbnail);
                 }
             }
+
+            // DEBUG
+            String title = null, image = null, feed = null;
+            if (episode.getTitle() != null) title = episode.getTitle();
+            if (imageUrl != null) image = imageUrl;
+            if (episode.getEnclosure().getUrl() != null) feed = episode.getEnclosure().getUrl();
+            Timber.i("%s: title: %s, feed: %s, image: %s", Constants.LOG_TAG, title, feed, image);
         }
     }
 
