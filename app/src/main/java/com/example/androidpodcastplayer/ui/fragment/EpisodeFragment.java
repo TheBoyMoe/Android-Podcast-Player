@@ -38,8 +38,10 @@ public class EpisodeFragment extends ContractFragment<EpisodeFragment.Contract>{
     private TextView mEpisodeDescription;
     private ImageView mEpisodeThumbnail;
     private AppCompatSeekBar mSeekBar;
-    private ImageButton mPlayButton;
+    private ImageButton mPlayPauseButton;
     private ImageButton mStopButton;
+
+    // TODO impl prev/next buttons
 
     public EpisodeFragment() {}
 
@@ -115,7 +117,7 @@ public class EpisodeFragment extends ContractFragment<EpisodeFragment.Contract>{
         mEpisodeTitle = (TextView) view.findViewById(R.id.episode_title);
         mEpisodeDescription = (TextView) view.findViewById(R.id.episode_description);
         mSeekBar = (AppCompatSeekBar) view.findViewById(R.id.episode_progress_bar);
-        mPlayButton = (ImageButton) view.findViewById(R.id.action_play);
+        mPlayPauseButton = (ImageButton) view.findViewById(R.id.action_play);
         mStopButton = (ImageButton) view.findViewById(R.id.action_stop);
     }
 
