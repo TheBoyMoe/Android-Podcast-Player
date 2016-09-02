@@ -1,15 +1,23 @@
 package com.example.androidpodcastplayer.player.service;
 
 import android.app.PendingIntent;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.devbrackets.android.exomedia.EMAudioPlayer;
 import com.devbrackets.android.playlistcore.api.AudioPlayerApi;
 import com.devbrackets.android.playlistcore.service.BasePlaylistService;
+import com.example.androidpodcastplayer.PodcastPlayerApplication;
+import com.example.androidpodcastplayer.R;
 import com.example.androidpodcastplayer.player.manager.PlaylistManager;
 import com.example.androidpodcastplayer.player.model.AudioItem;
+import com.example.androidpodcastplayer.ui.activity.EpisodesActivity;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 
 public class AudioService extends BasePlaylistService<AudioItem, PlaylistManager>{
@@ -24,51 +32,93 @@ public class AudioService extends BasePlaylistService<AudioItem, PlaylistManager
     private Bitmap mDefaultLargeNotificationImage;
     private Bitmap mLargeNotificationImage;
     private Bitmap mLockScreenArtwork;
+    private Picasso mPicasso;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        mPicasso = Picasso.with(getApplicationContext());
+    }
 
     @Override
     protected int getNotificationId() {
-        return 0;
+        return NOTIFICATION_ID;
     }
 
     @NonNull
     @Override
     protected PendingIntent getNotificationClickPendingIntent() {
-        return null;
+        Intent intent = new Intent(getApplicationContext(), EpisodesActivity.class);
+        return PendingIntent.getActivity(getApplicationContext(),
+                FOREGROUND_REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     @Nullable
     @Override
     protected Bitmap getDefaultLargeNotificationImage() {
+        if (mDefaultLargeNotificationImage == null) {
+            mDefaultLargeNotificationImage =
+                BitmapFactory.decodeResource(getResources(), R.drawable.no_image_600x600);
+        }
+        return mDefaultLargeNotificationImage;
+    }
+
+    @Nullable
+    @Override
+    protected Bitmap getDefaultLargeNotificationSecondaryImage() {
         return null;
     }
 
     @Override
+    protected void updateLargeNotificationImage(int size, AudioItem playlistItem) {
+        mPicasso.load(playlistItem.getThumbnailUrl()).into(mNotificationTarget);
+    }
+
+    @Override
+    protected void updateRemoteViewArtwork(AudioItem playlistItem) {
+        mPicasso.load(playlistItem.getArtworkUrl()).into(mLockScreenTarget);
+    }
+
+    @Nullable
+    @Override
+    protected Bitmap getRemoteViewArtwork() {
+        return mLockScreenArtwork;
+    }
+
+    @Nullable
+    @Override
+    public Bitmap getLargeNotificationImage() {
+        return mLargeNotificationImage;
+    }
+
+    @Override
     protected int getNotificationIconRes() {
-        return 0;
+        // FIXME
+        return R.mipmap.ic_launcher;
     }
 
     @Override
     protected int getRemoteViewIconRes() {
-        return 0;
+        // FIXME
+        return R.mipmap.ic_launcher;
     }
 
     @NonNull
     @Override
     protected AudioPlayerApi getNewAudioPlayer() {
-        return null;
+        return new AudioApi(new EMAudioPlayer(getApplicationContext()));
     }
 
     @Override
     protected float getAudioDuckVolume() {
-        return 0;
+        return AUDIO_DUCK_VOLUME;
     }
 
     @NonNull
     @Override
     protected PlaylistManager getPlaylistManager() {
-        return null;
+        return PodcastPlayerApplication.getsPlaylistManager();
     }
-
 
     @Override
     protected void performOnMediaCompletion() {
@@ -82,7 +132,7 @@ public class AudioService extends BasePlaylistService<AudioItem, PlaylistManager
     private class NotificationTarget implements Target {
 
         @Override
-        public void onBitmapLoaded(Bitmap bitmap) {
+        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
             mLargeNotificationImage = bitmap;
             onLargeNotificationImageUpdated();
         }
@@ -102,7 +152,7 @@ public class AudioService extends BasePlaylistService<AudioItem, PlaylistManager
     private class LockScreenTarget implements Target {
 
         @Override
-        public void onBitmapLoaded(Bitmap bitmap) {
+        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
             mLockScreenArtwork = bitmap;
             onRemoteViewArtworkUpdated();
         }
