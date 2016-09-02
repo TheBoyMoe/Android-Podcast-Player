@@ -2,17 +2,24 @@ package com.example.androidpodcastplayer;
 
 import android.app.Application;
 
+import com.example.androidpodcastplayer.player.manager.PlaylistManager;
 import com.facebook.stetho.Stetho;
 import com.facebook.stetho.timber.StethoTree;
-import com.squareup.leakcanary.LeakCanary;
 
 import timber.log.Timber;
 
 public class PodcastPlayerApplication extends Application{
 
+    private static PodcastPlayerApplication sApplication;
+    private static PlaylistManager sPlaylistManager;
+
+
     @Override
     public void onCreate() {
         super.onCreate();
+
+        sApplication = this;
+        sPlaylistManager = new PlaylistManager();
 
         // initialize Stetho
         Stetho.initialize(Stetho.newInitializerBuilder(this)
@@ -36,6 +43,21 @@ public class PodcastPlayerApplication extends Application{
         // enable Leak Canary
         // LeakCanary.install(this);
 
+    }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        sApplication = null;
+        sPlaylistManager = null;
+    }
+
+    public static PlaylistManager getsPlaylistManager() {
+        return sPlaylistManager;
+    }
+
+    public static PodcastPlayerApplication getsApplication() {
+        return sApplication;
     }
 
 }
