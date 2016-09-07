@@ -119,7 +119,7 @@ public class PodcastFragment extends ContractFragment<PodcastFragment.Contract>{
                 mFeedUrl = item.getFeedUrl();
                 mArtistName.setText(item.getArtistName());
                 mCollectionName.setText(item.getCollectionName());
-                mNumberOfEpisodes.setText(String.format(Locale.ENGLISH, "Episodes available: %d", item.getTrackCount()));
+                mNumberOfEpisodes.setText(String.format(Locale.ENGLISH, "Available episodes: %d", item.getTrackCount()));
 
                 // format the dateTime string
                 if (item.getReleaseDate() != null) {

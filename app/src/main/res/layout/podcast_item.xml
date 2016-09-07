@@ -42,13 +42,13 @@
                 style="@style/TextStyle.ListItem.AllCaps"/>
 
             <TextView
-                android:id="@+id/podcast_episode_number"
-                tools:text="Latest episode: 268"
+                android:id="@+id/podcast_latest_pubdate"
+                tools:text="26 Aug 2016"
                 style="@style/TextStyle.ListItem"/>
 
             <TextView
-                android:id="@+id/podcast_latest_pubdate"
-                tools:text="26 Aug 2016"
+                android:id="@+id/podcast_episode_number"
+                tools:text="Latest episode: 268"
                 style="@style/TextStyle.ListItem"/>
 
 
