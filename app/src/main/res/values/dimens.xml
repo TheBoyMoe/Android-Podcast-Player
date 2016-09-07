@@ -27,7 +27,7 @@
     <dimen name="podcast_thumbnail_size">100dp</dimen>
     <dimen name="appbar_layout_size">216dp</dimen>
     <dimen name="audio_player_button_size">56dp</dimen>
-    <dimen name="audio_player_margin">40dp</dimen>
+    <dimen name="audio_player_margin">10dp</dimen>
     <dimen name="audio_player_thumb_size">16dp</dimen>
     <dimen name="corner_radius">0dp</dimen>
     <dimen name="item_elevation">3dp</dimen>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
+                android:orientation="vertical"
                 android:background="@color/colorPlayerBackground"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -9,16 +10,16 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
+        android:layout_weight="1"
+        android:layout_height="0dp"
         tools:ignore="UselessParent">
 
         <!-- background image and info -->
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:layout_height="0dp">
+            android:layout_height="wrap_content">
 
+            <!-- podcast image -->
             <ImageView
                 android:id="@+id/episode_thumbnail"
                 android:layout_width="match_parent"
@@ -26,14 +27,14 @@
                 android:scaleType="centerCrop"
                 tools:ignore="ContentDescription"/>
 
-
+            <!-- title & description -->
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_alignParentBottom="true"
                 android:background="@drawable/gradient_bg_270"
                 android:paddingStart="@dimen/normal"
                 android:paddingEnd="@dimen/normal"
-                android:paddingTop="@dimen/xlarge"
+                android:paddingTop="@dimen/normal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -55,48 +56,13 @@
 
             <include layout="@layout/toolbar"/>
 
-        </RelativeLayout>
-
-
-        <!-- player controls -->
-        <RelativeLayout
-
-            android:layout_marginTop="@dimen/small"
-            android:layout_marginBottom="@dimen/normal"
-            android:layout_marginEnd="@dimen/normal"
-            android:layout_marginStart="@dimen/normal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageButton
-                android:id="@+id/action_play"
-                android:layout_alignParentStart="true"
-                android:background="@color/colorNeutral"
-                android:src="@drawable/ic_action_play"
-                android:enabled="false"
-                android:layout_width="@dimen/audio_player_button_size"
-                android:layout_height="@dimen/audio_player_button_size"
-                tools:ignore="ContentDescription"/>
-
-            <android.support.v7.widget.AppCompatSeekBar
-                android:id="@+id/episode_progress_bar"
-                android:indeterminate="false"
-                android:progressDrawable="@drawable/progress_bar_horizontal"
-                android:thumb="@drawable/progress_bar_thumb"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="@dimen/audio_player_margin"
-                android:layout_marginEnd="@dimen/audio_player_margin"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-            <ImageButton
-                android:id="@+id/action_stop"
-                android:layout_alignParentEnd="true"
-                android:background="@color/colorNeutral"
-                android:src="@drawable/ic_action_stop"
-                android:layout_width="@dimen/audio_player_button_size"
-                android:layout_height="@dimen/audio_player_button_size"
-                tools:ignore="ContentDescription"/>
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:indeterminateDrawable="@drawable/progress_bar_circular"
+                android:layout_centerInParent="true"
+                android:visibility="gone"
+                android:layout_width="@dimen/progress_bar_size"
+                android:layout_height="@dimen/progress_bar_size"/>
 
         </RelativeLayout>
 
@@ -104,35 +70,95 @@
     </LinearLayout>
 
 
-    <ProgressBar
-        android:id="@+id/progress_bar"
-        android:indeterminateDrawable="@drawable/progress_bar_circular"
-        android:layout_centerInParent="true"
-        android:visibility="gone"
-        android:layout_width="@dimen/progress_bar_size"
-        android:layout_height="@dimen/progress_bar_size"/>
+    <!-- Seeker bar -->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/large"
+        android:layout_marginStart="@dimen/large"
+        android:layout_marginEnd="@dimen/large"
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <ImageButton
-        android:id="@+id/skip_prev"
-        android:layout_centerVertical="true"
-        android:layout_alignParentStart="true"
-        android:background="@android:color/black"
-        android:src="@drawable/exomedia_ic_skip_previous_white"
-        android:layout_width="@dimen/audio_player_button_size"
-        android:layout_height="@dimen/audio_player_button_size"
-        tools:ignore="ContentDescription"/>
-
-    <ImageButton
-        android:id="@+id/skip_next"
-        android:layout_centerVertical="true"
-        android:layout_alignParentEnd="true"
-        android:background="@android:color/black"
-        android:src="@drawable/exomedia_ic_skip_next_white"
-        android:layout_width="@dimen/audio_player_button_size"
-        android:layout_height="@dimen/audio_player_button_size"
-        tools:ignore="ContentDescription"/>
+        <TextView
+            android:id="@+id/episode_position"
+            tools:text="0:00"
+            android:text="0:00"
+            android:textColor="@color/colorInverseText"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
 
+        <android.support.v7.widget.AppCompatSeekBar
+            android:id="@+id/episode_progress_bar"
+            android:indeterminate="false"
+            android:progressDrawable="@drawable/progress_bar_horizontal"
+            android:thumb="@drawable/progress_bar_thumb"
+            android:layout_marginStart="@dimen/audio_player_margin"
+            android:layout_marginEnd="@dimen/audio_player_margin"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="10dp"/>
 
-</RelativeLayout>
+
+        <TextView
+            android:id="@+id/episode_duration"
+            tools:text="0:00"
+            android:text="0:00"
+            android:textColor="@color/colorInverseText"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+
+    </LinearLayout>
+
+
+    <!-- player controls -->
+    <RelativeLayout
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginStart="@dimen/large"
+        android:layout_marginEnd="@dimen/large"
+        android:paddingTop="@dimen/normal"
+        android:paddingBottom="@dimen/normal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <ImageButton
+            android:id="@+id/skip_prev"
+            android:background="@color/colorNeutral"
+            android:src="@drawable/exomedia_ic_skip_previous_white"
+            android:layout_alignParentStart="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="ContentDescription"/>
+
+
+        <ImageButton
+            android:id="@+id/action_play"
+            android:layout_centerInParent="true"
+            android:background="@color/colorNeutral"
+            android:src="@drawable/exomedia_ic_play_arrow_white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="ContentDescription"/>
+
+
+        <ImageButton
+            android:id="@+id/skip_next"
+            android:layout_alignParentEnd="true"
+            android:background="@color/colorNeutral"
+            android:src="@drawable/exomedia_ic_skip_next_white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="ContentDescription"/>
+
+    </RelativeLayout>
+
+
+
+</LinearLayout>
 

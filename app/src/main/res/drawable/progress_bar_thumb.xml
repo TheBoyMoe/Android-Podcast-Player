@@ -10,8 +10,12 @@
 
     <!--<solid android:color="@color/colorAccent"/>-->
 
+    <!--<size-->
+        <!--android:width="@dimen/audio_player_thumb_size"-->
+        <!--android:height="@dimen/audio_player_thumb_size"/>-->
+
     <size
-        android:width="@dimen/audio_player_thumb_size"
-        android:height="@dimen/audio_player_thumb_size"/>
+        android:width="10dp"
+        android:height="10dp"/>
 
 </shape>

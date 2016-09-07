@@ -22,6 +22,8 @@ import com.example.androidpodcastplayer.R;
 import com.example.androidpodcastplayer.common.Constants;
 import com.example.androidpodcastplayer.common.Utils;
 import com.example.androidpodcastplayer.model.episode.Item;
+import com.example.androidpodcastplayer.player.manager.PlaylistManager;
+import com.squareup.picasso.Picasso;
 
 import timber.log.Timber;
 
@@ -40,8 +42,12 @@ public class EpisodeFragment extends ContractFragment<EpisodeFragment.Contract>{
     private AppCompatSeekBar mSeekBar;
     private ImageButton mPlayPauseButton;
     private ImageButton mStopButton;
+    private ImageButton mNextButton;
+    private ImageButton mPrevButton;
 
-    // TODO impl prev/next buttons
+    private PlaylistManager mPlaylistManager;
+    private int mSelectedIndex = 0;
+    private Picasso mPicasso;
 
     public EpisodeFragment() {}
 
@@ -117,8 +123,8 @@ public class EpisodeFragment extends ContractFragment<EpisodeFragment.Contract>{
         mEpisodeTitle = (TextView) view.findViewById(R.id.episode_title);
         mEpisodeDescription = (TextView) view.findViewById(R.id.episode_description);
         mSeekBar = (AppCompatSeekBar) view.findViewById(R.id.episode_progress_bar);
-        mPlayPauseButton = (ImageButton) view.findViewById(R.id.action_play);
-        mStopButton = (ImageButton) view.findViewById(R.id.action_stop);
+        // mPlayPauseButton = (ImageButton) view.findViewById(R.id.action_play);
+        // mStopButton = (ImageButton) view.findViewById(R.id.action_stop);
     }
 
     private void populateView(Item episode, String imageUrl) {
