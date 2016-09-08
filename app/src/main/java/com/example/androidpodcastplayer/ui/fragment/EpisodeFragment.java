@@ -41,10 +41,6 @@ import java.util.List;
 public class EpisodeFragment extends ContractFragment<EpisodeFragment.Contract> implements
         PlaylistListener<AudioItem>, ProgressListener{
 
-    private Item mEpisode;
-    private String mImageUrl;
-
-
     public interface Contract {
         void onNavigationIconBackPressed();
         void downloadEpisode();
@@ -52,6 +48,8 @@ public class EpisodeFragment extends ContractFragment<EpisodeFragment.Contract> 
     }
 
     private static final int PLAYLIST_ID = 4; // arbitrary
+    public static final String CURRENT_TITLE = "current_title";
+    public static final String CURRENT_DESCRIPTION = "current_description";
     private ProgressBar mProgressBar;
     private TextView mEpisodeTitle;
     private TextView mEpisodeDescription;
@@ -62,12 +60,15 @@ public class EpisodeFragment extends ContractFragment<EpisodeFragment.Contract> 
     private ImageButton mPlayPauseButton;
     private ImageButton mNextButton;
     private ImageButton mPrevButton;
-
+    private Item mEpisode;
+    private String mImageUrl;
     private PlaylistManager mPlaylistManager;
     private int mSelectedIndex = 0; // default
     private Picasso mPicasso;
     private boolean mShouldSetDuration;
     private boolean mUserInteracting;
+    private String mCurrentTitle;
+    private String mCurrentDescription;
 
     public EpisodeFragment() {}
 
@@ -100,10 +101,18 @@ public class EpisodeFragment extends ContractFragment<EpisodeFragment.Contract> 
         initView(view);
         mEpisode = getArguments().getParcelable(Constants.EPISODE_ITEM);
         mImageUrl = getArguments().getString(Constants.PODCAST_IMAGE);
-        // Timber.i("%s bundle extras: title: %s, imageUrl: %s", Constants.LOG_TAG, mEpisode.getTitle(), mImageUrl);
         // populateView(mEpisode, mImageUrl); // using playlist manager
-        boolean generatedPlaylist = setupPlaylistManager();
-        startPlayback(generatedPlaylist);
+        if (savedInstanceState == null) {
+            boolean generatedPlaylist = setupPlaylistManager();
+            startPlayback(generatedPlaylist);
+        } else {
+            mCurrentTitle = savedInstanceState.getString(CURRENT_TITLE);
+            mCurrentDescription = savedInstanceState.getString(CURRENT_DESCRIPTION);
+            if (mCurrentTitle != null && mCurrentDescription != null) {
+                mEpisodeTitle.setText(mCurrentTitle);
+                mEpisodeDescription.setText(mCurrentDescription);
+            }
+        }
         return view;
     }
 
@@ -123,6 +132,8 @@ public class EpisodeFragment extends ContractFragment<EpisodeFragment.Contract> 
         mPlaylistManager.registerProgressListener(this);
         updateCurrentPlaybackInformation();
     }
+
+
 
     @Override
     public boolean onPlaylistItemChanged(@Nullable AudioItem currentItem, boolean hasNext, boolean hasPrevious) {
@@ -199,6 +210,13 @@ public class EpisodeFragment extends ContractFragment<EpisodeFragment.Contract> 
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(CURRENT_TITLE, mCurrentTitle);
+        outState.putString(CURRENT_DESCRIPTION, mCurrentDescription);
     }
 
     // helper methods
@@ -322,8 +340,10 @@ public class EpisodeFragment extends ContractFragment<EpisodeFragment.Contract> 
             mPlaylistManager.setCurrentPosition(mSelectedIndex);
             mPlaylistManager.play(0, false);
             if (mPlaylistManager.getCurrentItem() != null) {
-                mEpisodeTitle.setText(mPlaylistManager.getCurrentItem().getTitle());
-                mEpisodeDescription.setText(mPlaylistManager.getCurrentItem().getDescription());
+                mCurrentTitle = mPlaylistManager.getCurrentItem().getTitle();
+                mEpisodeTitle.setText(mCurrentTitle);
+                mCurrentDescription = mPlaylistManager.getCurrentItem().getDescription();
+                mEpisodeDescription.setText(mCurrentDescription);
             }
         }
     }
