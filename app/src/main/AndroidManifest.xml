@@ -5,6 +5,7 @@
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
     <application
         android:name=".PodcastPlayerApplication"
@@ -62,6 +63,10 @@
             android:name=".custom.QuerySuggestionProvider"
             android:authorities="com.example.androidpodcastplayer.custom.QuerySuggestionProvider"
             android:exported="false"/>
+
+        <service android:name=".player.service.AudioService"
+                 android:enabled="true"
+                 android:exported="false"/>
 
     </application>
 
