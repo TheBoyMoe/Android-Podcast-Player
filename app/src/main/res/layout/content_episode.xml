@@ -130,7 +130,7 @@
         <ImageButton
             android:id="@+id/action_prev"
             android:background="@color/colorNeutral"
-            android:src="@drawable/exomedia_ic_skip_previous_white"
+            android:src="@drawable/ic_prev_white"
             android:layout_alignParentStart="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -141,7 +141,7 @@
             android:id="@+id/action_play_pause"
             android:layout_centerInParent="true"
             android:background="@color/colorNeutral"
-            android:src="@drawable/exomedia_ic_play_arrow_white"
+            android:src="@drawable/ic_play_white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:ignore="ContentDescription"/>
@@ -151,7 +151,7 @@
             android:id="@+id/action_next"
             android:layout_alignParentEnd="true"
             android:background="@color/colorNeutral"
-            android:src="@drawable/exomedia_ic_skip_next_white"
+            android:src="@drawable/ic_next_white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:ignore="ContentDescription"/>

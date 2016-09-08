@@ -38,8 +38,6 @@ import com.squareup.picasso.Picasso;
 import java.util.LinkedList;
 import java.util.List;
 
-import timber.log.Timber;
-
 public class EpisodeFragment extends ContractFragment<EpisodeFragment.Contract> implements
         PlaylistListener<AudioItem>, ProgressListener{
 
@@ -92,7 +90,6 @@ public class EpisodeFragment extends ContractFragment<EpisodeFragment.Contract> 
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
         // TODO playlist - retrieve position from bundle = selectedIndex
     }
 
@@ -103,6 +100,7 @@ public class EpisodeFragment extends ContractFragment<EpisodeFragment.Contract> 
         initView(view);
         mEpisode = getArguments().getParcelable(Constants.EPISODE_ITEM);
         mImageUrl = getArguments().getString(Constants.PODCAST_IMAGE);
+        // Timber.i("%s bundle extras: title: %s, imageUrl: %s", Constants.LOG_TAG, mEpisode.getTitle(), mImageUrl);
         // populateView(mEpisode, mImageUrl); // using playlist manager
         boolean generatedPlaylist = setupPlaylistManager();
         startPlayback(generatedPlaylist);
@@ -131,8 +129,8 @@ public class EpisodeFragment extends ContractFragment<EpisodeFragment.Contract> 
         mShouldSetDuration = true;
 
         // update the view
-        mNextButton.setEnabled(hasNext);
-        mPrevButton.setEnabled(hasPrevious);
+        // mNextButton.setEnabled(hasNext); // FIXME
+        // mPrevButton.setEnabled(hasPrevious);
         if (currentItem != null) {
             mPicasso.load(currentItem.getArtworkUrl())
                     .error(R.drawable.no_image_600x600)
@@ -248,7 +246,7 @@ public class EpisodeFragment extends ContractFragment<EpisodeFragment.Contract> 
             public void onClick(View view) {
                 // FIXME currently disabled
                 // mPlaylistManager.invokePrevious();
-                Utils.showSnackbar(getView(), "Clicked prev button");
+                Utils.showToast(getActivity(), "Clicked prev button");
             }
         });
         mNextButton.setOnClickListener(new View.OnClickListener() {
@@ -256,7 +254,7 @@ public class EpisodeFragment extends ContractFragment<EpisodeFragment.Contract> 
             public void onClick(View view) {
                 // FIXME currently disabled
                 // mPlaylistManager.invokeNext();
-                Utils.showSnackbar(getView(), "Clicked next button");
+                Utils.showToast(getActivity(), "Clicked next button");
             }
         });
     }
@@ -296,24 +294,26 @@ public class EpisodeFragment extends ContractFragment<EpisodeFragment.Contract> 
             }
 
             // DEBUG
-            String title = null, image = null, feed = null;
-            if (episode.getTitle() != null) title = episode.getTitle();
-            if (imageUrl != null) image = imageUrl;
-            if (episode.getEnclosure().getUrl() != null) feed = episode.getEnclosure().getUrl();
-            Timber.i("%s: title: %s, feed: %s, image: %s", Constants.LOG_TAG, title, feed, image);
+//            String title = null, image = null, feed = null;
+//            if (episode.getTitle() != null) title = episode.getTitle();
+//            if (imageUrl != null) image = imageUrl;
+//            if (episode.getEnclosure().getUrl() != null) feed = episode.getEnclosure().getUrl();
+//            Timber.i("%s: title: %s, feed: %s, image: %s", Constants.LOG_TAG, title, feed, image);
+
         }
     }
 
     private boolean setupPlaylistManager() {
+        // Timber.i("%s: setupPlaylistManager", Constants.LOG_TAG);
         mPlaylistManager = PodcastPlayerApplication.getsPlaylistManager();
-        if (mPlaylistManager.getId() == PLAYLIST_ID) {
-            return false;
-        }
+        // if (mPlaylistManager.getId() == PLAYLIST_ID) { // FIXME re-enable for playlists
+        //    return false;
+        // }
 
         List<AudioItem> items = new LinkedList<>();
         items.add(new AudioItem(mEpisode, mImageUrl));
         mPlaylistManager.setParameters(items, mSelectedIndex);
-        mPlaylistManager.setId(PLAYLIST_ID);
+        // mPlaylistManager.setId(PLAYLIST_ID);
         return true;
     }
 
@@ -321,8 +321,11 @@ public class EpisodeFragment extends ContractFragment<EpisodeFragment.Contract> 
         if (start || mPlaylistManager.getCurrentPosition() != mSelectedIndex) {
             mPlaylistManager.setCurrentPosition(mSelectedIndex);
             mPlaylistManager.play(0, false);
+            if (mPlaylistManager.getCurrentItem() != null) {
+                mEpisodeTitle.setText(mPlaylistManager.getCurrentItem().getTitle());
+                mEpisodeDescription.setText(mPlaylistManager.getCurrentItem().getDescription());
+            }
         }
-
     }
 
     private void setDuration(long duration) {
@@ -345,7 +348,7 @@ public class EpisodeFragment extends ContractFragment<EpisodeFragment.Contract> 
     }
 
     private void updatePlayPauseImage(boolean isPlaying) {
-        int resId = isPlaying ? R.drawable.ic_play_white : R.drawable.ic_pause_white;
+        int resId = isPlaying ? R.drawable.ic_pause_white : R.drawable.ic_play_white;
         mPlayPauseButton.setImageResource(resId);
     }
 
@@ -354,7 +357,7 @@ public class EpisodeFragment extends ContractFragment<EpisodeFragment.Contract> 
         updatePlayPauseImage(isPlaying);
     }
 
-    private void updateCurrentPlaybackInformation() {
+    private void  updateCurrentPlaybackInformation() {
         PlaylistItemChange<AudioItem> playlistItem = mPlaylistManager.getCurrentItemChange();
         if (playlistItem != null) {
             onPlaylistItemChanged(playlistItem.getCurrentItem(), playlistItem.hasNext(), playlistItem.hasPrevious());
