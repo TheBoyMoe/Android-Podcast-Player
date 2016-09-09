@@ -44,7 +44,7 @@ import java.util.Locale;
 public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract>{
 
     public interface Contract {
-        void launchPlayer(Item episode, String imageUrl);
+        void launchPlayer(int selected);
         void addEpisodeToPlaylist();
         void downloadEpisode();
         void downloadError(String message);
@@ -329,7 +329,7 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
                 switch (view.getId()) {
                     case R.id.episode_item:
                     case R.id.episode_play:
-                        getContract().launchPlayer(mEpisode, mImageUrl);
+                        getContract().launchPlayer(getAdapterPosition());
                         break;
                     case R.id.episode_download:
                         // TODO

@@ -8,7 +8,6 @@ import com.example.androidpodcastplayer.R;
 import com.example.androidpodcastplayer.common.Constants;
 import com.example.androidpodcastplayer.model.episode.Channel;
 import com.example.androidpodcastplayer.model.episode.EpisodesDataCache;
-import com.example.androidpodcastplayer.model.episode.Item;
 import com.example.androidpodcastplayer.model.podcast.Podcast;
 import com.example.androidpodcastplayer.ui.fragment.EpisodesFragment;
 
@@ -17,8 +16,8 @@ public class EpisodesActivity extends BlankActivity implements
 
     // impl of contract method
     @Override
-    public void launchPlayer(Item episode, String imageUrl) {
-        EpisodeActivity.launch(this, episode, imageUrl);
+    public void launchPlayer(int selected) {
+        EpisodeActivity.launch(this, selected);
     }
 
     @Override

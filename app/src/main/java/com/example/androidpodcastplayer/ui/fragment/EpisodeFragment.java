@@ -30,6 +30,7 @@ import com.example.androidpodcastplayer.PodcastPlayerApplication;
 import com.example.androidpodcastplayer.R;
 import com.example.androidpodcastplayer.common.Constants;
 import com.example.androidpodcastplayer.common.Utils;
+import com.example.androidpodcastplayer.model.episode.EpisodesDataCache;
 import com.example.androidpodcastplayer.model.episode.Item;
 import com.example.androidpodcastplayer.player.manager.PlaylistManager;
 import com.example.androidpodcastplayer.player.model.AudioItem;
@@ -60,8 +61,6 @@ public class EpisodeFragment extends ContractFragment<EpisodeFragment.Contract> 
     private ImageButton mPlayPauseButton;
     private ImageButton mNextButton;
     private ImageButton mPrevButton;
-    private Item mEpisode;
-    private String mImageUrl;
     private PlaylistManager mPlaylistManager;
     private int mSelectedIndex = 0; // default
     private Picasso mPicasso;
@@ -72,26 +71,18 @@ public class EpisodeFragment extends ContractFragment<EpisodeFragment.Contract> 
 
     public EpisodeFragment() {}
 
-    public static EpisodeFragment newInstance(Item episode, String imageUrl) {
+    public static EpisodeFragment newInstance(int position) {
         EpisodeFragment fragment = new EpisodeFragment();
         Bundle args = new Bundle();
-        args.putParcelable(Constants.EPISODE_ITEM, episode);
-        args.putString(Constants.PODCAST_IMAGE, imageUrl);
+        args.putInt(Constants.EPISODE_SELECTED, position);
         fragment.setArguments(args);
         return fragment;
     }
-
-    public static EpisodeFragment newInstance(List<Item> playlist, int position) {
-        // TODO when using playlist
-        return null;
-    }
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        // TODO playlist - retrieve position from bundle = selectedIndex
     }
 
     @Nullable
@@ -99,13 +90,13 @@ public class EpisodeFragment extends ContractFragment<EpisodeFragment.Contract> 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.content_episode, container, false);
         initView(view);
-        mEpisode = getArguments().getParcelable(Constants.EPISODE_ITEM);
-        mImageUrl = getArguments().getString(Constants.PODCAST_IMAGE);
+        retrieveBundleArgs();
         // populateView(mEpisode, mImageUrl); // using playlist manager
-        if (savedInstanceState == null) {
-            boolean generatedPlaylist = setupPlaylistManager();
-            startPlayback(generatedPlaylist);
-        } else {
+        boolean generatedPlaylist = setupPlaylistManager();
+        startPlayback(generatedPlaylist);
+        setEpisodeDetail();
+
+        if (savedInstanceState != null) {
             mCurrentTitle = savedInstanceState.getString(CURRENT_TITLE);
             mCurrentDescription = savedInstanceState.getString(CURRENT_DESCRIPTION);
             if (mCurrentTitle != null && mCurrentDescription != null) {
@@ -113,9 +104,9 @@ public class EpisodeFragment extends ContractFragment<EpisodeFragment.Contract> 
                 mEpisodeDescription.setText(mCurrentDescription);
             }
         }
+
         return view;
     }
-
 
     @Override
     public void onPause() {
@@ -133,21 +124,18 @@ public class EpisodeFragment extends ContractFragment<EpisodeFragment.Contract> 
         updateCurrentPlaybackInformation();
     }
 
-
-
     @Override
     public boolean onPlaylistItemChanged(@Nullable AudioItem currentItem, boolean hasNext, boolean hasPrevious) {
         mShouldSetDuration = true;
 
         // update the view
-        // mNextButton.setEnabled(hasNext); // FIXME
-        // mPrevButton.setEnabled(hasPrevious);
+        mNextButton.setEnabled(hasNext);
+        mPrevButton.setEnabled(hasPrevious);
         if (currentItem != null) {
             mPicasso.load(currentItem.getArtworkUrl())
                     .error(R.drawable.no_image_600x600)
                     .into(mEpisodeBackground);
         }
-
         return true;
     }
 
@@ -322,16 +310,20 @@ public class EpisodeFragment extends ContractFragment<EpisodeFragment.Contract> 
     }
 
     private boolean setupPlaylistManager() {
-        // Timber.i("%s: setupPlaylistManager", Constants.LOG_TAG);
         mPlaylistManager = PodcastPlayerApplication.getsPlaylistManager();
-        // if (mPlaylistManager.getId() == PLAYLIST_ID) { // FIXME re-enable for playlists
-        //    return false;
-        // }
+        if (mPlaylistManager.getId() == PLAYLIST_ID) {
+            return false;
+        }
 
         List<AudioItem> items = new LinkedList<>();
-        items.add(new AudioItem(mEpisode, mImageUrl));
+        List<Item> list = EpisodesDataCache.getInstance().getChannel().getItemList();
+        String imageUrl = EpisodesDataCache.getInstance().getPodcast().getArtworkUrl600();
+        for (Item item : list) {
+            items.add(new AudioItem(item, imageUrl));
+        }
+
         mPlaylistManager.setParameters(items, mSelectedIndex);
-        // mPlaylistManager.setId(PLAYLIST_ID);
+        mPlaylistManager.setId(PLAYLIST_ID);
         return true;
     }
 
@@ -339,12 +331,15 @@ public class EpisodeFragment extends ContractFragment<EpisodeFragment.Contract> 
         if (start || mPlaylistManager.getCurrentPosition() != mSelectedIndex) {
             mPlaylistManager.setCurrentPosition(mSelectedIndex);
             mPlaylistManager.play(0, false);
-            if (mPlaylistManager.getCurrentItem() != null) {
-                mCurrentTitle = mPlaylistManager.getCurrentItem().getTitle();
-                mEpisodeTitle.setText(mCurrentTitle);
-                mCurrentDescription = mPlaylistManager.getCurrentItem().getDescription();
-                mEpisodeDescription.setText(mCurrentDescription);
-            }
+        }
+    }
+
+    private void setEpisodeDetail() {
+        if (mPlaylistManager.getCurrentItem() != null) {
+            mCurrentTitle = mPlaylistManager.getCurrentItem().getTitle();
+            mEpisodeTitle.setText(mCurrentTitle);
+            mCurrentDescription = mPlaylistManager.getCurrentItem().getDescription();
+            mEpisodeDescription.setText(mCurrentDescription);
         }
     }
 
@@ -377,7 +372,7 @@ public class EpisodeFragment extends ContractFragment<EpisodeFragment.Contract> 
         updatePlayPauseImage(isPlaying);
     }
 
-    private void  updateCurrentPlaybackInformation() {
+    private void updateCurrentPlaybackInformation() {
         PlaylistItemChange<AudioItem> playlistItem = mPlaylistManager.getCurrentItemChange();
         if (playlistItem != null) {
             onPlaylistItemChanged(playlistItem.getCurrentItem(), playlistItem.hasNext(), playlistItem.hasPrevious());
@@ -392,9 +387,8 @@ public class EpisodeFragment extends ContractFragment<EpisodeFragment.Contract> 
         }
     }
 
-    private void retrieveExtras() {
-        // no-op
-        // retrieve selected index from bundle extras
+    private void retrieveBundleArgs() {
+        mSelectedIndex = getArguments().getInt(Constants.EPISODE_SELECTED, 0);
     }
 
     private class SeekBarChanged implements SeekBar.OnSeekBarChangeListener {

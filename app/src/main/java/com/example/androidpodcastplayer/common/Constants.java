@@ -26,5 +26,6 @@ public class Constants {
     public static final String PODCAST_ITEM = "podcast_item";
     public static final String PODCAST_IMAGE = "podcast_image";
     public static final String EPISODE_ITEM = "episode_item";
+    public static final String EPISODE_SELECTED = "episode_selected";
 
 }

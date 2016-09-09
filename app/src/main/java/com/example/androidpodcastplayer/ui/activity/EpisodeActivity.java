@@ -9,7 +9,6 @@ import android.widget.FrameLayout;
 import com.example.androidpodcastplayer.R;
 import com.example.androidpodcastplayer.common.Constants;
 import com.example.androidpodcastplayer.common.Utils;
-import com.example.androidpodcastplayer.model.episode.Item;
 import com.example.androidpodcastplayer.ui.fragment.EpisodeFragment;
 
 public class EpisodeActivity extends BlankActivity implements
@@ -34,10 +33,9 @@ public class EpisodeActivity extends BlankActivity implements
 
     private FrameLayout mLayout;
 
-    public static void launch(Activity activity, Item episode, String imageUrl) {
+    public static void launch(Activity activity, int position) {
         Intent intent = new Intent(activity, EpisodeActivity.class);
-        intent.putExtra(Constants.EPISODE_ITEM, episode);
-        intent.putExtra(Constants.PODCAST_IMAGE, imageUrl);
+        intent.putExtra(Constants.EPISODE_SELECTED, position);
         activity.startActivity(intent);
     }
 
@@ -46,13 +44,11 @@ public class EpisodeActivity extends BlankActivity implements
         super.onCreate(savedInstanceState);
         mLayout = (FrameLayout) findViewById(R.id.fragment_container);
         if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) == null) {
-            Item episode = getIntent().getParcelableExtra(Constants.EPISODE_ITEM);
-            String imageUrl = getIntent().getStringExtra(Constants.PODCAST_IMAGE);
-            if (episode != null) {
-                initFragment(EpisodeFragment.newInstance(episode, imageUrl));
+            int selected = getIntent().getIntExtra(Constants.EPISODE_SELECTED, 0);
+            if (selected >= 0) {
+                initFragment(EpisodeFragment.newInstance(selected));
             }
-
         }
-
     }
+
 }

@@ -40,13 +40,13 @@ public class AudioService extends BasePlaylistService<AudioItem, PlaylistManager
     public void onCreate() {
         super.onCreate();
         mPicasso = Picasso.with(getApplicationContext());
-        Timber.i("LOG Service onCreate called");
+        // Timber.i("LOG Service onCreate called");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Timber.i("LOG Service onDestroy called");
+        // Timber.i("LOG Service onDestroy called");
     }
 
     @Override
@@ -57,26 +57,26 @@ public class AudioService extends BasePlaylistService<AudioItem, PlaylistManager
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Timber.i("LOG Service onStartCommand called, flag: %d, startId: %d", flags, startId);
+        // Timber.i("LOG Service onStartCommand called, flag: %d, startId: %d", flags, startId);
         return super.onStartCommand(intent, flags, startId);
     }
 
     @Override
     protected void onMediaStopped(AudioItem playlistItem) {
         super.onMediaStopped(playlistItem);
-        Timber.i("LOG Service onMediaStopped called");
+        // Timber.i("LOG Service onMediaStopped called");
     }
 
     @Override
     protected void onMediaPlaybackStarted(AudioItem playlistItem, long currentPosition, long duration) {
         super.onMediaPlaybackStarted(playlistItem, currentPosition, duration);
-        Timber.i("LOG Service onMediaPlayBackStarted called");
+        // Timber.i("LOG Service onMediaPlayBackStarted called");
     }
 
     @Override
     protected void onMediaPlaybackEnded() {
         super.onMediaPlaybackEnded();
-        Timber.i("LOG Service onMediaPlaybackEnded called");
+        // Timber.i("LOG Service onMediaPlaybackEnded called");
     }
 
     @Override
