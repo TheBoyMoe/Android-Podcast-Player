@@ -42,13 +42,13 @@ import java.util.List;
 public class EpisodeFragment extends ContractFragment<EpisodeFragment.Contract> implements
         PlaylistListener<AudioItem>, ProgressListener{
 
+
     public interface Contract {
         void onNavigationIconBackPressed();
         void downloadEpisode();
         void addEpisodeToPlaylist();
     }
 
-    private static final int PLAYLIST_ID = 4; // arbitrary
     public static final String CURRENT_TITLE = "current_title";
     public static final String CURRENT_DESCRIPTION = "current_description";
     private ProgressBar mProgressBar;
@@ -62,12 +62,13 @@ public class EpisodeFragment extends ContractFragment<EpisodeFragment.Contract> 
     private ImageButton mNextButton;
     private ImageButton mPrevButton;
     private PlaylistManager mPlaylistManager;
-    private int mSelectedIndex = 0; // default
     private Picasso mPicasso;
     private boolean mShouldSetDuration;
     private boolean mUserInteracting;
     private String mCurrentTitle;
     private String mCurrentDescription;
+    private int mSelectedIndex = 0;
+    private long mPlaylistId = 0L;
 
     public EpisodeFragment() {}
 
@@ -91,10 +92,7 @@ public class EpisodeFragment extends ContractFragment<EpisodeFragment.Contract> 
         View view = inflater.inflate(R.layout.content_episode, container, false);
         initView(view);
         retrieveBundleArgs();
-        // populateView(mEpisode, mImageUrl); // using playlist manager
-        boolean generatedPlaylist = setupPlaylistManager();
-        startPlayback(generatedPlaylist);
-        setEpisodeDetail();
+        mPlaylistId = Long.valueOf(EpisodesDataCache.getInstance().getPodcast().getCollectionId());
 
         if (savedInstanceState != null) {
             mCurrentTitle = savedInstanceState.getString(CURRENT_TITLE);
@@ -104,6 +102,10 @@ public class EpisodeFragment extends ContractFragment<EpisodeFragment.Contract> 
                 mEpisodeDescription.setText(mCurrentDescription);
             }
         }
+
+        boolean generatedPlaylist = setupPlaylistManager();
+        startPlayback(generatedPlaylist);
+        setEpisodeDetail();
 
         return view;
     }
@@ -311,7 +313,7 @@ public class EpisodeFragment extends ContractFragment<EpisodeFragment.Contract> 
 
     private boolean setupPlaylistManager() {
         mPlaylistManager = PodcastPlayerApplication.getsPlaylistManager();
-        if (mPlaylistManager.getId() == PLAYLIST_ID) {
+        if (mPlaylistManager.getId() == mPlaylistId) {
             return false;
         }
 
@@ -321,9 +323,8 @@ public class EpisodeFragment extends ContractFragment<EpisodeFragment.Contract> 
         for (Item item : list) {
             items.add(new AudioItem(item, imageUrl));
         }
-
         mPlaylistManager.setParameters(items, mSelectedIndex);
-        mPlaylistManager.setId(PLAYLIST_ID);
+        mPlaylistManager.setId(mPlaylistId);
         return true;
     }
 
