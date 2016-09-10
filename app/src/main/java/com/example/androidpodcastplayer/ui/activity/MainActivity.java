@@ -1,7 +1,9 @@
 package com.example.androidpodcastplayer.ui.activity;
 
+import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
 import android.support.annotation.Nullable;
@@ -80,6 +82,11 @@ public class MainActivity extends AppCompatActivity implements
             R.drawable.ic_subscription,
             R.drawable.ic_playlist
     };
+
+    public static void launch(Activity activity) {
+        Intent intent = new Intent(activity, MainActivity.class);
+        activity.startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
