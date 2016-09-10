@@ -48,6 +48,7 @@ public class EpisodeFragment extends ContractFragment<EpisodeFragment.Contract> 
         void addEpisodeToPlaylist();
     }
 
+    public static final String SELECTED_INDEX = "selected_index";
     private ProgressBar mProgressBar;
     private TextView mEpisodeTitle;
     private TextView mEpisodeDescription;
@@ -79,7 +80,6 @@ public class EpisodeFragment extends ContractFragment<EpisodeFragment.Contract> 
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        setRetainInstance(true);
     }
 
     @Nullable
@@ -88,15 +88,20 @@ public class EpisodeFragment extends ContractFragment<EpisodeFragment.Contract> 
         View view = inflater.inflate(R.layout.content_episode, container, false);
         initView(view);
         retrieveValues();
+        if (savedInstanceState != null) {
+            mSelectedIndex = savedInstanceState.getInt(SELECTED_INDEX);
+        } else {
+            mSelectedIndex = getArguments().getInt(Constants.EPISODE_SELECTED);
+        }
         boolean generatedPlaylist = setupPlaylistManager();
         startPlayback(generatedPlaylist);
-
         return view;
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putInt(SELECTED_INDEX, mPlaylistManager.getCurrentPosition());
     }
 
     @Override
@@ -366,7 +371,7 @@ public class EpisodeFragment extends ContractFragment<EpisodeFragment.Contract> 
     }
 
     private void retrieveValues() {
-        mSelectedIndex = getArguments().getInt(Constants.EPISODE_SELECTED, 0);
+
         mPlaylistId = Long.valueOf(EpisodesDataCache.getInstance().getPodcast().getCollectionId());
     }
 
