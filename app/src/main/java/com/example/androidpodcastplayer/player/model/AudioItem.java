@@ -4,16 +4,19 @@ package com.example.androidpodcastplayer.player.model;
 import com.devbrackets.android.playlistcore.manager.IPlaylistItem;
 import com.example.androidpodcastplayer.common.Utils;
 import com.example.androidpodcastplayer.model.episode.Item;
+import com.example.androidpodcastplayer.model.podcast.Podcast;
 import com.example.androidpodcastplayer.player.manager.PlaylistManager;
+
+import static com.example.androidpodcastplayer.common.Utils.htmlToStringParser;
 
 public class AudioItem implements IPlaylistItem {
 
     private Item mEpisode;
-    private String mImageUrl;
+    private Podcast mPodcast;
 
-    public AudioItem(Item episode, String imageUrl) {
+    public AudioItem(Item episode, Podcast podcast) {
         mEpisode = episode;
-        mImageUrl = imageUrl;
+        mPodcast = podcast;
     }
 
 
@@ -39,7 +42,7 @@ public class AudioItem implements IPlaylistItem {
 
     @Override
     public String getDownloadedMediaUri() {
-        return null; // TODO downloaded episode
+        return null;
     }
 
     @Override
@@ -64,7 +67,14 @@ public class AudioItem implements IPlaylistItem {
 
     @Override
     public String getArtist() {
-        return mEpisode.getAuthor() != null ? Utils.htmlToStringParser(mEpisode.getAuthor()) : "unknown";
+        String author = "unknown";
+        if (mEpisode != null && mEpisode.getAuthor() != null && !mEpisode.getAuthor().isEmpty()) {
+            author = Utils.htmlToStringParser(mEpisode.getAuthor());
+        }
+        else if (mPodcast != null && mPodcast.getArtistName() != null && !mPodcast.getArtistName().isEmpty()) {
+            author = htmlToStringParser(mPodcast.getArtistName());
+        }
+        return author;
     }
 
     public String getDescription() {
@@ -83,36 +93,38 @@ public class AudioItem implements IPlaylistItem {
 
     // helper methods
     private String getEpisodeDescription() {
-        String description = null;
-        if (mEpisode.getSubtitle() != null && !mEpisode.getSubtitle().isEmpty()) {
-            description = Utils.htmlToStringParser(mEpisode.getSubtitle());
-        } else {
-            description = mEpisode.getDescription() != null ? Utils.htmlToStringParser(mEpisode.getDescription()) : "unknown";
+        String description = "unknown";
+        if (mEpisode != null && mEpisode.getSubtitle() != null && !mEpisode.getSubtitle().isEmpty()) {
+            description = htmlToStringParser(mEpisode.getSubtitle());
+        } else if (mEpisode != null && mEpisode.getDescription() != null && !mEpisode.getDescription().isEmpty()){
+            description = htmlToStringParser(mEpisode.getDescription());
+        } else if (mPodcast != null && mPodcast.getCollectionName() != null && !mPodcast.getCollectionName().isEmpty()){
+            description = Utils.htmlToStringParser(mPodcast.getCollectionName());
         }
-
         return description;
     }
 
     private String getEpisodeImageUrl() {
         String url = null;
-        if (mImageUrl != null) {
-            url = mImageUrl;
-        } else {
-            if (mEpisode.getImage() != null) {
-                if (mEpisode.getImage().getUrl() != null && !mEpisode.getImage().getUrl().isEmpty()) {
-                    url = mEpisode.getImage().getUrl();
-                }
-            }
+        if (mPodcast != null && mPodcast.getArtworkUrl600() != null && !mPodcast.getArtworkUrl600().isEmpty()) {
+            url = mPodcast.getArtworkUrl600();
+        }
+        else if (mEpisode.getImage() != null && mEpisode.getImage().getUrl() != null && !mEpisode.getImage().getUrl().isEmpty()) {
+            url = mEpisode.getImage().getUrl();
         }
         return url;
     }
 
     private String getEpisodeTitle() {
-        String title = null;
-        if (mEpisode.getTitle() != null && !mEpisode.getTitle().isEmpty()) {
-            title = Utils.htmlToStringParser(mEpisode.getTitle());
-        } else {
-            title = mEpisode.getAuthor() != null ? Utils.htmlToStringParser(mEpisode.getAuthor()) : "unknown";
+        String title = "unknown";
+        if (mEpisode != null && mEpisode.getTitle() != null && !mEpisode.getTitle().isEmpty()) {
+            title = htmlToStringParser(mEpisode.getTitle());
+        }
+        else if (mPodcast != null && mPodcast.getTrackName() != null && !mPodcast.getTrackName().isEmpty()) {
+            title = Utils.htmlToStringParser(mPodcast.getTrackName());
+        }
+        else if (mPodcast != null && mPodcast.getCollectionName() != null && !mPodcast.getCollectionName().isEmpty()) {
+            title = Utils.htmlToStringParser(mPodcast.getCollectionName());
         }
         return title;
     }

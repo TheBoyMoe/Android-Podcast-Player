@@ -32,6 +32,7 @@ import com.example.androidpodcastplayer.common.Constants;
 import com.example.androidpodcastplayer.common.Utils;
 import com.example.androidpodcastplayer.model.episode.EpisodesDataCache;
 import com.example.androidpodcastplayer.model.episode.Item;
+import com.example.androidpodcastplayer.model.podcast.Podcast;
 import com.example.androidpodcastplayer.player.manager.PlaylistManager;
 import com.example.androidpodcastplayer.player.model.AudioItem;
 import com.squareup.picasso.Picasso;
@@ -302,9 +303,9 @@ public class EpisodeFragment extends ContractFragment<EpisodeFragment.Contract> 
 
         List<AudioItem> items = new LinkedList<>();
         List<Item> list = EpisodesDataCache.getInstance().getChannel().getItemList();
-        String imageUrl = EpisodesDataCache.getInstance().getPodcast().getArtworkUrl600();
+        Podcast podcast = EpisodesDataCache.getInstance().getPodcast();
         for (Item item : list) {
-            items.add(new AudioItem(item, imageUrl));
+            items.add(new AudioItem(item, podcast));
         }
         mPlaylistManager.setParameters(items, mSelectedIndex);
         mPlaylistManager.setId(mPlaylistId);
