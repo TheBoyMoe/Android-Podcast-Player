@@ -262,11 +262,11 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
             TextView mEpisodeDuration;
             ImageView mEpisodeDownload;
             ImageView mEpisodePlaylist;
-            View mEpisodeItem;
+            View mEpisodeOnClick;
 
             public ViewHolder(View itemView) {
                 super(itemView);
-                mEpisodeItem = itemView.findViewById(R.id.episode_item);
+                mEpisodeOnClick = itemView.findViewById(R.id.episode_on_click);
                 mEpisodeDay = (TextView) itemView.findViewById(R.id.episode_day);
                 mEpisodeDescription = (TextView) itemView.findViewById(R.id.episode_description);
                 mEpisodeMonth = (TextView) itemView.findViewById(R.id.episode_month);
@@ -275,7 +275,7 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
                 mEpisodePlay = (ImageView) itemView.findViewById(R.id.episode_play);
                 mEpisodeDownload = (ImageView) itemView.findViewById(R.id.episode_download);
                 mEpisodePlaylist = (ImageView) itemView.findViewById(R.id.episode_playlist);
-                mEpisodeItem.setOnClickListener(this);
+                mEpisodeOnClick.setOnClickListener(this);
                 mEpisodePlay.setOnClickListener(this);
                 mEpisodeDownload.setOnClickListener(this);
                 mEpisodePlaylist.setOnClickListener(this);
@@ -327,7 +327,7 @@ public class EpisodesFragment extends ContractFragment<EpisodesFragment.Contract
             @Override
             public void onClick(View view) {
                 switch (view.getId()) {
-                    case R.id.episode_item:
+                    case R.id.episode_on_click:
                     case R.id.episode_play:
                         getContract().launchPlayer(getAdapterPosition());
                         break;
